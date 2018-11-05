@@ -1,0 +1,4 @@
+database.sq3
+__pycache__
+*.pyc
+stats_provider

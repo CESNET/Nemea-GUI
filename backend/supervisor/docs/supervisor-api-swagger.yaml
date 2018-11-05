@@ -1,0 +1,769 @@
+swagger: '2.0'
+
+#servers:
+#  - description: SwaggerHub API Auto Mocking
+#    url: https://virtserver.swaggerhub.com/nemea-supervisor-gui/nemea-supervisor-api/1.0.0
+info:
+  description: |
+    This is a API for [NEMEA Supervisor daemon version 2](https://github.com/zidekmat/nemea-supervisor-sysrepo-edition/). It is capable of following: edit configuration, start/stop/restart supervisor module and gather statistics from supervisor. 
+      All actions of this API are available only to authorized Liberouter GUI users with role Admin. You can see more details about authorization in Liberouter GUI [here](https://github.com/CESNET/liberouter-gui/wiki/API---Authorization). Authorization is not direct part of this API but for clarity we document basic authorization endpoints here so that you don't have to look it up.
+  version: "1.0.0"
+  title: NEMEA Supervisor API
+  contact:
+    email: zidekmat@fit.cvut.cz
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+            
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+  "/authorization":
+    post:
+      summary: "Retrieve session ID used for authorization"
+      tags:
+        - Liberouter GUI authorization
+      parameters:
+        - in: "body"
+          name: "login_data"
+          required: true
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+      responses:
+        200:
+          description: "Login success"
+          schema:
+            type: object
+            properties:
+              session_id: 
+                description: "This value is used in Authorization header"
+                type: string
+                example: "cfdfeddc-253f-11e8-a91e-080027de08bb"
+              user:
+                type: object
+                properties:
+                  id: 
+                    example: 1
+                  username:
+                    example: admin
+                  first_name:
+                    example: null
+                  last_name: 
+                    example: null
+                  email: 
+                    example: null
+                  role: 
+                    example: 0
+                  settings: 
+                    example: null
+                  provider: 
+                    example: db
+    delete:
+      summary: "Destroys session ID used for authorization"
+      tags:
+        - Liberouter GUI authorization
+      parameters:
+        - in: header
+          name: "Authorization"
+          description: "Session ID to destroy"
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Logout successful"
+    get:
+      summary: "Verifies whether session ID is still valid"
+      tags:
+        - Liberouter GUI authorization
+      parameters:
+        - in: header
+          name: "Authorization"
+          description: "Session ID to destroy"
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Logout successful"
+        401:
+          description: "Session ID is invalid"
+          schema:
+            type: object
+            properties:
+              message: 
+                example: "Session not found"
+              status_code:
+                example: 401
+              error:
+                example: true
+  "/nemea/modules/{module_name}":
+    parameters:
+      - in: header
+        name: "Authorization"
+        description: "Session ID of logged user"
+        type: string
+      - name: "module_name"
+        in: "path"
+        description: "Name of the module to return"
+        required: true
+        type: string
+    get:
+      summary: Returns available module by name
+      operationId: "get_nemea_module_by_name"
+      tags:
+        - NEMEA Module
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Module'
+        404:
+          description: "Module not found"
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+    put:
+      summary: Updates available module
+      operationId: "update_nemea_module_by_name"
+      tags:
+        - NEMEA Module
+      parameters:
+      - name: "module"
+        in: body
+        required: true
+        description: Module to update
+        schema:
+          $ref: '#/definitions/Module'
+      responses:
+        200:
+          description: "successful operation"
+        404:
+          description: "Module not found"
+        400:
+          $ref: '#/responses/InvalidRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+    delete:
+      summary: Deletes available module by name but also all of its instances with their custom sysrepo data models
+      operationId: "delete_nemea_module_by_name"
+      tags:
+        - NEMEA Module
+      responses:
+        204:
+          description: "successful operation"
+        404:
+          description: "Module not found"
+        400:
+          $ref: '#/responses/InvalidRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+  "/nemea/modules":
+    parameters:
+      - in: header
+        name: "Authorization"
+        description: "Session ID of logged user"
+        type: string
+    post:
+      summary: Creates new NEMEA module     
+      operationId: "create_new_nemea_module"
+      tags:
+        - NEMEA Module
+      parameters:
+      - name: "module"
+        in: body
+        required: true
+        description: "Module to create"
+        schema:
+          $ref: '#/definitions/Module'
+      responses:
+        201:
+          description: "Successful operation"
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Module'
+        404:
+          description: "Module not found"
+        400:
+          $ref: '#/responses/InvalidRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+    get:
+      summary: Returns all available NEMEA modules
+      operationId: "get_all_nemea_modules"
+      tags:
+        - NEMEA Module
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Module'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+  "/nemea/modules/{module_name}/instances":
+    parameters:
+      - in: header
+        name: "Authorization"
+        description: "Session ID of logged user"
+        type: string
+      - name: "module_name"
+        in: "path"
+        description: "Name of the module whose instances should be returned"
+        required: true
+        type: string
+    get:
+      summary: Returns instances of given NEMEA module
+      operationId: "get_instances_by_nemea_module_name"
+      tags:
+        - NEMEA Module
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Instance'
+        404:
+          description: "Module not found"
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+  "/nemea/instances/{instance_name}":
+    parameters:
+      - in: header
+        name: "Authorization"
+        description: "Session ID of logged user"
+        type: string
+      - name: "instance_name"
+        in: "path"
+        description: "Name of the instance to return"
+        required: true
+        type: string
+    get:
+      summary: Returns single instance
+      operationId: "get_instance_by_name"
+      tags:
+        - NEMEA Module Instance
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: object
+            items:
+              $ref: "#/definitions/Instance"
+        404:
+          description: "Instance not found"
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+    put:
+      summary: Updates instance
+      operationId: "update_instance_by_name"
+      tags:
+        - NEMEA Module Instance
+      parameters:
+      - name: "instance"
+        in: body
+        required: true
+        description: Instance to update
+        schema:
+          $ref: '#/definitions/Instance'
+      responses:
+        200:
+          description: "successful operation"
+        404:
+          description: "Instance not found"
+        400:
+          $ref: '#/responses/InvalidRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+    delete:
+      summary: Deletes instance by name
+      operationId: "delete_instance_by_name"
+      tags:
+        - NEMEA Module Instance
+      responses:
+        204:
+          description: "successful operation"
+        404:
+          description: "Instance not found"
+        400:
+          $ref: '#/responses/InvalidRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+  "/nemea/instances/{instance_name}/stats":
+    parameters:
+      - in: header
+        name: "Authorization"
+        description: "Session ID of logged user"
+        type: string
+      - name: "instance_name"
+        in: "path"
+        description: "Name of the instance to return"
+        required: true
+        type: string
+    get:
+      summary: Returns runtime statistics of single running instance
+      operationId: "get_instance_stats_by_name"
+      tags:
+        - NEMEA Module Instance
+        - Runtime statistics
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/InstanceStats"
+        404:
+          description: "Instance doesn't exist or is not running"
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+  "/nemea/instances/{instance_name}/{action}":
+    parameters:
+      - in: header
+        name: "Authorization"
+        description: "Session ID of logged user"
+        type: string
+      - name: "instance_name"
+        in: "path"
+        description: "Name of the instance to return"
+        required: true
+        type: string
+      - name: "action"
+        in: 'path'
+        required: true
+        type: string
+        description: "Action to take over the instance. Either 'start' or 'stop'"
+        enum: ['start', 'stop']
+    post:
+      summary: Start/stop instance by name
+      operationId: "control_instance"
+      tags:
+        - NEMEA Module Instance
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/InstanceStats"
+        404:
+          description: "Instance doesn't exist"
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+  "/nemea/instances":
+    parameters:
+      - in: header
+        name: "Authorization"
+        description: "Session ID of logged user"
+        type: string
+    get:
+      summary: Returns all instances, running or not
+      operationId: "get_all_instances"
+      tags:
+        - NEMEA Module Instance
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Instance"
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+    post:
+      summary: Creates new instance     
+      operationId: "create_new_instance"
+      tags:
+        - NEMEA Module Instance
+      parameters:
+      - name: "instance"
+        in: body
+        required: true
+        description: Instance to create
+        schema:
+          $ref: '#/definitions/Instance'
+      responses:
+        201:
+          description: "successful operation"
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Instance'
+        404:
+          description: "Instance not found"
+        400:
+          $ref: '#/responses/InvalidRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+  "/nemea/instances/stats":
+    parameters:
+      - in: header
+        name: "Authorization"
+        description: "Session ID of logged user"
+        type: string
+    get:
+      summary: Returns runtime statistics of all running instances
+      operationId: "get_all_instances_stats"
+      tags:
+        - NEMEA Module Instance
+        - Runtime statistics
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/InstanceStats"
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+  "/nemea/sysrepo/modules":
+    parameters:
+      - in: header
+        name: "Authorization"
+        description: "Session ID of logged user"
+        type: string
+    get:
+      summary: "Returns all sysrepo module names the API has access to. Meaning NEMEA model and custom models of its modules"
+      description: "WARNING!!! Returns only names, not the whole module string"
+      operationId: "get_all_sysrepo_modules"
+      tags:
+        - sysrepo Modules (data models)
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: array
+            items:
+              type: string
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+  "/nemea/sysrepo/modules/{sysrepo_module_name}":
+    parameters:
+      - in: header
+        name: "Authorization"
+        description: "Session ID of logged user"
+        type: string
+      - name: "sysrepo_module_name"
+        in: "path"
+        description: "Name of the sysrepo module to return"
+        required: true
+        type: string
+    get:
+      summary: Returns single sysrepo module
+      operationId: "get_sysrepo_module_by_name"
+      tags:
+        - sysrepo Modules (data models)
+      parameters:
+      - name: "sysrepo_module_type"
+        in: "query"
+        description: "Type of representation of sysrepo module. If used, only this type is returned is returned in response"
+        required: false
+        type: string
+        enum: [TREE, YANG, YIN]
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: array
+            items:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  description: Name of sysrepo module
+                  type: string
+                TREE:
+                  description: "sysrepo module in tree format. This property is only present if `sysrepo_module_type` parameter is not specified or equals TREE"
+                  type: string
+                YANG:
+                  description: "sysrepo module in YANG format. This property is only present if `sysrepo_module_type` parameter is not specified or equals YANG"
+                  type: string
+                YIN:
+                  description: "sysrepo module in YIN format. This property is only present if `sysrepo_module_type` parameter is not specified or equals YIN"
+                  type: string
+        404:
+          description: "sysrepo module was not found"
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+  "/nemea/sysrepo/load/{sysrepo_module_name}":
+    parameters:
+      - in: header
+        name: "Authorization"
+        description: "Session ID of logged user"
+        type: string
+      - in: "path"
+        name: "sysrepo_module_name"
+        required: true
+        type: string
+        description: "Name of sysrepo model where the data would be loaded to. "
+    post:
+      summary: "Inserts new or updates existing data in sysrepo"
+      description: "Inserts new or updates existing data of NEMEA Module, NEMEA Instance or custom NEMEA Instance inside sysrepo. Accepts JSON that will be directly loaded into sysrepo"
+      operationId: "sysrepo_load_json"
+      tags:
+        - Direct sysrepo Data Manipulation
+      parameters:
+        - in: "body"
+          name: "sysrepoModuleJsonData"
+          required: true
+          description: "JSON of sysrepo module data"
+          schema:
+            type: object
+      responses:
+        200:
+          description: "Successful operation"
+        404:
+          description: "Instance not found"
+        400:
+          $ref: '#/responses/InvalidRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        500:
+          $ref: '#/responses/ServerError'
+      
+
+definitions:
+  Module:
+    type: object
+    required:
+      - name
+      - path
+      - description
+      - trap-monitorable
+      - trap-ifces-cli
+      - is-sysrepo-ready
+    properties:
+      name:
+        type: string
+        pattern: "^[0-9a-zA-Z _-]+$"
+      path:
+        type: string
+        pattern: '^\/.+'
+      description:
+        type: string
+      trap-monitorable:
+        type: boolean
+      trap-ifces-cli:
+        type: boolean
+      is-sysrepo-ready:
+        type: boolean
+      in-ifces-cnt:
+        type: string
+        #pattern: "^(\*|0|[1-9][0-9]$"
+        example: "*"
+      out-ifces-cnt:
+        type: string
+        #pattern: "^(\\*|0|[1-9][0-9]$"
+        example: "3"
+  Instance:
+    type: object
+    required:
+      - name
+      - module-ref
+      - enabled
+      - max-restarts-per-min
+      - use-sysrepo
+    properties:
+      name:
+        type: string
+      module:
+        type: string
+      enabled:
+        type: boolean
+      max-restart-per-min:
+        type: integer
+      use-sysrepo:
+        type: boolean
+      interface:
+        type: array
+        items:
+          $ref: '#/definitions/Interface'
+      params:
+        type: string
+      custom-attributes:
+        type: object
+  Interface:
+    type: object
+    required:
+      - name
+      - type
+      - direction
+    properties:
+      name:
+        type: string
+        pattern: "^[0-9a-zA-Z _-]+$"
+      type:
+        type: string
+        enum: [TCP, TCP-TLS, UNIXSOCKET, FILE, BLACKHOLE]
+      direction:
+        type: string
+        enum: [IN, OUT]
+      timeout:
+        type: string
+        pattern: "^(([1-9]+[0-9]*)|WAIT|NO_WAIT|HALF_WAIT)"
+      buffer:
+        type: string
+        enum: [ON, OFF]
+      autoflush:
+        type: string
+        pattern: "^(off|[1-9][0-9]*)$"
+      stats:
+        $ref: '#/definitions/InterfaceStats'
+  InstanceStats:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Instance name
+      interface:
+        type: array
+        items:
+          $ref: "#/definitions/InterfaceStats"
+      stats:
+        type: object
+        properties:
+          running:
+            type: boolean
+          restart-counter:
+            type: integer
+          cpu-user:
+            type: integer
+          cpu-kern:
+            type: integer
+          mem-vms:
+            type: integer
+          mem-rss:
+            type: integer
+  InterfaceStats:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name of interface
+      stats:
+        type: object
+        properties:
+          recv-msg-cnt:
+            type: integer
+            description: Only for IN direction
+          recv-buff-cnt:
+            type: integer
+            description: Only for IN direction
+          sent-msg-cnt:
+            type: integer
+            description: Only for OUT direction
+          sent-buff-cnt:
+            type: integer
+            description: Only for OUT direction
+          dropped-msg-cnt:
+            type: integer
+            description: Only for OUT direction
+          autoflush-cnt:
+            type: integer
+            description: Only for OUT direction
+  Error:
+    type: object
+    properties:
+      message:
+        type: string
+      status_code:
+        type: integer
+      error:
+        type: boolean
+        
+responses:
+  NotFound:
+    description: "The specified resource was not found"
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+        status_code:
+          type: integer
+          example: 404
+        error:
+          type: boolean
+  Unauthorized:
+    description: "Request is unauthorized. Responses come from liberouter-gui authorization functionality."
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Session not found"
+        status_code:
+          type: integer
+          example: 401
+        error:
+          type: boolean
+  ServerError:
+    description: "Something unexpected happened on server"
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+        status_code:
+          type: integer
+          example: 500
+        error:
+          type: boolean
+  InvalidRequest:
+    description: "Invalid parameters supplied or validation error(s)"
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+        status_code:
+          type: integer
+          example: 400
+        error:
+          type: boolean
+# Added by API Auto Mocking Plugin
+schemes:
+ - https
+ - http
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /nemea-supervisor-gui/nemea-supervisor-api/1.0.0

@@ -1,0 +1,167 @@
+module nemea-test-1 {
+  yang-version 1.1;
+  namespace "urn:ietf:params:xml:ns:yang:nemea-test-1";
+  prefix "nemea-test-1";
+  include trap-interfaces-test-1;
+  contact "zidekmat@fit.cvut.cz";
+  description "Module specifying configuration of Nemea Supervisor.";
+  revision "2018-01-17" { description "First version"; }
+
+  typedef full-unix-path {
+    type string {
+      length "1..255";
+      pattern "/.+[^/]";
+    }
+    description "Full UNIX path to file";
+  }
+
+  grouping nemea-key-name {
+    leaf name {
+      type string {
+        length "1..255";
+        pattern "[0-9a-zA-Z _-]+";
+      }
+      mandatory true;
+    }
+  } // end grouping nemea-key-name
+
+  grouping nemea-instance-stats {
+    /* This grouping is here just to make nemea-supervisor container
+     *  more readable */
+    container stats {
+      config false;
+    
+      leaf running {
+        type boolean;
+        description "Specify whether the module is running.";
+      }
+      leaf restart-counter {
+        type uint8;
+        description "The number of repeated starts of the module.";
+      }
+      leaf cpu-user {
+      	type uint64;
+      	description "A percentual CPU usage in user mode or 0 in case the instance is not running.";
+      }
+      leaf cpu-kern {
+      	type uint64;
+      	description "A percentual CPU usage in kernel mode or 0 in case the instance is not running.";
+      }
+      leaf mem-vms {
+      	type uint64;
+      	description "A value of resident set size (RSS) portion of random-access memory (RAM) used by the instance process or 0 in case the instance is not running.";
+      }
+      leaf mem-rss {
+      	type uint64;
+      	description "A value of virtual memory size, which is all the memory the instance process can access, meaning all swapped memory, all allocated memory and size of memory of the shared libraries. In case the instance is not running, 0 is returned.";
+      }
+    } // end container stats
+  } // end grouping nemea-instance-stats
+
+  container supervisor {
+    list available-module {
+      description "A list of available NEMEA modules that are able to be started. Once started, they are called intances.";
+
+      key name;
+      uses nemea-key-name {
+        description "Unique module name";
+      }
+
+      leaf path {
+        type full-unix-path;
+        mandatory true;
+        description "Full path to where module binary resides.";
+      }
+      leaf description {
+        type string;
+        mandatory true;
+        description "Brief description of a module that will be displayed to the end user in GUI.";
+      }
+      leaf trap-monitorable {
+        type boolean;
+        mandatory true;
+        description "Determines whether a given module uses interfaces of the libtrap library in some unspecified manner and also whether we want to connect to its service interface to gather runtime statistics about the interfaces.";
+      }
+      leaf trap-ifces-cli {
+        type boolean;
+        mandatory true;
+        description "Compared to the previous one, this flag determines whether a module supports the configuration of libtrap interfaces and so whether this configuration is supposed to be passed to it using CLI parameters in a standard format described in libtrap's IFC SPEC.";
+      }
+      leaf is-sysrepo-ready {
+        type boolean;
+        mandatory true;
+        description "Specifies whether a module supports sysrepo.";
+      }
+      leaf sr-model-prefix {
+        when "../is-sysrepo-ready = 'true'";
+        type string;
+        mandatory true;
+        description "Defines a prefix of the YANG model that is used by a NEMEA module. This way the Supervisor and its GUI know, where to find a configuration.";
+      }
+      
+      choice if-trap-ifces {
+        case yes {
+          when "trap-monitorable = 'true' or trap-ifces-cli = 'true'";
+
+          leaf in-ifces-cnt {
+            type string {
+              length "1..2";
+              pattern "(\\*|0|[1-9][0-9]?)";
+            }
+            mandatory true;
+            description "Exact number of INPUT interfaces.";
+          }
+          leaf out-ifces-cnt {
+            type string {
+              length "1..2";
+              pattern "(\\*|0|[1-9][0-9]?)";
+            }
+            mandatory true;
+            description "Exact number of OUTPUT interfaces.";
+          }
+        }
+      } // end choice if-trap-ifces
+    } // end list available-module
+
+    list instance {
+      key name;
+      description "Instance is one specific instance of a started module (a system process)";
+      uses nemea-key-name {
+        description "Unique module process name";
+      }
+
+      leaf module-ref {
+        type leafref { path "../../available-module/name"; }
+        mandatory true;
+        description "Refers to name in the list of available-modules and by such reference it forms a relation where the particular instance belongs to a module.";
+      }
+      leaf enabled {
+        type boolean;
+        description "Specifies whether instance should run.";
+      }
+      leaf max-restarts-per-min {
+        type uint8;
+        default 3;
+        description "Enables to set a number of attempts to restart an instance in case that the instance is enabled but not running. If the number of attempts per minute exceeds the set value, the Supervisor tries to restart it no more.";
+      }
+      leaf last-pid {
+        type uint32 { range "1..max"; }
+        description "This value serves the Supervisor for saving a UNIX process identifier (PID) of the instance before it turns itself off.";
+      }
+      leaf use-sysrepo {
+        when "../../available-module[name=current()/../module-ref]/is-sysrepo-ready = 'true'";
+        type boolean;
+        default false;
+        description " If the module of an instance supports sysrepo, this flag determines whether to really use a configuration provided by sysrepo or whether to use standard arguments passed through the command line.";
+      }
+      leaf params {
+        when "../../available-module[name=current()/../module-ref]/is-sysrepo-ready = 'false' or ../use-sysrepo = 'false'";
+        type string;
+        description "In case sysrepo is not used, it is possible to use leaf \textit{params} as a place where CLI parameters for an instance should be placed, e.g., '-v 20 -r'";
+      }
+ 
+      uses trap-ifcs-list;
+      uses nemea-instance-stats;
+    } // end of list module
+  } // end container nemea-supervisor
+} // end module nemea-test-1
