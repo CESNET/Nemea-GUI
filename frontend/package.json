@@ -1,0 +1,22 @@
+{
+  "name": "Nemea GUI",
+  "version": "0.0.1",
+  "description": "Nemea framework management toolkit",
+  "main": "index.html",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CESNET/Nemea-GUI.git"
+  },
+  "author": "",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/CESNET/Nemea-GUI/issues"
+  },
+  "homepage": "https://github.com/CESNET/Nemea-GUI",
+  "dependencies" : {
+    "d3": "^5.7.0"
+  },
+  "devDependencies": {
+    "@types/d3": "^5.7.0"
+  }
+}
