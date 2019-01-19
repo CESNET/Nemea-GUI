@@ -6,9 +6,24 @@ import { Node, Link, NetworkGraph} from './models';
 export class D3Service {
     constructor() {}
 
-    applyZoomableBehaviour() {}
+    applyZoomableBehaviour(svgElement, containerElement) {
+        let svg, container, zoomed, zoom;
 
-    applyDraggableBehaviour() {}
+        svg = d3.select(svgElement);
+        container = d3.select(containerElement);
+
+        zoomed = () => {
+            const transform = d3.event.transform;
+            container.attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
+        };
+
+        zoom = d3.zoom().on("zoom", zoomed);
+        svg.call(zoom);
+    }
+
+    applyDraggableBehaviour() {
+
+    }
 
     getNetworkGraph(nodes: Node[], links: Link[], options: {width, height}) {
         let graph = new NetworkGraph(nodes, links, options);
