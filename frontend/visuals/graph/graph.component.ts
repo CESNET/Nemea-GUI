@@ -2,20 +2,21 @@ import { Component, Input } from '@angular/core';
 import { D3Service, NetworkGraph, Node } from '../../d3';
 
 @Component({
+    providers: [D3Service],
     selector: 'graph',
     template: `
     <svg #svg [attr.width]="_options.width" [attr.height]="_options.height">
-      <g>
+      <g [zoomableOf]="svg">
         <g [linkVisual]="link" *ngFor="let link of links"></g>
-        <g [nodeVisual]="node" *ngFor="let node of nodes"></g>
+        <g [nodeVisual]="node" [draggableNode]="node" [draggableInGraph]="graph" *ngFor="let node of nodes"></g>
       </g>
     </svg>
   `,
     styleUrls: ['./graph.component.scss']
 })
 export class GraphComponent {
-    @Input('nodes') nodes;
-    @Input('links') links;
+    @Input() nodes: Node[];
+    @Input() links: any[];
 
     graph: NetworkGraph;
 

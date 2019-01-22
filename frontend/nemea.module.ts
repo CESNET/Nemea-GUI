@@ -10,6 +10,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthGuard } from 'app/utils/auth.guard';
 import { SafePipe, SafePipeModule } from 'app/utils/safe.pipe';
 import { HttpClientModule } from '@angular/common/http';
+import { GraphComponent } from './visuals/graph/graph.component';
+import { LinkVisualComponent } from './visuals/shared/link-visual.component';
+import { NodeVisualComponent } from './visuals/shared/node-visual.component';
+import { D3Service, ZoomableDirective } from './d3';
+import { DraggableDirective } from './d3/directives/draggable.directive';
 
 const routes: Routes = [{
     path: 'nemea',
@@ -34,10 +39,16 @@ const routes: Routes = [{
         NgbModule.forRoot(),
     ],
     declarations: [
-        NemeaComponent
+        NemeaComponent,
+        GraphComponent,
+        LinkVisualComponent,
+        NodeVisualComponent,
+        ZoomableDirective,
+        DraggableDirective
     ],
     providers: [
-        SafePipe
+        SafePipe,
+        D3Service
     ]
 })
 export class NemeaModule {}

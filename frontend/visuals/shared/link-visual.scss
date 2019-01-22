@@ -1,0 +1,14 @@
+@import '../../colors';
+
+.link {
+  stroke: $green;
+  stroke-width: 10px;
+}
+
+.link-not-running {
+  stroke: $grey;
+}
+
+.link-error {
+  stroke: $red;
+}
