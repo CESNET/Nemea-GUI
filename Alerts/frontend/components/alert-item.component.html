@@ -1,0 +1,15 @@
+<tr [class.confirmed]="alert.status == AlertTypes.Confirmed" [class.false-positive]="alert.status == AlertTypes.FalsePositive">
+    <td>{{alert.date}}</td> <!-- date -->
+    <td>{{alert.category}}</td> <!-- category -->
+    <td>{{alert.source[0]}}</td> <!-- TODO: source -->
+    <td>N/A</td> <!-- target -->
+    <td>{{alert.flows}}</td> <!-- flows -->
+    <td>{{AlertTypeToString(alert.status)}}</td> <!-- status -->
+    <td><i class="fa fa-search-plus quick-action-btn" aria-hidden="true"></i>
+        <div  *ngIf="alert.status == AlertTypes.Undecided || alert.status == AlertTypes.New">
+            <i class="fa fa-check quick-action-btn confirm" aria-hidden="true"></i>
+            <i class="fa fa-times quick-action-btn reject" aria-hidden="true"></i>
+        </div>
+    </td>
+    <td><a class="btn btn-secondary">Show related flows</a></td>
+</tr>
