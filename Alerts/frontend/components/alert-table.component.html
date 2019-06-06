@@ -19,9 +19,9 @@
         [class.new-alert]="alertItem.status == 3">
         <td><input type="checkbox"  (change)="toggleCheckedId($event)" [value]="alertItem.id" [ngModel]="checkAll"></td>
         <td>{{alertItem.date}}</td> <!-- date -->
-        <td>{{alertItem.category}}</td> <!-- category -->
+        <td>{{alertItem.category[0]}}</td> <!-- category -->
         <td>{{alertItem.source}}</td> <!-- source -->
-        <td [innerHTML]="createTargetString(alertItem.target)"></td> <!-- target -->
+        <td [innerHTML]="alertItem.target = [] ? 'N/A' : createTargetString(alertItem.target)"></td> <!-- target -->
         <td>{{alertItem.flows}}</td> <!-- flows -->
         <td>{{alertTypeToString(alertItem.status)}}</td> <!-- status -->
         <td><i class="fa fa-search-plus quick-action-btn" aria-hidden="true"></i>
