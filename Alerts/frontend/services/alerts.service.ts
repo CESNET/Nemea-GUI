@@ -14,10 +14,10 @@ export class AlertsService {
     ) {}
 
 
-    getAlertCount(): Observable<object> {
-        return this.http.get<object>('/alerts/alert-count')
+    getAlertCount(): Observable<number> {
+        return this.http.get<number>('/alerts/alert-count')
             .pipe(
-              catchError(this.handleError('getAlertCount', {"number_of_records": 0}))
+              catchError(this.handleError('getAlertCount', 0))
             );
     }
 

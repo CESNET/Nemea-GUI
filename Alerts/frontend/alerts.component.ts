@@ -13,7 +13,7 @@ export class AlertsComponent implements OnInit {
     alertTable: AlertSimple[] = [];
     page: number = 1;
     pageSize: number = 10;
-    itemCount: number = 30000;
+    itemCount: number = 0;
     loading: boolean = false;
     selectedAlerts: string[] = [];
 
@@ -23,8 +23,10 @@ export class AlertsComponent implements OnInit {
     {}
 
     ngOnInit() {
-      this.prepareTmpData();
-      //this.fetchAlertCount()
+      //this.prepareTmpData();
+      this.fetchAlertCount();
+      this.getAlerts();
+
     }
 
     goToPage(n: number): void {
@@ -49,16 +51,18 @@ export class AlertsComponent implements OnInit {
 
     onPerPageChanged(newValue: number) {
         this.pageSize = newValue;
-        console.log(newValue);
+        this.getAlerts();
     }
 
     getAlerts() {
-        console.log("Loading page " + this.page); //TODO: Remove this
+        console.log("Loading page " + this.page);
+        this.alertsService.getAlertPage(this.page, this.pageSize)
+            .subscribe(alerts => this.alertTable = alerts);
     }
 
     fetchAlertCount(): void {
         this.alertsService.getAlertCount()
-            .subscribe(alertCount => this.itemCount = alertCount["number_of_records"]);
+            .subscribe(alertCount => this.itemCount = alertCount);
     }
 
     private prepareTmpData() {
