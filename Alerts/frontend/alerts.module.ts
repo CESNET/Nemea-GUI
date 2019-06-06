@@ -8,6 +8,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthGuard } from 'app/utils/auth.guard';
 import { SafePipe, SafePipeModule } from 'app/utils/safe.pipe';
 import { AlertsComponent } from './alerts.component';
+import { AlertTableComponent } from './components/alert-table.component';
 
 
 const routes: Routes = [{
@@ -17,7 +18,7 @@ const routes: Routes = [{
     data: {
         role: 10,
         name: 'Alerts',
-        description: 'Nemea alerts (TODO: better description)',
+        description: 'Nemea alerts',
         icon: 'fa-exclamation-triangle',
     },
     children: []
@@ -32,7 +33,8 @@ const routes: Routes = [{
         NgbModule,
     ],
     declarations: [
-        AlertsComponent
+        AlertsComponent,
+        AlertTableComponent
     ],
     providers: [
         SafePipe
