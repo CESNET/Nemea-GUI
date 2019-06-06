@@ -7,8 +7,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AuthGuard } from 'app/utils/auth.guard';
 import { SafePipe, SafePipeModule } from 'app/utils/safe.pipe';
+
 import { AlertsComponent } from './alerts.component';
 import { AlertTableComponent } from './components/alert-table.component';
+import { PaginationComponent } from './components/pagination.component';
 
 
 const routes: Routes = [{
@@ -34,7 +36,8 @@ const routes: Routes = [{
     ],
     declarations: [
         AlertsComponent,
-        AlertTableComponent
+        AlertTableComponent,
+        PaginationComponent
     ],
     providers: [
         SafePipe

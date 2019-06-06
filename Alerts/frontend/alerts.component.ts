@@ -10,12 +10,35 @@ import { AlertType } from './shared/alertType';
 export class AlertsComponent implements OnInit {
 
     alertTable: AlertSimple[] = [];
+    page: number = 1;
+    pageSize: number = 10;
+    itemCount: number = 30000;
+    loading: boolean = false;
 
     constructor() {
     }
 
     ngOnInit() {
       this.prepareTmpData();
+    }
+
+    goToPage(n: number): void {
+        this.page = n;
+        this.getAlerts();
+    }
+
+    onNext(): void {
+        this.page++;
+        this.getAlerts();
+    }
+
+    onPrev(): void {
+        this.page--;
+        this.getAlerts();
+    }
+
+    getAlerts() {
+
     }
 
     private prepareTmpData() {

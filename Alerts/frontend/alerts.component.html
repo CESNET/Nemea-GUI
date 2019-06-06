@@ -19,8 +19,25 @@
         </div>
     </div>
     <section class="box d-flex flex-row">
-        <div class="table-responsive">
-            <alert-table [alertTable]="alertTable"></alert-table>
+        <div class="col-sm-12">
+            <div class="table-responsive">
+                <alert-table [alertTable]="alertTable"></alert-table>
+            </div>
         </div>
+
+
     </section>
+    <div class="row">
+        <div class="col-sm-12">
+            <lgui-pagination (goPage)="goToPage($event)"
+                             (goNext)="onNext()"
+                             (goPrev)="onPrev()"
+                             [page]="page"
+                             [itemsPerPage]="pageSize"
+                             [itemCount]="itemCount"
+                             [loading]="loading"></lgui-pagination>
+        </div>
+
+    </div>
+
 </div>

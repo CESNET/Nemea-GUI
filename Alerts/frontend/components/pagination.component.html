@@ -1,0 +1,22 @@
+<div class="pagination" *ngIf="itemCount > itemsPerPage">
+    <div class="pagination-content">
+        <div class="no-mobile">
+            <button class="page-btn" (click)="setPage(1)" [class.active]="page == 1">1</button>
+            <button class="page-btn" (click)="prevPage()" [class.disabled]="page == 1">&lt;</button>
+
+            <button class="page-btn"
+                    *ngFor="let pageNum of getPages()"
+                    [ngClass]="{'active': pageNum === page, 'disabled': loading}"
+                    (click)="setPage(pageNum)">
+                {{pageNum}}</button>
+
+            <button class="page-btn" (click)="nextPage()" *ngIf="!isLastPage()" [class.disabled]="page == totalPages()">&gt;</button>
+            <button class="page-btn" (click)="setPage(totalPages())" [class.active]="page == totalPages()">{{totalPages()}}</button>
+        </div>
+        <div class="align-center">
+            Go to page: <input type="number" [(ngModel)]="page" (change)="setPage(page)" min="1" class="set-page-input"/>/{{totalPages()}}
+        </div>
+
+    </div>
+
+</div>
