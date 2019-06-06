@@ -7,6 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AuthGuard } from 'app/utils/auth.guard';
 import { SafePipe, SafePipeModule } from 'app/utils/safe.pipe';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AlertsComponent } from './alerts.component';
 import { AlertTableComponent } from './components/alert-table.component';
@@ -33,6 +34,7 @@ const routes: Routes = [{
         SafePipeModule,
         RouterModule.forChild(routes),
         NgbModule,
+        HttpClientModule
     ],
     declarations: [
         AlertsComponent,

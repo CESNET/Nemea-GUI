@@ -4,7 +4,7 @@
             <h1>Nemea Alerts</h1>
         </div>
     </div>
-    <div class="box d-flex flex-row">
+    <div class="box row">
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-body">
@@ -18,10 +18,26 @@
             </div>
         </div>
     </div>
-    <section class="box d-flex flex-row">
-        <div class="col-sm-12">
-            <div class="table-responsive">
-                <alert-table [alertTable]="alertTable"></alert-table>
+    <section class="box">
+        <div class="row">
+            <div class="col-sm-12 col-md-4 col-lg-2">
+                <label for="perPageSelect">Limit:</label>
+                <select (change)="onPerPageChanged($event.target.value)" id="perPageSelect">
+                    <option value="10">10 per page</option>
+                    <option value="20">20 per page</option>
+                    <option value="50">50 per page</option>
+                    <option value="100">100 per page</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <alert-table
+                            [alertTable]="alertTable"
+                            (selectedItemsChanged)="updateSelectedAlertList($event)"></alert-table>
+                </div>
             </div>
         </div>
 

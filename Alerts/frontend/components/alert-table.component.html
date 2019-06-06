@@ -1,6 +1,7 @@
 <table class="table table-hover">
     <thead>
     <tr>
+        <th><input type="checkbox" [(ngModel)]="checkAll" (click)="toggleAll(checkAll)"></th>
         <th>Date</th>
         <th>Category</th>
         <th>Source</th>
@@ -16,6 +17,7 @@
         [class.confirmed]="alertItem.status == 1"
         [class.false-positive]="alertItem.status == 2"
         [class.new-alert]="alertItem.status == 3">
+        <td><input type="checkbox"  (change)="toggleCheckedId($event)" [value]="alertItem.id" [ngModel]="checkAll"></td>
         <td>{{alertItem.date}}</td> <!-- date -->
         <td>{{alertItem.category}}</td> <!-- category -->
         <td>{{alertItem.source}}</td> <!-- source -->
