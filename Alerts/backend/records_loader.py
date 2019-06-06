@@ -19,9 +19,8 @@ def get_number_of_all_records():
 
 @auth.required()
 def get_limited_number_of_records():
-    data = request.json
-    page = data['page']
-    items = data['items']
+    page = request.args.get('page')
+    items = request.args.get('items')
     first_item = items * (page - 1)
 
     ids = [x["_id"] for x in list(alerts_coll.find({}, {"_id": 1}).skip(first_item).limit(items))]
