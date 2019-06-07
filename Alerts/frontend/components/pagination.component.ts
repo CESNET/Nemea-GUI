@@ -69,11 +69,17 @@ export class PaginationComponent {
                 if(i > this.totalPages()) {
                     break;
                 }
+                if(i < 2) {
+                    continue;
+                }
                 nums.push(i);
             }
         }
         else if(p > (this.totalPages() - Math.ceil(pages / 2))) {
             for(let i = this.totalPages() - pages; i < this.totalPages(); i++) {
+                if(i < 2) {
+                    continue;
+                }
                 nums.push(i);
             }
         }
@@ -81,6 +87,9 @@ export class PaginationComponent {
             for(let i = Math.ceil(p - (pages / 2)); i < Math.ceil(p + (pages / 2)); i++) {
                 if(i >= this.totalPages()) {
                     break;
+                }
+                if(i < 2) {
+                    continue;
                 }
                 nums.push(i);
             }
