@@ -53,14 +53,14 @@ def get_limited_number_of_records():
 def set_confirmed():
     data = request.json
     ids = data['ids']
-    set_status(ids, 1)
+    return set_status(ids, 1)
 
 
 @auth.required()
 def set_false_positive():
     data = request.json
     ids = data['ids']
-    set_status(ids, 2)
+    return set_status(ids, 2)
 
 
 def set_status(ids, status):
