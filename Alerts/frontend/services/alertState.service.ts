@@ -28,6 +28,13 @@ export class AlertStateService {
         }
     }
 
+    deleteAlerts(alertIds: string[]) {
+        return this.http.post<object>('alerts/delete-alerts', {'ids': alertIds})
+            .pipe(
+                catchError(this.handleError('deleteAlerts', {success: false, errCode: 500}))
+            );
+    }
+
     private handleError<T> (operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {
             console.error('Failed on ' + operation + '. Error details:');

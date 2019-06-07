@@ -25,11 +25,11 @@
         <td [innerHTML]="createTargetString(alertItem.Target)"></td> <!-- target -->
         <td>{{alertItem.FlowCount || 'N/A'}}</td> <!-- flows -->
         <td>{{alertTypeToString(alertItem.Status) || 'N/A'}}</td> <!-- status -->
-        <td><i class="fa fa-search-plus quick-action-btn" aria-hidden="true"></i>
-            <i *ngIf="alertItem.Status == 0 || alertItem.Status == 3" class="fa fa-check quick-action-btn confirm"
+        <td><i class="fa fa-search-plus quick-action-btn " title="View detail" aria-hidden="true"></i>
+            <i title="Set as confirmed" *ngIf="alertItem.Status == 0 || alertItem.Status == 3" class="fa fa-check quick-action-btn confirm"
                aria-hidden="true"
                (click)="setStatus(alertItem.ID, 1)"></i>
-            <i *ngIf="alertItem.Status == 0 || alertItem.Status == 3" class="fa fa-times quick-action-btn reject"
+            <i title="Set as false positive" *ngIf="alertItem.Status == 0 || alertItem.Status == 3" class="fa fa-times quick-action-btn reject"
                aria-hidden="true"
                (click)="setStatus(alertItem.ID, 2)"></i>
         </td>

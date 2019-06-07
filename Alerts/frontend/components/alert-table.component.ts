@@ -22,7 +22,6 @@ export class AlertTableComponent implements OnInit {
     set alertTable(value: AlertSimple []) {
         this.checkAll = false;
         this.toggleAll(true);
-        console.log(value);
         this._alertTable = value;
     }
 
@@ -37,10 +36,7 @@ export class AlertTableComponent implements OnInit {
         private alertStateService: AlertStateService
     ) { }
 
-    ngOnInit() {
-        console.log("GOT ALERT TABLE DATA:");
-        console.log(this.alertTable); //TODO: Remove this after debugging
-    }
+    ngOnInit() {}
 
     private static createTargetString(target: string[])
     {
@@ -84,7 +80,7 @@ export class AlertTableComponent implements OnInit {
     setStatus(id: string, status: AlertType) {
         let idx = this._alertTable.indexOf(this._alertTable.find(i => i.ID === id));
         this._alertTable[idx].Status = status;
-        //this.alertStateService.setAlertType(status, [id]);
+        this.alertStateService.setAlertType(status, [id]).subscribe();
     }
 
     toggleAll(newState: boolean) {

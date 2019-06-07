@@ -49,7 +49,6 @@ export class AlertsComponent implements OnInit {
 
     updateSelectedAlertList(selectedAlerts: string[]) {
         this.selectedAlerts = selectedAlerts;
-        console.log(selectedAlerts);
     }
 
     onPerPageChanged(newValue: number) {
@@ -66,7 +65,51 @@ export class AlertsComponent implements OnInit {
     }
 
     applyMassOperation() {
-        
+        switch(this.selectedAction) {
+            case "delete":
+                this.deleteSelectedAlerts();
+                break;
+            case "confirm":
+                this.setSelectedAlertType(AlertType.Confirmed);
+                break;
+            case "false-positive":
+                this.setSelectedAlertType(AlertType.FalsePositive);
+                break;
+        }
+
+    }
+
+    private setSelectedAlertType(type: AlertType) {
+        for(let alert of this.selectedAlerts) {
+            let idx = this.alertTable.indexOf(this.alertTable.find(i => i.ID === alert));
+            console.log(idx);
+            if(idx > -1) {
+                this.alertTable[idx].Status = type;
+            }
+        }
+        this.alertStateService.setAlertType(type, this.selectedAlerts).subscribe();
+    }
+
+    private deleteSelectedAlerts() {
+        if(confirm("Are you sure you want to delete " + this.selectedAlerts.length + " alerts? This cannot be undone!")) {
+            for(let alert of this.selectedAlerts) {
+                this.alertTable = this.alertTable.filter(function( obj ) {
+                    return obj.ID !== alert;
+                });
+            }
+            this.alertStateService.deleteAlerts(this.selectedAlerts).subscribe(() => this.fixAfterDeleteOffset());
+        }
+    }
+
+    private fixAfterDeleteOffset(): void {
+        this.alertsService.getAlertCount()
+            .subscribe(alertCount => {
+                this.itemCount = alertCount;
+                if(Math.ceil(this.itemCount / this.pageSize) < this.page) {
+                    this.page = Math.ceil(this.itemCount / this.pageSize);
+                }
+                this.getAlerts();
+            });
     }
 
     getAlerts() {
@@ -84,6 +127,5 @@ export class AlertsComponent implements OnInit {
         this.alertsService.getAlertCount()
             .subscribe(alertCount => this.itemCount = alertCount);
     }
-
-
+    
 }
