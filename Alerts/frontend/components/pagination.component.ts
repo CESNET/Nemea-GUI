@@ -66,7 +66,7 @@ export class PaginationComponent {
         let nums: number[] = [];
         if(p < Math.ceil(pages / 2) + 2) {
             for(let i = 2; i <= pages + 1; i++) {
-                if(i > this.totalPages()) {
+                if(i >= this.totalPages()) {
                     break;
                 }
                 if(i < 2) {
