@@ -18,11 +18,12 @@
             </div>
         </div>
     </div>
-    <section class="box">
+    <section class="box m-0 mb-2 mt-2">
         <div class="row mb-3">
             <div class="col-sm-12 col-md-3">
                 <label for="perPageSelect">Limit:</label>
                 <select (change)="onPerPageChanged($event.target.value)" id="perPageSelect">
+                    <option value="1">1 per page</option>
                     <option selected value="10">10 per page</option>
                     <option value="20">20 per page</option>
                     <option value="50">50 per page</option>
@@ -46,7 +47,7 @@
                     <option value="false-positive">Set as false positive</option>
                     <option value="delete">Delete</option> <!-- TODO: Confirmation dialog -->
                 </select>
-                <button class="btn btn-primary ml-1">Apply operation</button>
+                <button class="btn btn-primary ml-1" (click)="applyMassOperation()">Apply operation</button>
             </div>
 
         </div>
@@ -62,8 +63,8 @@
 
 
     </section>
-    <div class="row">
-        <div class="col-sm-12">
+    <section class="row box m-0 mt-2 mb-2">
+        <div class="col-sm-12 box">
             <lgui-pagination (goPage)="goToPage($event)"
                              (goNext)="onNext()"
                              (goPrev)="onPrev()"
@@ -73,6 +74,6 @@
                              [loading]="loading"></lgui-pagination>
         </div>
 
-    </div>
+    </section>
 
 </div>

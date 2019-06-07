@@ -1,11 +1,11 @@
 import { AlertType } from './alertType';
 
 export class AlertSimple {
-    date?: string;
-    category?: string[];
-    source?: string;
-    target?: string[];
-    flows?: number;
-    status?: AlertType;
-    id: string; // ID of full alert
+    DetectTime?: string;
+    Category?: string[];
+    Source?: string;
+    Target?: string[];
+    FlowCount?: number;
+    Status?: AlertType;
+    ID: string; // ID of full alert
 }

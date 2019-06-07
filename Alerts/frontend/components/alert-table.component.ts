@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { AlertSimple } from '../shared/alert-simple';
-import { AlertTypeToString } from '../shared/alertType';
+import { AlertType, AlertTypeToString } from '../shared/alertType';
+import { AlertStateService } from '../services/alertState.service';
 
 @Component({
     selector: 'alert-table',
@@ -21,6 +22,7 @@ export class AlertTableComponent implements OnInit {
     set alertTable(value: AlertSimple []) {
         this.checkAll = false;
         this.toggleAll(true);
+        console.log(value);
         this._alertTable = value;
     }
 
@@ -31,7 +33,9 @@ export class AlertTableComponent implements OnInit {
 
     selectedItems: string[] = [];
 
-    constructor() { }
+    constructor(
+        private alertStateService: AlertStateService
+    ) { }
 
     ngOnInit() {
         console.log("GOT ALERT TABLE DATA:");
@@ -76,13 +80,19 @@ export class AlertTableComponent implements OnInit {
         }
         this.selectedItemsChanged.emit(this.selectedItems);
     }
-    
+
+    setStatus(id: string, status: AlertType) {
+        let idx = this._alertTable.indexOf(this._alertTable.find(i => i.ID === id));
+        this._alertTable[idx].Status = status;
+        //this.alertStateService.setAlertType(status, [id]);
+    }
+
     toggleAll(newState: boolean) {
         this.selectedItems = [];
 
         if(!newState) {
             for(let alert of this._alertTable) {
-                this.selectedItems.push(alert.id);
+                this.selectedItems.push(alert.ID);
             }
             this.selectedItemsChanged.emit(this.selectedItems);
         }

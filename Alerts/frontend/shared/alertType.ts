@@ -1,5 +1,5 @@
 export enum AlertType {
-    Undecided,
+    Undecided = 0,
     Confirmed,
     FalsePositive,
     New
@@ -7,7 +7,7 @@ export enum AlertType {
 export function AlertTypeToString(type: AlertType): string {
     switch(type) {
         case AlertType.Undecided:
-            return "";
+            return " ";
         case AlertType.Confirmed:
             return "Confirmed";
         case AlertType.FalsePositive:
