@@ -74,3 +74,13 @@ def set_status(ids, status):
         return json.dumps({"success": False, "errCode": 500})
 
 
+@auth.required()
+def delete_alerts():
+    data = request.json
+    ids = data['ids']
+    try:
+        alerts_coll.delete_many({"ID": {"$in": ids}})
+        return json.dumps({"success": True, "errCode": 200})
+    except Exception:
+        return json.dumps({"success": False, "errCode": 500})
+
