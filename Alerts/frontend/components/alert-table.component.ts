@@ -9,7 +9,20 @@ import { AlertTypeToString } from '../shared/alertType';
 })
 export class AlertTableComponent implements OnInit {
 
-    @Input() alertTable: AlertSimple[];
+    private _alertTable: AlertSimple[] = [];
+
+    checkAll: boolean = false;
+
+    get alertTable(): AlertSimple[] {
+        return this._alertTable;
+    }
+
+    @Input()
+    set alertTable(value: AlertSimple []) {
+        this.checkAll = false;
+        this.toggleAll(true);
+        this._alertTable = value;
+    }
 
     @Output() selectedItemsChanged = new EventEmitter<string[]>();
 
@@ -68,7 +81,7 @@ export class AlertTableComponent implements OnInit {
         this.selectedItems = [];
 
         if(!newState) {
-            for(let alert of this.alertTable) {
+            for(let alert of this._alertTable) {
                 this.selectedItems.push(alert.id);
             }
             this.selectedItemsChanged.emit(this.selectedItems);
