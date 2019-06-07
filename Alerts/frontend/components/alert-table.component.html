@@ -18,12 +18,13 @@
         [class.false-positive]="alertItem.status == 2"
         [class.new-alert]="alertItem.status == 3">
         <td><input type="checkbox"  (change)="toggleCheckedId($event)" [value]="alertItem.id" [ngModel]="checkAll"></td>
-        <td>{{alertItem.date}}</td> <!-- date -->
-        <td>{{alertItem.category[0]}}</td> <!-- category -->
-        <td>{{alertItem.source}}</td> <!-- source -->
+        <td *ngIf="alertItem.date">{{alertItem.date[0]}}</td> <!-- date -->
+        <td *ngIf="!alertItem.date">N/A</td>
+        <td>{{alertItem.category || 'N/A'}}</td> <!-- category -->
+        <td>{{alertItem.source || 'N/A'}}</td> <!-- source -->
         <td [innerHTML]="createTargetString(alertItem.target)"></td> <!-- target -->
-        <td>{{alertItem.flows}}</td> <!-- flows -->
-        <td>{{alertTypeToString(alertItem.status)}}</td> <!-- status -->
+        <td>{{alertItem.flows || 'N/A'}}</td> <!-- flows -->
+        <td>{{alertTypeToString(alertItem.status) || 'N/A'}}</td> <!-- status -->
         <td><i class="fa fa-search-plus quick-action-btn" aria-hidden="true"></i>
             <i *ngIf="alertItem.status == 0 || alertItem.status == 3" class="fa fa-check quick-action-btn confirm"
                aria-hidden="true"></i>

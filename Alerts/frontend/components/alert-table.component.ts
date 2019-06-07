@@ -21,11 +21,15 @@ export class AlertTableComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
+        console.log("GOT ALERT TABLE DATA:");
         console.log(this.alertTable); //TODO: Remove this after debugging
     }
 
     private static createTargetString(target: string[])
     {
+        if(!target) {
+            return "N/A";
+        }
         var len = target.length;
         if(len === 0 || target === []) {
             return "N/A";
