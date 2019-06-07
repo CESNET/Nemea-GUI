@@ -6,6 +6,16 @@ from liberouterapi.dbConnector import dbConnector
 import json
 from flask import request
 
+from enum import Enum
+
+
+class Status(Enum):
+    Undecided = 0,
+    Confirmed = 1,
+    FalsePositive = 2,
+    New = 3
+
+
 # Connect and select alerts collection
 alerts_db = dbConnector("alerts")
 alerts_coll = alerts_db.db[config['alerts']['collection']]
@@ -24,8 +34,8 @@ def get_limited_number_of_records():
     first_item = items * (page - 1)
 
     ids = [x["_id"] for x in list(alerts_coll.find({}, {"_id": 1}).skip(first_item).limit(items))]
-    alerts_coll.update_many({"_id": {"$in": ids}, "Status": 3}, {"$set": {"Status": 0}})
-    alerts_coll.update_many({"_id": {"$in": ids}, "Status": {"$exists": False}}, {"$set": {"Status": 3}})
+    alerts_coll.update_many({"_id": {"$in": ids}, "Status": Status.New}, {"$set": {"Status": Status.Undecided}})
+    alerts_coll.update_many({"_id": {"$in": ids}, "Status": {"$exists": False}}, {"$set": {"Status": Status.New}})
 
     query = {"_id": 0, "DetectTime": 1, "Category": 1, "Source": 1, "Target": 1, "FlowCount": 1, "Status": 1, "ID": 1}
     records = list(alerts_coll.find({}, query).skip(first_item).limit(items))
@@ -41,3 +51,30 @@ def get_limited_number_of_records():
                 record["Target"] = record["Target"][0]
 
     return json.dumps(records)
+
+
+@auth.required()
+def set_confirmed():
+    data = request.json
+    ids = data['ids']
+    set_status(ids, Status.Confirmed)
+
+
+@auth.required()
+def set_false_positive():
+    data = request.json
+    ids = data['ids']
+    set_status(ids, Status.FalsePositive)
+
+
+def set_status(ids, status):
+    try:
+        if status == Status.Confirmed:
+            alerts_coll.update_many({"ID": {"$in": ids}}, {"$set": {"Status": Status.Confirmed}})
+        elif status == Status.FalsePositive:
+            alerts_coll.update_many({"ID": {"$in": ids}}, {"$set": {"Status": Status.FalsePositive}})
+        return json.dumps({"success": True, "errCode": 200})
+    except Exception:
+        return json.dumps({"success": False, "errCode": 500})
+
+

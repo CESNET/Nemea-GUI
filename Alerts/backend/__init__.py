@@ -28,3 +28,9 @@ alerts_bp.add_url_rule('/alert-count', view_func=get_number_of_all_records, meth
 
 # Get limited number of records for one page
 alerts_bp.add_url_rule('/alert-page', view_func=get_limited_number_of_records, methods=['GET'])
+
+# Get limited number of records for one page
+alerts_bp.add_url_rule('/set-confirmed', view_func=set_confirmed, methods=['POST'])
+
+# Get limited number of records for one page
+alerts_bp.add_url_rule('/set-false-positive', view_func=set_false_positive, methods=['POST'])
