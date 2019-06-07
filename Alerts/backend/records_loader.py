@@ -84,3 +84,9 @@ def delete_alerts():
     except Exception:
         return json.dumps({"success": False, "errCode": 500})
 
+
+@auth.required
+def get_detail_of_alert():
+    record_id = request.args.get('id')
+    record = alerts_coll.find_one({"ID": record_id}, {"_id": 0})
+    return json.dumps(record)

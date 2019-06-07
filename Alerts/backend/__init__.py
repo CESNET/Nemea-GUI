@@ -37,3 +37,6 @@ alerts_bp.add_url_rule('/set-false-positive', view_func=set_false_positive, meth
 
 # Delete array of alerts
 alerts_bp.add_url_rule('/delete-alerts', view_func=delete_alerts, methods=['POST'])
+
+# Get detail of selected alert
+alerts_bp.add_url_rule('/alert-detail', view_func=get_detail_of_alert, methods=['POST'])
