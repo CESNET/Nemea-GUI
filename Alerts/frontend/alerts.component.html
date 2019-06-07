@@ -23,10 +23,20 @@
             <div class="col-sm-12 col-md-4 col-lg-2">
                 <label for="perPageSelect">Limit:</label>
                 <select (change)="onPerPageChanged($event.target.value)" id="perPageSelect">
-                    <option value="10">10 per page</option>
+                    <option selected value="10">10 per page</option>
                     <option value="20">20 per page</option>
                     <option value="50">50 per page</option>
                     <option value="100">100 per page</option>
+                </select>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-2">
+                <label for="statusSelect">Status:</label>
+                <select (change)="onStatusChanged($event.target.value)" id="statusSelect">
+                    <option selected value="all">All</option>
+                    <option value="new">New</option>
+                    <option value="undecided">Undecided</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="false-positive">False positive</option>
                 </select>
             </div>
 

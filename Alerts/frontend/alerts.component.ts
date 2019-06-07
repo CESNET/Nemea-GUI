@@ -51,13 +51,25 @@ export class AlertsComponent implements OnInit {
 
     onPerPageChanged(newValue: number) {
         this.pageSize = newValue;
+        if(Math.ceil(this.itemCount / this.pageSize) < this.page) {
+            this.page = Math.ceil(this.itemCount / this.pageSize);
+        }
         this.getAlerts();
     }
 
+    onStatusChanged(newValue: string) {
+        console.log(newValue);
+    }
+
     getAlerts() {
-        console.log("Loading page " + this.page);
+        this.loading = true;
         this.alertsService.getAlertPage(this.page, this.pageSize)
-            .subscribe(alerts => this.alertTable = alerts);
+            .subscribe(alerts => this.setAlerts(alerts));
+    }
+
+    setAlerts(alerts: AlertSimple[]) {
+        this.loading = false;
+        this.alertTable = alerts;
     }
 
     fetchAlertCount(): void {
