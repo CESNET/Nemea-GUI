@@ -19,8 +19,8 @@
         </div>
     </div>
     <section class="box">
-        <div class="row">
-            <div class="col-sm-12 col-md-4 col-lg-2">
+        <div class="row mb-3">
+            <div class="col-sm-12 col-md-3">
                 <label for="perPageSelect">Limit:</label>
                 <select (change)="onPerPageChanged($event.target.value)" id="perPageSelect">
                     <option selected value="10">10 per page</option>
@@ -29,7 +29,7 @@
                     <option value="100">100 per page</option>
                 </select>
             </div>
-            <div class="col-sm-12 col-md-4 col-lg-2">
+            <div class="col-sm-12 col-md-3">
                 <label for="statusSelect">Status:</label>
                 <select (change)="onStatusChanged($event.target.value)" id="statusSelect">
                     <option selected value="all">All</option>
@@ -38,6 +38,15 @@
                     <option value="confirmed">Confirmed</option>
                     <option value="false-positive">False positive</option>
                 </select>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <label for="actionSelect">On selected perform:</label>
+                <select [(ngModel)]="selectedAction" id="actionSelect">
+                    <option selected value="confirm">Set as confirmed</option>
+                    <option value="false-positive">Set as false positive</option>
+                    <option value="delete">Delete</option> <!-- TODO: Confirmation dialog -->
+                </select>
+                <button class="btn btn-primary ml-1">Apply operation</button>
             </div>
 
         </div>

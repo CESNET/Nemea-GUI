@@ -17,6 +17,8 @@ export class AlertsComponent implements OnInit {
     loading: boolean = false;
     selectedAlerts: string[] = [];
 
+    selectedAction: string;
+
     constructor(
         private alertsService: AlertsService
     )
