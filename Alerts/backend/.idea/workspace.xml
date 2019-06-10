@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2394a6aa-1eab-494a-8e40-6d91c17638b9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/records_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/records_loader.py" afterDir="false" />
     </list>
@@ -14,11 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="704">
-              <caret line="46" selection-start-line="46" selection-end-line="46" selection-end-column="105" />
+              <caret line="49" column="36" selection-start-line="49" selection-start-column="36" selection-end-line="49" selection-end-column="36" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -38,11 +37,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/records_loader.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="494">
-              <caret line="95" column="26" selection-start-line="95" selection-start-column="26" selection-end-line="95" selection-end-column="26" />
+            <state relative-caret-position="434">
+              <caret line="36" column="100" lean-forward="true" selection-start-line="36" selection-start-column="100" selection-end-line="36" selection-end-column="100" />
               <folding>
                 <element signature="e#48#90#0" expanded="true" />
               </folding>
@@ -151,15 +150,15 @@
       <updated>1559820694755</updated>
       <workItem from="1559820696116" duration="10503000" />
       <workItem from="1559889385110" duration="16652000" />
-      <workItem from="1560149751728" duration="15523000" />
+      <workItem from="1560149751728" duration="15994000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="42678000" />
+    <option name="totallyTimeSpent" value="43149000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1984" y="-4" width="1857" height="1085" extended-state="6" />
+    <frame x="64" y="-4" width="1857" height="1085" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25538972" />
@@ -215,22 +214,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/records_loader.py">
+    <entry file="file://$PROJECT_DIR$/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="95" column="26" selection-start-line="95" selection-start-column="26" selection-end-line="95" selection-end-column="26" />
+        <state relative-caret-position="704">
+          <caret line="49" column="36" selection-start-line="49" selection-start-column="36" selection-end-line="49" selection-end-column="36" />
           <folding>
-            <element signature="e#48#90#0" expanded="true" />
+            <element signature="e#0#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/__init__.py">
+    <entry file="file://$PROJECT_DIR$/records_loader.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="704">
-          <caret line="46" selection-start-line="46" selection-end-line="46" selection-end-column="105" />
+        <state relative-caret-position="434">
+          <caret line="36" column="100" lean-forward="true" selection-start-line="36" selection-start-column="100" selection-end-line="36" selection-end-column="100" />
           <folding>
-            <element signature="e#0#32#0" expanded="true" />
+            <element signature="e#48#90#0" expanded="true" />
           </folding>
         </state>
       </provider>
