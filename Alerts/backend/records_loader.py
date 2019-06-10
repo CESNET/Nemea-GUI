@@ -34,7 +34,7 @@ def get_limited_number_of_records():
     alerts_coll.update_many({"_id": {"$in": ids}, "Status": {"$exists": False}}, {"$set": {"Status": 3}})
 
     query = {"_id": 0, "DetectTime": 1, "Category": 1, "Source": 1, "Target": 1, "FlowCount": 1, "Status": 1, "ID": 1}
-    records = list(alerts_coll.find({}, query).skip(first_item).limit(items))
+    records = list(alerts_coll.find({}, query).skip(first_item).limit(items).sort("DetectTime", -1))
 
     for record in records:
         if "Source" in record.keys():
