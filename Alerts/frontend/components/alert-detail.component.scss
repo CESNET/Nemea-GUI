@@ -1,0 +1,60 @@
+@import "../colors";
+@import "../alerts-colors";
+
+.popup-wrapper {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+
+  .popup-content-wrapper {
+    background: $colorItemBackground;
+    max-height: 80vh;
+    max-width: 80vw;
+    border-radius: 5px;
+    border: 2px solid $colorItemBackground;
+
+    .popup-header {
+      background: $colorMain;
+      text-align: center;
+      width: 100%;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+
+      h1 {
+        color: $colorTextInverse;
+      }
+    }
+
+    .popup-content {
+      overflow: auto;
+      max-height: 60vh;
+      padding: 20px;
+    }
+
+    .popup-toolbox {
+
+    }
+  }
+}
+
+.nerd-link {
+  max-width: 1em;
+  height: auto;
+  margin-left: 0.5em;
+}
+
+@for $i from 0 through 6 {
+  .left-#{$i} {
+    margin-left: #{$i}em;
+  }
+}
+

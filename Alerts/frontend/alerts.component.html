@@ -56,7 +56,8 @@
                 <div class="table-responsive">
                     <alert-table
                             [alertTable]="alertTable"
-                            (selectedItemsChanged)="updateSelectedAlertList($event)"></alert-table>
+                            (selectedItemsChanged)="updateSelectedAlertList($event)"
+                            (removeAlertEvent)="deleteSingleAlert($event)"></alert-table>
                 </div>
             </div>
         </div>

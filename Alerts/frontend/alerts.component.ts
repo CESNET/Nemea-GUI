@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertSimple } from './shared/alert-simple';
 import { AlertType } from './shared/alertType';
 import { AlertsService } from './services/alerts.service';
-import { AlertStateService } from './services/alertState.service';
+import { AlertStateService } from './services/alert-state.service';
 
 @Component({
     selector: 'alerts',
@@ -82,7 +82,6 @@ export class AlertsComponent implements OnInit {
     private setSelectedAlertType(type: AlertType) {
         for(let alert of this.selectedAlerts) {
             let idx = this.alertTable.indexOf(this.alertTable.find(i => i.ID === alert));
-            console.log(idx);
             if(idx > -1) {
                 this.alertTable[idx].Status = type;
             }
@@ -99,6 +98,15 @@ export class AlertsComponent implements OnInit {
             }
             this.alertStateService.deleteAlerts(this.selectedAlerts).subscribe(() => this.fixAfterDeleteOffset());
         }
+    }
+
+    deleteSingleAlert(id: string) {
+        if(confirm("Do you really want to remove alert " + id + "? This cannot be undone!")) {
+            this.alertTable = this.alertTable.filter(function( obj ) {
+                return obj.ID !== id;
+            });
+        }
+        this.alertStateService.deleteAlerts([id]).subscribe(() => this.fixAfterDeleteOffset());
     }
 
     private fixAfterDeleteOffset(): void {

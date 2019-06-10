@@ -1,7 +1,8 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { AlertSimple } from '../shared/alert-simple';
 import { AlertType, AlertTypeToString } from '../shared/alertType';
-import { AlertStateService } from '../services/alertState.service';
+import { AlertStateService } from '../services/alert-state.service';
+import { AlertDetailService } from '../services/alert-detail.service';
 
 @Component({
     selector: 'alert-table',
@@ -10,9 +11,16 @@ import { AlertStateService } from '../services/alertState.service';
 })
 export class AlertTableComponent implements OnInit {
 
-    private _alertTable: AlertSimple[] = [];
+    constructor(
+        private alertStateService: AlertStateService,
+        private alertDetailService: AlertDetailService
+    ) { }
 
+    ngOnInit() {}
+
+    private _alertTable: AlertSimple[] = [];
     checkAll: boolean = false;
+    alertDetail: object = null;
 
     get alertTable(): AlertSimple[] {
         return this._alertTable;
@@ -27,16 +35,14 @@ export class AlertTableComponent implements OnInit {
 
     @Output() selectedItemsChanged = new EventEmitter<string[]>();
 
+    @Output() removeAlertEvent = new EventEmitter<string>();
+
     createTargetString = AlertTableComponent.createTargetString;
     alertTypeToString = AlertTypeToString;
 
     selectedItems: string[] = [];
 
-    constructor(
-        private alertStateService: AlertStateService
-    ) { }
 
-    ngOnInit() {}
 
     private static createTargetString(target: string[])
     {
@@ -77,7 +83,14 @@ export class AlertTableComponent implements OnInit {
         this.selectedItemsChanged.emit(this.selectedItems);
     }
 
-    setStatus(id: string, status: AlertType) {
+    setSelectedAlertType(type: AlertType) {
+        if(this.alertDetail !== null) {
+            this.setAlertType(this.alertDetail["ID"], type);
+        }
+
+    }
+
+    setAlertType(id: string, status: AlertType) {
         let idx = this._alertTable.indexOf(this._alertTable.find(i => i.ID === id));
         this._alertTable[idx].Status = status;
         this.alertStateService.setAlertType(status, [id]).subscribe();
@@ -97,6 +110,24 @@ export class AlertTableComponent implements OnInit {
         }
     }
 
+    loadAlertDetail(alertId: string) {
+        this.alertDetailService.getAlertDetail(alertId).subscribe(alertDetail => {
+            this.alertDetail = alertDetail;
+            console.log(this.alertDetail);
+        });
+    }
 
+
+    closeAlertDetail() {
+        this.alertDetail = null;
+    }
+
+    removeSingleAlert() {
+        if(this.alertDetail !== null) {
+            this.removeAlertEvent.emit(this.alertDetail["ID"]);
+            this.alertDetail = null;
+        }
+
+    }
 
 }

@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AlertSimple } from '../shared/alert-simple';
+import { HandleServiceError } from '../shared/handle-service-error';
 
 @Injectable({
     providedIn: 'root',
@@ -17,7 +18,7 @@ export class AlertsService {
     getAlertCount(): Observable<number> {
         return this.http.get<number>('/alerts/alert-count')
             .pipe(
-              catchError(this.handleError('getAlertCount', 0))
+              catchError(HandleServiceError.handleError('getAlertCount', 0))
             );
     }
 
@@ -27,7 +28,7 @@ export class AlertsService {
             .set('items', itemsPerPage.toString());
         return this.http.get<AlertSimple[]>('alerts/alert-page',  { params: params })
             .pipe(
-                catchError(this.handleError('getAlertPage', []))
+                catchError(HandleServiceError.handleError('getAlertPage', []))
             );
     }
 
@@ -40,12 +41,6 @@ export class AlertsService {
     }
 
 
-    private handleError<T> (operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-            console.error('Failed on ' + operation + '. Error details:');
-            console.error(error);
-            //TODO: Notify user in GUI
-            return of(result as T);
-        };
-    }
+
+
 }

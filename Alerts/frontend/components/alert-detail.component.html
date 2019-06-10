@@ -1,0 +1,18 @@
+<div *ngIf="alertDetail" class="popup-wrapper" (click)="closeAlertDetail()">
+    <div class="popup-content-wrapper" (click)="$event.stopPropagation()">
+        <div class="popup-header">
+            <h1>Alert detail</h1>
+        </div>
+        <div class="popup-content" [innerHTML]="objectToHtml(alertDetail)">
+
+            <!--<p *ngFor="let item of alertDetail | keyvalue"><b>{{item.key}}</b>: {{item.value}}</p>-->
+        </div>
+        <div class="popup-toolbar">
+            <button class="btn btn-primary" >Edit description</button>
+            <button class="btn btn-warning" (click)="removeAlert()">Remove alert</button>
+            <button class="btn btn-danger" (click)="setAlertType(2)">Set as false positive</button>
+            <button class="btn btn-success" (click)="setAlertType(1)">Set as confirmed</button>
+        </div>
+    </div>
+
+</div>

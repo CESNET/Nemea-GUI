@@ -3,14 +3,22 @@
 
 .confirmed {
   background: $confirmed-bg;
+  &:hover {
+    background: darken($confirmed-bg, 10%);
+  }
 }
 .false-positive {
   background: $false-positive-bg;
+  &:hover {
+    background: darken($false-positive-bg, 10%);
+  }
 }
 .new-alert {
   font-weight: bold;
 }
-
+.alert-table-row {
+  transition: background ease-in-out 50ms;
+}
 
 .quick-action-btn {
   cursor: pointer;
@@ -33,4 +41,9 @@
       color: transparentize($reject, .3);
     }
   }
+}
+.nerd-link {
+  max-width: 20px;
+  height: auto;
+  margin-left: 1em;
 }
