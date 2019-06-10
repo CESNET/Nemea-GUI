@@ -90,3 +90,19 @@ def get_detail_of_alert():
     record_id = request.args.get('id')
     record = alerts_coll.find_one({"ID": record_id}, {"_id": 0})
     return json.dumps(record)
+
+
+# @auth.required
+def set_description(record_id):
+    data = request.json
+    description = data['description']
+    try:
+        alerts_coll.update_many({"ID": record_id}, {"$set": {"Description": description}})
+        return json.dumps({"success": True, "errCode": 200})
+    except Exception:
+        return json.dumps({"success": False, "errCode": 500})
+
+
+# @auth.required
+def get_filtered_alerts():
+    pass
