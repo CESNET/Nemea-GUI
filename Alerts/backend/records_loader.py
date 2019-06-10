@@ -34,7 +34,7 @@ def get_limited_number_of_records():
     alerts_coll.update_many({"_id": {"$in": ids}, "Status": {"$exists": False}}, {"$set": {"Status": 3}})
 
     query = {"_id": 0, "DetectTime": 1, "Category": 1, "Source": 1, "Target": 1, "FlowCount": 1, "Status": 1, "ID": 1}
-    records = list(alerts_coll.find({}, query).skip(first_item).limit(items))
+    records = list(alerts_coll.find({}, query).skip(first_item).limit(items).sort("DetectTime"))
 
     for record in records:
         if "Source" in record.keys():
@@ -93,16 +93,11 @@ def get_detail_of_alert():
 
 
 # @auth.required
-def set_description(record_id):
+def set_status_comment(record_id):
     data = request.json
-    description = data['description']
+    status_comment = data['StatusComment']
     try:
-        alerts_coll.update_many({"ID": record_id}, {"$set": {"Description": description}})
+        alerts_coll.update_many({"ID": record_id}, {"$set": {"StatusComment": status_comment}})
         return json.dumps({"success": True, "errCode": 200})
     except Exception:
         return json.dumps({"success": False, "errCode": 500})
-
-
-# @auth.required
-def get_filtered_alerts():
-    pass
