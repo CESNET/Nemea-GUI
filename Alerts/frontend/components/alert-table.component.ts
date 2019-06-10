@@ -21,6 +21,7 @@ export class AlertTableComponent implements OnInit {
     private _alertTable: AlertSimple[] = [];
     checkAll: boolean = false;
     alertDetail: object = null;
+    detailLoading: string = "";
 
     get alertTable(): AlertSimple[] {
         return this._alertTable;
@@ -111,9 +112,10 @@ export class AlertTableComponent implements OnInit {
     }
 
     loadAlertDetail(alertId: string) {
+        this.detailLoading = alertId;
         this.alertDetailService.getAlertDetail(alertId).subscribe(alertDetail => {
             this.alertDetail = alertDetail;
-            console.log(this.alertDetail);
+            this.detailLoading = "";
         });
     }
 

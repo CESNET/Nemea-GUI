@@ -105,8 +105,8 @@ export class AlertsComponent implements OnInit {
             this.alertTable = this.alertTable.filter(function( obj ) {
                 return obj.ID !== id;
             });
+            this.alertStateService.deleteAlerts([id]).subscribe(() => this.fixAfterDeleteOffset());
         }
-        this.alertStateService.deleteAlerts([id]).subscribe(() => this.fixAfterDeleteOffset());
     }
 
     private fixAfterDeleteOffset(): void {

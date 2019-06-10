@@ -7,11 +7,17 @@
 
             <!--<p *ngFor="let item of alertDetail | keyvalue"><b>{{item.key}}</b>: {{item.value}}</p>-->
         </div>
-        <div class="popup-toolbar">
+        <div class="popup-toolbox">
+            <a (click)="removeAlert()" [routerLink]=""><i class="fa fa-pencil" aria-hidden="true"></i> Edit description</a>
+            <a (click)="removeAlert()" [routerLink]=""><i class="fa fa-trash-o" aria-hidden="true"></i> Remove alert</a>
+            <a (click)="setAlertType(2)" [routerLink]=""><i class="fa fa-times" aria-hidden="true"></i> Set as false positive</a>
+            <a (click)="setAlertType(1)" [routerLink]=""><i class="fa fa-check" aria-hidden="true"></i> Set as confirmed</a>
+            <!--
             <button class="btn btn-primary" >Edit description</button>
             <button class="btn btn-warning" (click)="removeAlert()">Remove alert</button>
             <button class="btn btn-danger" (click)="setAlertType(2)">Set as false positive</button>
             <button class="btn btn-success" (click)="setAlertType(1)">Set as confirmed</button>
+            -->
         </div>
     </div>
 
