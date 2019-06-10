@@ -93,11 +93,11 @@ def get_detail_of_alert():
 
 
 # @auth.required
-def set_description(record_id):
+def set_status_comment(record_id):
     data = request.json
-    description = data['description']
+    status_comment = data['StatusComment']
     try:
-        alerts_coll.update_many({"ID": record_id}, {"$set": {"Description": description}})
+        alerts_coll.update_many({"ID": record_id}, {"$set": {"StatusComment": status_comment}})
         return json.dumps({"success": True, "errCode": 200})
     except Exception:
         return json.dumps({"success": False, "errCode": 500})
