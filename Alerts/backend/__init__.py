@@ -16,11 +16,13 @@ alerts_bp = Module('alerts', __name__, url_prefix='/alerts', no_version=True)
 
 from .fill_db import *
 from .records_loader import *
+from .filters import *
 
 # pomocne funkce pro docasne testovani
 # fill_db_with_data()
 # print(get_number_of_all_records())
 # print(get_limited_number_of_records(2, 3))
+# get_filtered_alerts("aa", "bb", "cc")
 # delete_data_from_db()
 
 # Get number of all records in database
@@ -42,4 +44,4 @@ alerts_bp.add_url_rule('/delete-alerts', view_func=delete_alerts, methods=['POST
 alerts_bp.add_url_rule('/alert-detail', view_func=get_detail_of_alert, methods=['GET'])
 
 # Set description of selected alert
-alerts_bp.add_url_rule('/set-description/<id>', view_func=set_description, methods=['POST'])
+alerts_bp.add_url_rule('/set-description/<record_id>', view_func=set_description, methods=['POST'])
