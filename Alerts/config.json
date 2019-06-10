@@ -1,9 +1,10 @@
-{
+ {
     "module": {
         "class": "AlertsModule",
         "file": "alerts.module.ts",
         "frontend": "frontend/",
         "backend": "backend/",
-        "name" : "alerts"
+        "name" : "alerts",
+        "assets" : "assets"
     }
-}
+ }
