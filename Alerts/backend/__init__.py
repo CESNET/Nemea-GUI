@@ -45,3 +45,6 @@ alerts_bp.add_url_rule('/alert-detail', view_func=get_detail_of_alert, methods=[
 
 # Set description of selected alert
 alerts_bp.add_url_rule('/set-status-comment/<record_id>', view_func=set_status_comment, methods=['POST'])
+
+import atexit
+atexit.register(delete_data_from_db)
