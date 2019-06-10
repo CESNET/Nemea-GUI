@@ -21,4 +21,11 @@ export class AlertDetailService {
                 catchError(HandleServiceError.handleError('getAlertDetail', {}))
             );
     }
+
+    editStatusComment(alertId: string, desc: string): Observable<object> {
+        return this.http.post<object>('alerts/set-status-comment/' + alertId, {'StatusComment': desc})
+            .pipe(
+                catchError(HandleServiceError.handleError('editDescription', {}))
+            );
+    }
 }
