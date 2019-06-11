@@ -10,31 +10,35 @@ from flask import request
 alerts_db = dbConnector("alerts")
 alerts_coll = alerts_db.db[config['alerts']['collection']]
 
+# Received filter format
+# [{'field': 'collumName', 'field2': 'submergedCollumName', 'predicate': '$...', 'value': '...'}, ...]
+# 'predicate': $eq, $ne, $lt, $lte, $gt, $gte
 
-# request query blueprint
-# field_name: TargetIP4, TargetIP6, TargetPort, TargetProto,
-#        SourceIP4, TargetIP6, SourcePort, TargetProto,
-#        Category, ...
-# predicate: gt, lt, eq, ne, range
-# field_value: [single number], [first number, second number]
 
 # @auth.required
-def get_filtered_alerts(titlef, scopef, valuef):
-    # data = request.json
-    # title = data['title']
-    # scope = data['scope']
-    # value = data['value']
-    request_filter = [{'field_name': 'CreateTime', 'predicate': 'ne', 'field_value': '2016-03-23T16:50:47Z'}]
+def get_filtered_alerts():
+    data = request.json
+    received_filter = data['filter']
 
-    query = filter_parser(request_filter)
-    print(alerts_coll.find_one(query))
+    # received_filter1 = [{'field': 'CreateTime', 'predicate': '$eq', 'value': '2016-03-23T16:50:47Z'}]
+    # received_filter2 = [{'field': 'Target', 'field2': 'Port', 'predicate': '$gt', 'value': 5000}]
+    # received_filter3 = [{'field': 'Target', 'field2': 'Port', 'predicate': '$gt', 'value': 5000},
+    #                    {'field': 'Target', 'field2': 'Port', 'predicate': '$lt', 'value': 5100}]
+
+    query = parse_filter_to_query(received_filter)
+    print(query)
+    for x in alerts_coll.find(query):
+        print(x)
 
 
-def filter_parser(request_filter):
-    query = '{"$and": [{'
-    for x in request_filter:
-        query = query + x['field_name'] + ': { "$' + x['predicate'] + '":' + x['field_value'] + '}'
-    query = query + '}]}'
+def parse_filter_to_query(received_filter):
+    query = {'$and': []}
+    for x in received_filter:
+        expression = {x['field']: {}}
+        if 'field2' in x:
+            expression[x['field']] = {'$elemMatch': {x['field2']: {x['predicate']: x['value']}}}
+        else:
+            expression[x['field']] = {x['predicate']: x['value']}
+        query['$and'].append(expression)
     return query
 
-# db["mydb"].find( { "$and": [{"field": var1},{"field": {"$ne": var2}}] } )
