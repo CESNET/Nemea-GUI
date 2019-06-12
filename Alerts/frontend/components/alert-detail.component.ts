@@ -1,7 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewEncapsulation } from '@angular/core'
-import { AlertStateService } from '../services/alert-state.service';
 import { AlertType, AlertTypeToString } from '../shared/alertType';
-import { Alert } from '../shared/alert';
 import { AlertDetailService } from '../services/alert-detail.service';
 
 @Component({
@@ -21,11 +19,8 @@ export class AlertDetailComponent implements OnInit {
     }
 
     @Input() alertDetail: object;
-
     @Output() alertDetailClosed = new EventEmitter<boolean>();
-
     @Output() setSelectedAlertType = new EventEmitter<AlertType>();
-
     @Output() removeAlertEvent = new EventEmitter<boolean>();
 
     @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
@@ -55,8 +50,8 @@ export class AlertDetailComponent implements OnInit {
     }
 
     editAlertDescription() {
-        let newDesc = prompt("Why was status of this alert changed?", this.alertDetail['StatusComment']);
-        if(newDesc != null && newDesc != "") {
+        let newDesc = prompt('Why was status of this alert changed?', this.alertDetail['StatusComment']);
+        if (newDesc != null && newDesc != '') {
             this.alertDetail['StatusComment'] = newDesc;
             this.alertDetailService.editStatusComment(this.alertDetail['ID'], newDesc).subscribe();
         }
@@ -89,7 +84,7 @@ export class AlertDetailComponent implements OnInit {
         let result = '';
         let label = '';
         if (key !== null) {
-            label = '<p class="mb-0 left-' + offset + '"><b>' + key + ':</b> ';
+            label = '<p class="mb-0 left-' + offset + '"><b>' + AlertDetailComponent.escapeHtmlChars(key) + ':</b> ';
         } else {
             label = '<p class="mb-0 left-' + offset + '"> ';
         }
@@ -107,7 +102,7 @@ export class AlertDetailComponent implements OnInit {
                         result += label + o +
                             '<a href="https://nerd.cesnet.cz/nerd/ip/' + o + '"  target="_blank"><img class="nerd-link" src="/assets/alerts/nerd-icon.png"alt="nerd"></a></p>';
                     } else {
-                        result += label + o + '</p>';
+                        result += label + AlertDetailComponent.escapeHtmlChars(o) + '</p>';
                     }
                     break;
             }
@@ -116,6 +111,19 @@ export class AlertDetailComponent implements OnInit {
         }
 
         return result;
+    }
+
+    private static escapeHtmlChars(s: string) {
+        let entityMap = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': '&quot;',
+            "'": '&#39;',
+            "/": '&#x2F;'
+        };
+
+        return String(s).replace(/[&<>"'\/]/g, st => entityMap[st]);
     }
 
 }
