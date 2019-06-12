@@ -101,7 +101,7 @@ export class AlertsComponent implements OnInit {
     }
 
     deleteSingleAlert(id: string) {
-        if(confirm("Do you really want to remove alert " + id + "? This cannot be undone!")) {
+        if(confirm("Do you really want to remove this alert ? This cannot be undone!")) {
             this.alertTable = this.alertTable.filter(function( obj ) {
                 return obj.ID !== id;
             });
@@ -114,7 +114,7 @@ export class AlertsComponent implements OnInit {
             .subscribe(alertCount => {
                 this.itemCount = alertCount;
                 if(Math.ceil(this.itemCount / this.pageSize) < this.page) {
-                    this.page = Math.ceil(this.itemCount / this.pageSize);
+                    this.page = Math.ceil(this.itemCount / this.pageSize) || 1;
                 }
                 this.getAlerts();
             });
