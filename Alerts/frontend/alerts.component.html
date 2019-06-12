@@ -11,8 +11,8 @@
                     <div class="card-header">
                         <h4 class="card-title">Filter</h4>
                     </div>
-                    <div class="card-content">
-
+                    <div class="card-content pb-0">
+                        <filter></filter>
                     </div>
                 </div>
             </div>
@@ -34,7 +34,6 @@
                 <label for="statusSelect">Status:</label>
                 <select (change)="onStatusChanged($event.target.value)" id="statusSelect">
                     <option selected value="all">All</option>
-                    <option value="new">New</option>
                     <option value="undecided">Undecided</option>
                     <option value="confirmed">Confirmed</option>
                     <option value="false-positive">False positive</option>
@@ -45,7 +44,7 @@
                 <select [(ngModel)]="selectedAction" id="actionSelect">
                     <option selected value="confirm">Set as confirmed</option>
                     <option value="false-positive">Set as false positive</option>
-                    <option value="delete">Delete</option> <!-- TODO: Confirmation dialog -->
+                    <option value="delete">Delete</option>
                 </select>
                 <button class="btn btn-primary ml-1" (click)="applyMassOperation()">Apply operation</button>
             </div>

@@ -15,6 +15,6 @@ export function AlertTypeToString(type: AlertType): string {
         case AlertType.New:
             return "New";
         default:
-            return "error";
+            return "Not set";
     }
 }

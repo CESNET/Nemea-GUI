@@ -5,7 +5,7 @@
         </div>
         <div class="popup-content" [innerHTML]="objectToHtml(alertDetail)"></div>
         <div class="popup-toolbox">
-            <a (click)="removeAlert()" [routerLink]=""><i class="fa fa-trash-o" aria-hidden="true"></i> Remove alert</a>
+            <a (click)="removeAlert()" [routerLink]="" class="remove"><i class="fa fa-trash-o" aria-hidden="true"></i> Remove alert</a>
             <a (click)="editAlertDescription()" [routerLink]=""><i class="fa fa-pencil" aria-hidden="true"></i> Edit status comment</a>
             <a (click)="setAlertType(2)" [routerLink]=""><i class="fa fa-times" aria-hidden="true"></i> Set as false positive</a>
             <a (click)="setAlertType(1)" [routerLink]=""><i class="fa fa-check" aria-hidden="true"></i> Set as confirmed</a>

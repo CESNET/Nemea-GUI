@@ -1,0 +1,17 @@
+@import "../colors";
+@import "../alerts-colors";
+
+.filter-rule-input {
+  margin: 5px;
+  font-size: 1rem;
+  font-family: 'Source Code Pro', 'Consolas', 'Courier', monospace;
+}
+
+.remove-filter-rule {
+  color: $reject;
+  cursor: pointer;
+  transition: all ease-in-out 250ms;
+  &:hover {
+    color: transparentize($reject, .4);
+  }
+}

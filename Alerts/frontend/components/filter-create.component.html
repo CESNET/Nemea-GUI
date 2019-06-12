@@ -1,0 +1,27 @@
+<div class="popup-wrapper" *ngIf="showDialog" (click)="hideDialog()">
+    <div class="popup-content-wrapper filter-popup-wrapper" (click)="$event.stopPropagation()">
+        <div class="popup-header">
+            <h1>Create a new filter</h1>
+        </div>
+        <div class="popup-content">
+            <label for="filter-name-input">Filter name: </label>
+            <input type="text" id="filter-name-input" placeholder="Name for a new filter" [(ngModel)]="newFilterName">
+            <div class="filter-config-wrapper">
+                <filter-rule *ngFor="let filter of filterRules; let i = index" [ruleFilter]="filter"
+                             (ruleFilterChanged)="setFilterRule($event, i)" [ruleIndex]="i"></filter-rule>
+                <p><a [routerLink]="" class="float-left" (click)="addRule()">+ add filter rule</a></p>
+            </div>
+        </div>
+        <div class="filter-popup-toolbox">
+            <button class="btn btn-danger" (click)="hideDialog()">Cancel</button>
+
+
+            <div class="float-right">
+                <button class="btn btn-secondary">Use</button>
+                <button class="btn btn-secondary" *ngIf="newFilterName != ''">Save</button>
+                <button class="btn btn-primary" *ngIf="newFilterName != ''">Save and use</button>
+            </div>
+
+        </div>
+    </div>
+</div>

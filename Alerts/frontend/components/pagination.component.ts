@@ -53,7 +53,7 @@ export class PaginationComponent {
     }
 
     totalPages(): number {
-        return Math.ceil(this.itemCount / this.itemsPerPage) || 0;
+        return Math.ceil(this.itemCount / this.itemsPerPage) || 1;
     }
 
     isLastPage(): boolean {

@@ -1,0 +1,13 @@
+@import "../colors";
+@import "../shared-styles/popups";
+
+.filter-popup-toolbox {
+  background: darken($colorItemBackground, 20%);
+  padding: 10px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  text-align: left;
+  .btn {
+    margin: 5px;
+  }
+}

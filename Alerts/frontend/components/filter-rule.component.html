@@ -1,0 +1,15 @@
+<select [(ngModel)]="selectedFilter" (change)="changeActiveFilter()" class="filter-rule-input">
+    <option *ngFor="let fc of filterConfig" [ngValue]="fc">{{fc.name}}</option>
+</select>
+
+<select *ngIf="selectedFilter" class="filter-rule-input">
+    <option selected disabled>Operation</option>
+    <option *ngFor="let predicate of selectedFilter.predicates">{{predicateToName(predicate)}}</option>
+</select>
+
+<input type="text" class="filter-rule-input"
+       *ngIf="selectedFilter &&
+       (selectedFilter.type == 'text' || selectedFilter.type == 'ip4' || selectedFilter.type == 'ip6')">
+<input class="filter-rule-input" type="number" *ngIf="selectedFilter && selectedFilter.type == 'number'">
+<i class="fa fa-times remove-filter-rule" aria-hidden="true"></i>
+<br>

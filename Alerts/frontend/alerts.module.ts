@@ -14,6 +14,9 @@ import { AlertTableComponent } from './components/alert-table.component';
 import { PaginationComponent } from './components/pagination.component';
 import { AlertDetailComponent } from './components/alert-detail.component';
 import { ClickStopPropagation } from './directives/click-stop-propagation.directive';
+import { FilterComponent } from './components/filter.component';
+import { FilterCreateComponent } from './components/filter-create.component';
+import { FilterRuleComponent } from './components/filter-rule.component';
 
 
 const routes: Routes = [{
@@ -43,7 +46,10 @@ const routes: Routes = [{
         AlertTableComponent,
         PaginationComponent,
         AlertDetailComponent,
-        ClickStopPropagation
+        ClickStopPropagation,
+        FilterComponent,
+        FilterCreateComponent,
+        FilterRuleComponent
     ],
     providers: [
         SafePipe
