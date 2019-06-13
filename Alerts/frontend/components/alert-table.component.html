@@ -9,11 +9,11 @@
         <th>Flows</th>
         <th>Status</th>
         <th>Quick actions</th>
-        <th></th>
+        <th class="text-right"><i class="fa fa-spinner fa-pulse fa-fw" *ngIf="loading" title="Loading..."></i></th>
     </tr>
     </thead>
     <tbody>
-    <h1 class="text-center" *ngIf="loading">Loading...</h1>
+
     <tr *ngFor="let alertItem of alertTable"
         [class.confirmed]="alertItem.Status == 1"
         [class.false-positive]="alertItem.Status == 2"
