@@ -15,7 +15,7 @@ alerts_coll = alerts_db.db[config['alerts']['collection']]
 # 'predicate': $eq, $ne, $lt, $lte, $gt, $gte, $in, $nin
 
 
-@auth.required
+@auth.required()
 def get_filtered_alerts():
     data = request.json
     received_filter = data['filter']
