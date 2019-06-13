@@ -44,7 +44,7 @@ def get_limited_number_of_records():
             record['Target'] = []
 
         alerts_coll.update_one({'ID': record['ID'], 'Status': 3}, {'$set': {'Status': 0}})
-        alerts_coll.update_many({'ID': record['ID'], 'Status': {'$exists': False}}, {'$set': {'Status': 3}})
+        alerts_coll.update_one({'ID': record['ID'], 'Status': {'$exists': False}}, {'$set': {'Status': 3}})
 
     return json.dumps({"count": numbers_of_records, "data": records})
 
