@@ -8,7 +8,8 @@
             <input type="text" id="filter-name-input" placeholder="Name for a new filter" [(ngModel)]="newFilterName">
             <div class="filter-config-wrapper">
                 <filter-rule *ngFor="let filter of filterRules; let i = index" [ruleFilter]="filter"
-                             (ruleFilterChanged)="setFilterRule($event, i)" [ruleIndex]="i"></filter-rule>
+                             (ruleFilterChanged)="setFilterRule($event, i)" [ruleIndex]="i"
+                        (removeRule)="removeRule($event)"></filter-rule>
                 <p><a [routerLink]="" class="float-left" (click)="addRule()">+ add filter rule</a></p>
             </div>
         </div>

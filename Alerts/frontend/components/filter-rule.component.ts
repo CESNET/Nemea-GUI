@@ -23,6 +23,7 @@ export class FilterRuleComponent implements OnInit
     @Input() ruleFilter: Filter;
 
     @Output() ruleFilterChanged = new EventEmitter<Filter>();
+    @Output() removeRule = new EventEmitter<number>();
 
     ngOnInit() {
         this.filterConfig = filters;
@@ -83,6 +84,10 @@ export class FilterRuleComponent implements OnInit
         else {
             this.selectedRule.value = this.inputValue;
         }
+    }
+
+    removeSelf() {
+        this.removeRule.emit(this.ruleIndex);
     }
 
     // TODO: in range

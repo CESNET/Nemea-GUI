@@ -34,9 +34,9 @@
                 <label for="statusSelect">Status:</label>
                 <select (change)="onStatusChanged($event.target.value)" id="statusSelect">
                     <option selected value="all">All</option>
-                    <option value="undecided">Undecided</option>
-                    <option value="confirmed">Confirmed</option>
-                    <option value="false-positive">False positive</option>
+                    <option value="0">Undecided</option>
+                    <option value="1">Confirmed</option>
+                    <option value="2">False positive</option>
                 </select>
             </div>
             <div class="col-sm-12 col-md-4">

@@ -10,5 +10,5 @@
 </select>
 
 <input type="text" class="filter-rule-input" [(ngModel)]="inputValue" (change)="changeValue()">
-<i class="fa fa-times remove-filter-rule" aria-hidden="true"></i>
+<i class="fa fa-times remove-filter-rule" aria-hidden="true" (click)="removeSelf()"></i>
 <br>

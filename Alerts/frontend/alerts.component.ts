@@ -19,7 +19,8 @@ export class AlertsComponent implements OnInit {
     itemCount: number = 0;
     loading: boolean = false;
     selectedAlerts: string[] = [];
-    activeFilter: Filter[];
+    activeFilter: Filter[] = [];
+    statusFilterIdx: number = -1;
 
     selectedAction: string;
 
@@ -61,8 +62,22 @@ export class AlertsComponent implements OnInit {
     }
 
     onStatusChanged(newValue: string) {
-        //TODO: Filtering
         console.log(newValue);
+        if(this.statusFilterIdx != -1) {
+            this.activeFilter.splice(this.statusFilterIdx, 1);
+            this.statusFilterIdx = -1;
+        }
+        if(newValue !== 'all') {
+            let f: Filter = {
+                field: "Status",
+                field2: undefined,
+                predicate: "$eq",
+                value: +newValue
+            };
+            this.activeFilter.push(f);
+            this.statusFilterIdx = this.activeFilter.length - 1;
+        }
+        this.getAlerts();
     }
 
     applyMassOperation() {
@@ -112,7 +127,9 @@ export class AlertsComponent implements OnInit {
 
     getAlerts() {
         this.loading = true;
-        if(this.activeFilter === []) {
+        console.log("Active filter:");
+        console.log(this.activeFilter);
+        if(this.activeFilter.length === 0) {
             this.alertsService.getAlertPage(this.page, this.pageSize)
                 .subscribe(alerts => this.setAlerts(alerts));
         }
@@ -135,8 +152,6 @@ export class AlertsComponent implements OnInit {
 
     setFilter(filter: Filter[]) {
         this.activeFilter = filter;
-        console.log('Setting filter from alerts component');
-        console.log(this.activeFilter);
         this.getAlerts();
     }
 

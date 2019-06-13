@@ -54,6 +54,9 @@ export class FilterCreateComponent implements OnInit
         this.hideDialog();
     }
 
+    removeRule(idx: number) {
+        this.filterRules.splice(idx, 1);
+    }
 
 
 }
