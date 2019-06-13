@@ -25,9 +25,6 @@ from .filters import *
 # get_filtered_alerts(1, 1)
 # delete_data_from_db()
 
-# Get number of all records in database
-alerts_bp.add_url_rule('/alert-count', view_func=get_number_of_all_records, methods=['GET'])
-
 # Get limited number of records for one page
 alerts_bp.add_url_rule('/alert-page', view_func=get_limited_number_of_records, methods=['GET'])
 
