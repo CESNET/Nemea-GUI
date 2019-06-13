@@ -15,13 +15,17 @@ alerts_coll = alerts_db.db[config['alerts']['collection']]
 # 'predicate': $eq, $ne, $lt, $lte, $gt, $gte, $in, $nin
 
 
-# @auth.required
+@auth.required
 def get_filtered_alerts():
     data = request.json
     received_filter = data['filter']
     page = int(data['page'])
     items = int(data['items'])
     first_item = items * (page - 1)
+
+    ids = [x["_id"] for x in list(alerts_coll.find({}, {"_id": 1}).skip(first_item).limit(items).sort("DetectTime", -1))]
+    alerts_coll.update_many({"_id": {"$in": ids}, "Status": 3}, {"$set": {"Status": 0}})
+    alerts_coll.update_many({"_id": {"$in": ids}, "Status": {"$exists": False}}, {"$set": {"Status": 3}})
 
     query = parse_filter_to_query(received_filter)
     project = {'_id': 0, 'DetectTime': 1, 'Category': 1, 'FlowCount': 1, 'Status': 1, 'ID': 1,
@@ -43,9 +47,6 @@ def get_filtered_alerts():
             record['Target'] = list(set(record['Target']))
         else:
             record['Target'] = []
-
-        alerts_coll.update_one({'ID': record['ID'], 'Status': 3}, {'$set': {'Status': 0}})
-        alerts_coll.update_one({'ID': record['ID'], 'Status': {'$exists': False}}, {'$set': {'Status': 3}})
 
     return json.dumps({"count": numbers_of_records, "data": records})
 

@@ -23,6 +23,10 @@ def get_limited_number_of_records():
     items = int(request.args.get('items'))
     first_item = items * (page - 1)
 
+    ids = [x["_id"] for x in list(alerts_coll.find({}, {"_id": 1}).skip(first_item).limit(items).sort("DetectTime", -1))]
+    alerts_coll.update_many({"_id": {"$in": ids}, "Status": 3}, {"$set": {"Status": 0}})
+    alerts_coll.update_many({"_id": {"$in": ids}, "Status": {"$exists": False}}, {"$set": {"Status": 3}})
+
     project = {'_id': 0, 'DetectTime': 1, 'Category': 1, 'FlowCount': 1, 'Status': 1, 'ID': 1,
                'Source': {'$setUnion': ['$Source.IP4', '$Source.IP6']},
                'Target': {'$setUnion': ['$Target.IP4', '$Target.IP6']}}
@@ -42,9 +46,7 @@ def get_limited_number_of_records():
             record['Target'] = list(set(record['Target']))
         else:
             record['Target'] = []
-
-        alerts_coll.update_one({'ID': record['ID'], 'Status': 3}, {'$set': {'Status': 0}})
-        alerts_coll.update_one({'ID': record['ID'], 'Status': {'$exists': False}}, {'$set': {'Status': 3}})
+        print(record)
 
     return json.dumps({"count": numbers_of_records, "data": records})
 
@@ -92,7 +94,6 @@ def get_detail_of_alert():
     return json.dumps(record)
 
 
-# @auth.required
 def set_status_comment(record_id):
     data = request.json
     status_comment = data['StatusComment']
