@@ -27,7 +27,7 @@ def get_filtered_alerts():
     project = {'_id': 0, 'DetectTime': 1, 'Category': 1, 'FlowCount': 1, 'Status': 1, 'ID': 1,
                'Source': {'$setUnion': ['$Source.IP4', '$Source.IP6']},
                'Target': {'$setUnion': ['$Target.IP4', '$Target.IP6']}}
-    records = list(alerts_coll.aggregate([{'$match': query}, {'$project': project},
+    records = list(alerts_coll.aggregate([{'$match': query}, {'$project': project}, {'$sort': {'DetectTime': -1}},
                                           {'$skip': first_item}, {'$limit': items}]))
 
     numbers_of_records = alerts_coll.find(query).count()
