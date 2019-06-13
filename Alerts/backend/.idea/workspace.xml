@@ -4,7 +4,9 @@
     <list default="true" id="2394a6aa-1eab-494a-8e40-6d91c17638b9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fill_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/fill_db.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/filters.py" beforeDir="false" afterPath="$PROJECT_DIR$/filters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/records_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/records_loader.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,11 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="614">
-              <caret line="49" column="39" selection-start-line="49" selection-start-column="39" selection-end-line="49" selection-end-column="39" />
+            <state relative-caret-position="734">
+              <caret line="53" lean-forward="true" selection-start-line="53" selection-end-line="53" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -29,8 +31,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fill_db.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="810">
-              <caret line="27" column="1" lean-forward="true" selection-start-line="27" selection-start-column="1" selection-end-line="27" selection-end-column="1" />
+            <state relative-caret-position="180">
+              <caret line="9" column="70" selection-start-line="9" selection-start-column="70" selection-end-line="9" selection-end-column="70" />
               <folding>
                 <element signature="e#48#90#0" expanded="true" />
               </folding>
@@ -41,8 +43,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/records_loader.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="39" column="37" lean-forward="true" selection-start-line="39" selection-start-column="37" selection-end-line="39" selection-end-column="37" />
+            <state relative-caret-position="-390">
+              <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
               <folding>
                 <element signature="e#48#90#0" expanded="true" />
               </folding>
@@ -50,11 +52,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/filters.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="16" selection-start-line="16" selection-end-line="16" />
+            <state relative-caret-position="420">
+              <caret line="29" column="63" selection-start-line="29" selection-start-column="63" selection-end-line="29" selection-end-column="63" />
               <folding>
                 <element signature="e#48#90#0" expanded="true" />
               </folding>
@@ -76,6 +78,7 @@
       <find>Source</find>
       <find>Creat</find>
       <find>2016-03-23T16:50:47Z</find>
+      <find>59c85a23-11b6-4faf-9eff-55bfb5f7fda5</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -88,10 +91,11 @@
         <option value="$PROJECT_DIR$/tests/records.py" />
         <option value="$PROJECT_DIR$/test_records_fce.py" />
         <option value="$PROJECT_DIR$/filteres.py" />
+        <option value="$PROJECT_DIR$/filters.json" />
+        <option value="$PROJECT_DIR$/__init__.py" />
         <option value="$PROJECT_DIR$/records_loader.py" />
         <option value="$PROJECT_DIR$/fill_db.py" />
         <option value="$PROJECT_DIR$/filters.py" />
-        <option value="$PROJECT_DIR$/__init__.py" />
       </list>
     </option>
   </component>
@@ -107,6 +111,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -118,13 +123,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$USER_HOME$/PycharmProjects/test" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
   </component>
@@ -153,18 +157,20 @@
       <workItem from="1559820696116" duration="10503000" />
       <workItem from="1559889385110" duration="16652000" />
       <workItem from="1560149751728" duration="18298000" />
-      <workItem from="1560236478848" duration="17428000" />
+      <workItem from="1560236478848" duration="19638000" />
+      <workItem from="1560321812966" duration="19059000" />
+      <workItem from="1560408094508" duration="2544000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="62881000" />
+    <option name="totallyTimeSpent" value="86694000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1985" y="-4" width="1855" height="1084" extended-state="6" />
+    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25815368" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2642344" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -197,20 +203,31 @@
     <entry file="file://$PROJECT_DIR$/tests/__init__.py" />
     <entry file="file://$PROJECT_DIR$/tests/records.py" />
     <entry file="file://$PROJECT_DIR$/test_records_fce.py" />
-    <entry file="file://$PROJECT_DIR$/records_loader.py">
+    <entry file="file://$PROJECT_DIR$/filters.json" />
+    <entry file="file://$PROJECT_DIR$/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="39" column="37" lean-forward="true" selection-start-line="39" selection-start-column="37" selection-end-line="39" selection-end-column="37" />
+        <state relative-caret-position="734">
+          <caret line="53" lean-forward="true" selection-start-line="53" selection-end-line="53" />
           <folding>
-            <element signature="e#48#90#0" expanded="true" />
+            <element signature="e#0#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fill_db.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="27" column="1" lean-forward="true" selection-start-line="27" selection-start-column="1" selection-end-line="27" selection-end-column="1" />
+        <state relative-caret-position="180">
+          <caret line="9" column="70" selection-start-line="9" selection-start-column="70" selection-end-line="9" selection-end-column="70" />
+          <folding>
+            <element signature="e#48#90#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/records_loader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-390">
+          <caret line="51" lean-forward="true" selection-start-line="51" selection-end-line="51" />
           <folding>
             <element signature="e#48#90#0" expanded="true" />
           </folding>
@@ -219,20 +236,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/filters.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        <state relative-caret-position="420">
+          <caret line="29" column="63" selection-start-line="29" selection-start-column="63" selection-end-line="29" selection-end-column="63" />
           <folding>
             <element signature="e#48#90#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="614">
-          <caret line="49" column="39" selection-start-line="49" selection-start-column="39" selection-end-line="49" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
           </folding>
         </state>
       </provider>

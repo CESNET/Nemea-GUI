@@ -29,12 +29,16 @@ def get_limited_number_of_records():
     items = int(request.args.get('items'))
     first_item = items * (page - 1)
 
+    if page < 1:
+        print("Warning: received page is less than 1.")
+        return
+
     ids = [x["_id"] for x in list(alerts_coll.find({}, {"_id": 1}).skip(first_item).limit(items).sort("DetectTime", -1))]
     alerts_coll.update_many({"_id": {"$in": ids}, "Status": 3}, {"$set": {"Status": 0}})
     alerts_coll.update_many({"_id": {"$in": ids}, "Status": {"$exists": False}}, {"$set": {"Status": 3}})
 
-    query = {"_id": 0, "DetectTime": 1, "Category": 1, "Source": 1, "Target": 1, "FlowCount": 1, "Status": 1, "ID": 1}
-    records = list(alerts_coll.find({}, query).skip(first_item).limit(items).sort("DetectTime", -1))
+    fields = {"_id": 0, "DetectTime": 1, "Category": 1, "Source": 1, "Target": 1, "FlowCount": 1, "Status": 1, "ID": 1}
+    records = list(alerts_coll.find({}, fields).skip(first_item).limit(items).sort("DetectTime", -1))
 
     for record in records:
         if "Source" in record.keys():
