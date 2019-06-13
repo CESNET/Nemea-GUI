@@ -20,8 +20,7 @@ from .filters import *
 
 # pomocne funkce pro docasne testovani
 # fill_db_with_data()
-# print(get_number_of_all_records())
-# print(get_limited_number_of_records(2, 3))
+# get_limited_number_of_records(2, 3)
 # get_filtered_alerts(1, 1)
 # delete_data_from_db()
 
