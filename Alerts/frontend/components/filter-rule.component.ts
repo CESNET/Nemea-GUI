@@ -33,14 +33,22 @@ export class FilterRuleComponent implements OnInit
     }
 
     filterToSelectedItem(filter: Filter) {
+        console.log("Setting filter");
+        console.log(filter);
         if(filter.field2 !== undefined) {
             this.selectedFilter = this.filterConfig.find(x => (x['field'] == filter.field && x['field2'] == filter.field2));
         }
         else {
-            this.selectedFilter = this.filterConfig.find(x => (x['field'] == filter.field ));
+            this.selectedFilter = this.filterConfig.find(x => (x['field'] == filter.field && x['field2'] == undefined));
         }
 
-        this.selectedPredicateValue = filter.predicate;
+        if(filter.predicate === "$exists" && filter.value == 0) {
+            this.selectedPredicateValue = "$nexists";
+        }
+        else {
+            this.selectedPredicateValue = filter.predicate;
+        }
+
 
     }
 
@@ -65,7 +73,14 @@ export class FilterRuleComponent implements OnInit
     }
 
     private convertInputValue() {
-        if(this.selectedPredicateValue === "$in" || this.selectedPredicateValue === "$nin") {
+        if(this.selectedPredicateValue === "$exists") {
+            this.ruleFilter.value = 1;
+        }
+        else if(this.selectedPredicateValue === "$nexists") {
+            this.ruleFilter.value = 0;
+            this.ruleFilter.predicate = "$exists";
+        }
+        else if(this.selectedPredicateValue === "$in" || this.selectedPredicateValue === "$nin") {
             if(this.selectedFilter['type'] == 'number') {
                 let tmp = [];
                 for(let i of this.inputValue.split(',')) {
@@ -121,6 +136,10 @@ export class FilterRuleComponent implements OnInit
                 return "is one of";
             case "$nin":
                 return "is not one of";
+            case "$exists":
+                return "is set";
+            case "$nexists":
+                return "is not set";
             default:
                 return predicate;
         }

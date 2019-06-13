@@ -97,6 +97,7 @@ export class AlertTableComponent implements OnInit {
     }
 
     setAlertType(id: string, status: AlertType) {
+        this.removeNewStatus(id);
         let idx = this._alertTable.indexOf(this._alertTable.find(i => i.ID === id));
         this._alertTable[idx].Status = status;
         this.alertStateService.setAlertType(status, [id]).subscribe();
@@ -117,6 +118,7 @@ export class AlertTableComponent implements OnInit {
     }
 
     loadAlertDetail(alertId: string) {
+        this.removeNewStatus(alertId);
         this.detailLoading = alertId;
         this.alertDetailService.getAlertDetail(alertId).subscribe(alertDetail => {
             this.alertDetail = alertDetail;
@@ -124,6 +126,10 @@ export class AlertTableComponent implements OnInit {
         });
     }
 
+    removeNewStatus(alertId: string) {
+        let idx = this._alertTable.indexOf(this._alertTable.find(i => i.ID === alertId));
+        this._alertTable[idx].New = false;
+    }
 
     closeAlertDetail() {
         this.alertDetail = null;

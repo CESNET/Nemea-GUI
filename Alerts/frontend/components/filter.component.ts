@@ -13,6 +13,7 @@ export class FilterComponent {
     {}
 
     createFilterShown: boolean = false;
+    dateStartAt: string;
 
     @Output() filterChanged = new EventEmitter<Filter[]>();
 
@@ -26,6 +27,11 @@ export class FilterComponent {
 
     delegateFilterChange(filter: Filter[]) {
         this.filterChanged.emit(filter);
+    }
+
+    changeStartAtDate(){
+        console.log(typeof(this.dateStartAt));
+        console.log(this.dateStartAt);
     }
 
 }

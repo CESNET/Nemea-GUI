@@ -9,6 +9,7 @@
     </option>
 </select>
 
-<input type="text" class="filter-rule-input" [(ngModel)]="inputValue" (change)="changeValue()">
+<input type="text" class="filter-rule-input" [(ngModel)]="inputValue" (change)="changeValue()" placeholder="value"
+        *ngIf="selectedPredicateValue != '$nexists' && selectedPredicateValue != '$exists'">
 <i class="fa fa-times remove-filter-rule" aria-hidden="true" (click)="removeSelf()"></i>
 <br>

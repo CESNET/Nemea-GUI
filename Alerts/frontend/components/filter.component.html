@@ -5,7 +5,7 @@
     <div class="col-sm-12 col-md-5">
         <label>
             Start at
-            <input type="datetime-local">
+            <input type="datetime-local" [(ngModel)]="dateStartAt" (change)="changeStartAtDate(dateStartAt)">
         </label><br>
         <label>
             End at

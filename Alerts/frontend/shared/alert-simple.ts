@@ -8,4 +8,5 @@ export class AlertSimple {
     FlowCount?: number;
     Status?: AlertType;
     ID: string; // ID of full alert
+    New?: boolean;
 }

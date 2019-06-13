@@ -68,13 +68,26 @@ export class AlertsComponent implements OnInit {
             this.statusFilterIdx = -1;
         }
         if(newValue !== 'all') {
-            let f: Filter = {
-                field: "Status",
-                field2: undefined,
-                predicate: "$eq",
-                value: +newValue
-            };
-            this.activeFilter.push(f);
+            if(newValue == "3") {
+                let f: Filter = {
+                    field: "Status",
+                    field2: undefined,
+                    predicate: "$exists",
+                    value: false
+                };
+                this.activeFilter.push(f);
+            }
+            else {
+                let f: Filter = {
+                    field: "Status",
+                    field2: undefined,
+                    predicate: "$eq",
+                    value: +newValue
+                };
+                this.activeFilter.push(f);
+            }
+
+
             this.statusFilterIdx = this.activeFilter.length - 1;
         }
         this.getAlerts();
@@ -145,8 +158,9 @@ export class AlertsComponent implements OnInit {
         this.loading = false;
         this.itemCount = alertSet.count;
         this.alertTable = alertSet.data;
-        if(Math.ceil(this.itemCount / this.pageSize) < this.page) {
+        if(this.itemCount !== 0 &&(Math.ceil(this.itemCount / this.pageSize) < this.page)) {
             this.page = Math.ceil(this.itemCount / this.pageSize) || 1;
+            this.getAlerts();
         }
     }
 

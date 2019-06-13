@@ -15,9 +15,9 @@
     <tbody>
 
     <tr *ngFor="let alertItem of alertTable"
-        [class.confirmed]="alertItem.Status == 1"
-        [class.false-positive]="alertItem.Status == 2"
-        [class.new-alert]="alertItem.Status == 3"
+        [class.confirmed]="alertItem.Status == 0"
+        [class.false-positive]="alertItem.Status == 1"
+        [class.new-alert]="alertItem.New"
         class="alert-table-row">
         <td><input type="checkbox" (change)="toggleCheckedId($event)" [value]="alertItem.ID" [ngModel]="checkAll"></td>
         <td>{{alertItem.DetectTime || 'N/A'}}</td> <!-- date -->
@@ -27,19 +27,19 @@
         <!-- source -->
         <td [innerHTML]="createIpListHtml(alertItem.Target)"></td> <!-- target -->
         <td>{{alertItem.FlowCount || 'N/A'}}</td> <!-- flows -->
-        <td>{{alertTypeToString(alertItem.Status) || 'N/A'}}</td> <!-- status -->
+        <td>{{alertTypeToString(alertItem.Status) || 'N/A'}} <span class="new-badge" *ngIf="alertItem.New">New</span></td> <!-- status -->
         <td><i *ngIf="detailLoading != alertItem.ID" class="fa fa-search-plus quick-action-btn " title="View detail" aria-hidden="true"
                (click)="loadAlertDetail(alertItem.ID)"></i>
             <i class="fa fa-spinner fa-pulse fa-fw quick-action-btn" *ngIf="detailLoading == alertItem.ID"></i>
             <span class="sr-only" *ngIf="detailLoading == alertItem.ID">Loading...</span>
-            <i title="Set as confirmed" *ngIf="alertItem.Status == 0 || alertItem.Status == 3"
+            <i title="Set as confirmed" *ngIf="alertItem.Status != 0 && alertItem.Status != 1"
                class="fa fa-check quick-action-btn confirm"
                aria-hidden="true"
-               (click)="setAlertType(alertItem.ID, 1)"></i>
-            <i title="Set as false positive" *ngIf="alertItem.Status == 0 || alertItem.Status == 3"
+               (click)="setAlertType(alertItem.ID, 0)"></i>
+            <i title="Set as false positive" *ngIf="alertItem.Status != 0 && alertItem.Status != 1"
                class="fa fa-times quick-action-btn reject"
                aria-hidden="true"
-               (click)="setAlertType(alertItem.ID, 2)"></i>
+               (click)="setAlertType(alertItem.ID, 1)"></i>
         </td>
         <td><a class="btn btn-secondary" href="#">Show related flows</a></td>
     </tr>
@@ -50,4 +50,4 @@
               (setSelectedAlertType)="setSelectedAlertType($event)"
               (removeAlertEvent)="removeSingleAlert()"></alert-detail>
 <h1 class="text-center" *ngIf="(!alertTable || alertTable.length == 0) && !loading">No alerts found.</h1>
-
+<h1 class="text-center" *ngIf="(!alertTable || alertTable.length == 0) && loading">Loading...</h1>
