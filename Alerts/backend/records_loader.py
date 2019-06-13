@@ -13,7 +13,7 @@ from flask import request
 # New = 3
 
 # Connect and select alerts collection
-alerts_db = dbConnector("alerts")
+alerts_db = dbConnector('alerts')
 alerts_coll = alerts_db.db[config['alerts']['collection']]
 
 
@@ -43,6 +43,9 @@ def get_limited_number_of_records():
         else:
             record['Target'] = []
 
+        alerts_coll.update_one({'ID': record['ID'], 'Status': 3}, {'$set': {'Status': 0}})
+        alerts_coll.update_many({'ID': record['ID'], 'Status': {'$exists': False}}, {'$set': {'Status': 3}})
+
     return json.dumps({"count": numbers_of_records, "data": records})
 
 
@@ -63,9 +66,9 @@ def set_false_positive():
 def set_status(ids, status):
     try:
         if status == 1:
-            alerts_coll.update_many({"ID": {"$in": ids}}, {"$set": {"Status": 1}})
+            alerts_coll.update_many({'ID': {'$in': ids}}, {'$set': {'Status': 1}})
         elif status == 2:
-            alerts_coll.update_many({"ID": {"$in": ids}}, {"$set": {"Status": 2}})
+            alerts_coll.update_many({'ID': {'$in': ids}}, {'$set': {'Status': 2}})
         return json.dumps({"success": True, "errCode": 200})
     except Exception:
         return json.dumps({"success": False, "errCode": 500})
@@ -76,7 +79,7 @@ def delete_alerts():
     data = request.json
     ids = data['ids']
     try:
-        alerts_coll.delete_many({"ID": {"$in": ids}})
+        alerts_coll.delete_many({'ID': {'$in': ids}})
         return json.dumps({"success": True, "errCode": 200})
     except Exception:
         return json.dumps({"success": False, "errCode": 500})
@@ -85,7 +88,7 @@ def delete_alerts():
 @auth.required()
 def get_detail_of_alert():
     record_id = request.args.get('id')
-    record = alerts_coll.find_one({"ID": record_id}, {"_id": 0})
+    record = alerts_coll.find_one({'ID': record_id}, {'_id': 0})
     return json.dumps(record)
 
 
@@ -94,7 +97,7 @@ def set_status_comment(record_id):
     data = request.json
     status_comment = data['StatusComment']
     try:
-        alerts_coll.update_many({"ID": record_id}, {"$set": {"StatusComment": status_comment}})
+        alerts_coll.update_many({'ID': record_id}, {'$set': {'StatusComment': status_comment}})
         return json.dumps({"success": True, "errCode": 200})
     except Exception:
         return json.dumps({"success": False, "errCode": 500})
