@@ -21,7 +21,7 @@ from .filters import *
 # pomocne funkce pro docasne testovani
 # fill_db_with_data()
 # get_limited_number_of_records(2, 3)
-# get_filtered_alerts(1, 1)
+# get_filtered_alerts(1, 20)
 # delete_data_from_db()
 
 # Get limited number of records for one page

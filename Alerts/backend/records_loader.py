@@ -23,11 +23,13 @@ def get_limited_number_of_records():
     items = int(request.args.get('items'))
     first_item = items * (page - 1)
 
-    ids = [x["_id"] for x in list(alerts_coll.find({}, {"_id": 1}).skip(first_item).limit(items).sort("DetectTime", -1))]
-    alerts_coll.update_many({"_id": {"$in": ids}, "Status": 3}, {"$set": {"Status": 0}})
-    alerts_coll.update_many({"_id": {"$in": ids}, "Status": {"$exists": False}}, {"$set": {"Status": 3}})
+    if page < 1:
+        print('Warning: received page number is less than 1')
+        return
 
-    project = {'_id': 0, 'DetectTime': 1, 'Category': 1, 'FlowCount': 1, 'Status': 1, 'ID': 1,
+    alerts_coll.update_many({"New": {"$exists": False}}, {"$set": {"New": True}})
+
+    project = {'_id': 0, 'DetectTime': 1, 'Category': 1, 'FlowCount': 1, 'Status': 1, 'ID': 1, 'New': 1,
                'Source': {'$setUnion': ['$Source.IP4', '$Source.IP6']},
                'Target': {'$setUnion': ['$Target.IP4', '$Target.IP6']}}
     records = list(alerts_coll.aggregate([{'$project': project}, {'$sort': {'DetectTime': -1}},
@@ -46,7 +48,6 @@ def get_limited_number_of_records():
             record['Target'] = list(set(record['Target']))
         else:
             record['Target'] = []
-        print(record)
 
     return json.dumps({"count": numbers_of_records, "data": records})
 
@@ -55,22 +56,19 @@ def get_limited_number_of_records():
 def set_confirmed():
     data = request.json
     ids = data['ids']
-    return set_status(ids, 1)
+    return set_status(ids, 0)
 
 
 @auth.required()
 def set_false_positive():
     data = request.json
     ids = data['ids']
-    return set_status(ids, 2)
+    return set_status(ids, 1)
 
 
 def set_status(ids, status):
     try:
-        if status == 1:
-            alerts_coll.update_many({'ID': {'$in': ids}}, {'$set': {'Status': 1}})
-        elif status == 2:
-            alerts_coll.update_many({'ID': {'$in': ids}}, {'$set': {'Status': 2}})
+        alerts_coll.update_many({'ID': {'$in': ids}}, {'$set': {'Status': status}})
         return json.dumps({"success": True, "errCode": 200})
     except Exception:
         return json.dumps({"success": False, "errCode": 500})
@@ -90,6 +88,7 @@ def delete_alerts():
 @auth.required()
 def get_detail_of_alert():
     record_id = request.args.get('id')
+    alerts_coll.update_one({'ID': record_id, "New": {"$exists": True}}, {"$set": {"New": False}})
     record = alerts_coll.find_one({'ID': record_id}, {'_id': 0})
     return json.dumps(record)
 
