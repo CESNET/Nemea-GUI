@@ -23,15 +23,9 @@
         <td>{{alertItem.DetectTime || 'N/A'}}</td> <!-- date -->
         <td *ngIf="alertItem.Category">{{alertItem.Category[0]}}</td> <!-- category -->
         <td *ngIf="!alertItem.Category">N/A</td>
-        <td>{{alertItem.Source || 'N/A'}}
-            <a href="https://nerd.cesnet.cz/nerd/ip/{{alertItem.Source}}" *ngIf="alertItem.Source" target="_blank">
-                <img class="nerd-link"
-                     src="/assets/alerts/nerd-icon.png"
-                     alt="nerd">
-            </a>
-        </td>
+        <td [innerHTML]="createIpListHtml(alertItem.Source)"></td>
         <!-- source -->
-        <td [innerHTML]="createTargetString(alertItem.Target)"></td> <!-- target -->
+        <td [innerHTML]="createIpListHtml(alertItem.Target)"></td> <!-- target -->
         <td>{{alertItem.FlowCount || 'N/A'}}</td> <!-- flows -->
         <td>{{alertTypeToString(alertItem.Status) || 'N/A'}}</td> <!-- status -->
         <td><i *ngIf="detailLoading != alertItem.ID" class="fa fa-search-plus quick-action-btn " title="View detail" aria-hidden="true"

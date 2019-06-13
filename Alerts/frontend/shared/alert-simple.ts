@@ -3,7 +3,7 @@ import { AlertType } from './alertType';
 export class AlertSimple {
     DetectTime?: string;
     Category?: string[];
-    Source?: string;
+    Source?: string[];
     Target?: string[];
     FlowCount?: number;
     Status?: AlertType;

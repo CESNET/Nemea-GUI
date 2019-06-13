@@ -39,30 +39,34 @@ export class AlertTableComponent implements OnInit {
     @Output() selectedItemsChanged = new EventEmitter<string[]>();
     @Output() removeAlertEvent = new EventEmitter<string>();
 
-    createTargetString = AlertTableComponent.createTargetString;
+    createIpListHtml = AlertTableComponent.createIpListHtml;
     alertTypeToString = AlertTypeToString;
 
     selectedItems: string[] = [];
 
 
 
-    private static createTargetString(target: string[])
+    private static createIpListHtml(ipList: string[])
     {
-        if(!target) {
+        if(!ipList) {
             return "N/A";
         }
-        var len = target.length;
-        if(len === 0 || target === []) {
+        let len = ipList.length;
+        if(len === 0 || ipList === []) {
             return "N/A";
         }
         else if(len == 1) {
-            return target[0];
+            return ipList[0] + '<a href="https://nerd.cesnet.cz/nerd/ip/' + ipList[0] + '"  target="_blank">\n' +
+                '                <img class="nerd-link"\n' +
+                '                     src="/assets/alerts/nerd-icon.png"\n' +
+                '                     alt="nerd">\n' +
+                '            </a>';
         }
         else if(len == 2) {
-            return target[0] + ',<br>' + target[1];
+            return ipList[0] + ',<br>' + ipList[1];
         }
         else {
-            return target[0] + "... (" + (len - 1) + " more)";
+            return ipList[0] + "... (" + (len - 1) + " more)";
         }
     }
 
