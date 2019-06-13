@@ -3,12 +3,12 @@ from liberouterapi.dbConnector import dbConnector
 from liberouterapi.modules.module import Module
 
 # Load Alerts configuration file if Alerts section is not present in current config
-if "alerts" not in config.config.sections():
-    config.load(path = __path__[0] + '/config.ini')
+if 'alerts' not in config.config.sections():
+    config.load(path=__path__[0] + '/config.ini')
     conf_path = config['alerts']
 
 # We need collection for Alerts to be set up
-alerts_conn = dbConnector("alerts", provider="mongodb", config={'database': config['alerts']['database']})
+alerts_conn = dbConnector('alerts', provider='mongodb', config={'database': config['alerts']['database']})
 alerts_coll = alerts_conn.db[config['alerts']['collection']]
 
 # Register a blueprint
@@ -22,7 +22,7 @@ from .filters import *
 # fill_db_with_data()
 # print(get_number_of_all_records())
 # print(get_limited_number_of_records(2, 3))
-# get_filtered_alerts("aa", "bb", "cc")
+# get_filtered_alerts(1, 1)
 # delete_data_from_db()
 
 # Get number of all records in database
@@ -45,6 +45,9 @@ alerts_bp.add_url_rule('/alert-detail', view_func=get_detail_of_alert, methods=[
 
 # Set description of selected alert
 alerts_bp.add_url_rule('/set-status-comment/<record_id>', view_func=set_status_comment, methods=['POST'])
+
+# Get all alerts that sets to filter
+alerts_bp.add_url_rule('/alert-filtered', view_func=get_filtered_alerts, methods=['POST'])
 
 # import atexit
 # atexit.register(delete_data_from_db)

@@ -18,35 +18,40 @@ alerts_coll = alerts_db.db[config['alerts']['collection']]
 
 
 @auth.required()
-def get_number_of_all_records():
-    number_of_records = alerts_coll.find().count()
-    return json.dumps(number_of_records)
-
-
-@auth.required()
 def get_limited_number_of_records():
     page = int(request.args.get('page'))
     items = int(request.args.get('items'))
     first_item = items * (page - 1)
 
+    if page < 1:
+        print("Warning: received page is less than 1.")
+        return
+
     ids = [x["_id"] for x in list(alerts_coll.find({}, {"_id": 1}).skip(first_item).limit(items).sort("DetectTime", -1))]
     alerts_coll.update_many({"_id": {"$in": ids}, "Status": 3}, {"$set": {"Status": 0}})
     alerts_coll.update_many({"_id": {"$in": ids}, "Status": {"$exists": False}}, {"$set": {"Status": 3}})
 
-    query = {"_id": 0, "DetectTime": 1, "Category": 1, "Source": 1, "Target": 1, "FlowCount": 1, "Status": 1, "ID": 1}
-    records = list(alerts_coll.find({}, query).skip(first_item).limit(items).sort("DetectTime", -1))
+    project = {'_id': 0, 'DetectTime': 1, 'Category': 1, 'FlowCount': 1, 'Status': 1, 'ID': 1,
+               'Source': {'$setUnion': ['$Source.IP4', '$Source.IP6']},
+               'Target': {'$setUnion': ['$Target.IP4', '$Target.IP6']}}
+    records = list(alerts_coll.aggregate([{'$project': project},
+                                          {'$skip': first_item}, {'$limit': items}]))
+
+    numbers_of_records = len(records)
 
     for record in records:
-        if "Source" in record.keys():
-            record["Source"] = [x["IP4"] if "IP4" in x.keys() else x["IP6"] for x in record["Source"] if not x.keys().isdisjoint(("IP4", "IP6"))]
-            if record["Source"]:
-                record["Source"] = record["Source"][0][0]
-        if "Target" in record.keys():
-            record["Target"] = [x["IP4"] if "IP4" in x.keys() else x["IP6"] for x in record["Target"] if not x.keys().isdisjoint(("IP4", "IP6"))]
-            if record["Target"]:
-                record["Target"] = record["Target"][0]
+        if record['Source'] is not None:
+            record['Source'] = sum(record['Source'], [])
+            record['Source'] = list(set(record['Source']))
+        else:
+            record['Source'] = []
+        if record['Target'] is not None:
+            record['Target'] = sum(record['Target'], [])
+            record['Target'] = list(set(record['Target']))
+        else:
+            record['Target'] = []
 
-    return json.dumps(records)
+    return json.dumps({"count": numbers_of_records, "data": records})
 
 
 @auth.required()
