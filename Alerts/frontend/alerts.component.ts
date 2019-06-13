@@ -3,6 +3,8 @@ import { AlertSimple } from './shared/alert-simple';
 import { AlertType } from './shared/alertType';
 import { AlertsService } from './services/alerts.service';
 import { AlertStateService } from './services/alert-state.service';
+import { Filter } from './shared/filter';
+import { AlertSet } from './shared/alert-set';
 
 @Component({
     selector: 'alerts',
@@ -17,6 +19,7 @@ export class AlertsComponent implements OnInit {
     itemCount: number = 0;
     loading: boolean = false;
     selectedAlerts: string[] = [];
+    activeFilter: Filter[];
 
     selectedAction: string;
 
@@ -27,9 +30,7 @@ export class AlertsComponent implements OnInit {
     {}
 
     ngOnInit() {
-      this.fetchAlertCount();
       this.getAlerts();
-
     }
 
     goToPage(n: number): void {
@@ -96,7 +97,7 @@ export class AlertsComponent implements OnInit {
                     return obj.ID !== alert;
                 });
             }
-            this.alertStateService.deleteAlerts(this.selectedAlerts).subscribe(() => this.fixAfterDeleteOffset());
+            this.alertStateService.deleteAlerts(this.selectedAlerts).subscribe(() => this.getAlerts());
         }
     }
 
@@ -105,35 +106,38 @@ export class AlertsComponent implements OnInit {
             this.alertTable = this.alertTable.filter(function( obj ) {
                 return obj.ID !== id;
             });
-            this.alertStateService.deleteAlerts([id]).subscribe(() => this.fixAfterDeleteOffset());
+            this.alertStateService.deleteAlerts([id]).subscribe(() => this.getAlerts());
         }
-    }
-
-    private fixAfterDeleteOffset(): void {
-        this.alertsService.getAlertCount()
-            .subscribe(alertCount => {
-                this.itemCount = alertCount;
-                if(Math.ceil(this.itemCount / this.pageSize) < this.page) {
-                    this.page = Math.ceil(this.itemCount / this.pageSize) || 1;
-                }
-                this.getAlerts();
-            });
     }
 
     getAlerts() {
         this.loading = true;
-        this.alertsService.getAlertPage(this.page, this.pageSize)
-            .subscribe(alerts => this.setAlerts(alerts));
+        if(this.activeFilter === []) {
+            this.alertsService.getAlertPage(this.page, this.pageSize)
+                .subscribe(alerts => this.setAlerts(alerts));
+        }
+        else {
+            this.alertsService.getAlertPageFiltered(this.page, this.pageSize, this.activeFilter)
+                .subscribe(alerts => this.setAlerts(alerts));
+        }
+
+
     }
 
-    setAlerts(alerts: AlertSimple[]) {
+    setAlerts(alertSet: AlertSet) {
         this.loading = false;
-        this.alertTable = alerts;
+        this.itemCount = alertSet.count;
+        this.alertTable = alertSet.data;
+        if(Math.ceil(this.itemCount / this.pageSize) < this.page) {
+            this.page = Math.ceil(this.itemCount / this.pageSize) || 1;
+        }
     }
 
-    fetchAlertCount(): void {
-        this.alertsService.getAlertCount()
-            .subscribe(alertCount => this.itemCount = alertCount);
+    setFilter(filter: Filter[]) {
+        this.activeFilter = filter;
+        console.log('Setting filter from alerts component');
+        console.log(this.activeFilter);
+        this.getAlerts();
     }
-    
+
 }

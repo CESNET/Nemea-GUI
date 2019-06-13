@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-sm-12 col-md-7">
-        <textarea class="filter-text-preview" (click)="showCreateFilterDialog()">target ip is equal to 127.0.0.* AND target port is in range from 200 to 5500 AND source ip is not equal to 255.0.*.* AND source port is not 80 AND protocol can be one of SSH,TCP,HTTP</textarea>
+        <textarea class="filter-text-preview" (click)="showCreateFilterDialog()" disabled></textarea>
     </div>
     <div class="col-sm-12 col-md-5">
         <label>
@@ -19,11 +19,7 @@
             <button class="btn btn-secondary mr-2" (click)="showCreateFilterDialog()">Create filter</button>
             <label for="filter-select">Load filter</label>
             <select id="filter-select">
-                <option disabled selected>Select saved filter</option>
-                <option>this is</option>
-                <option>temporary</option>
-                <option>to see</option>
-                <option>how it looks</option>
+                <option disabled selected>No saved filters</option>
             </select>
         </div>
         <div class="float-right">
@@ -34,4 +30,6 @@
     </div>
 </div>
 
-<filter-create [showDialog]="createFilterShown" (dialogClosed)="hideCreateFilterDialog()"></filter-create>
+<filter-create [showDialog]="createFilterShown"
+               (dialogClosed)="hideCreateFilterDialog()"
+               (filterRulesChanged)="delegateFilterChange($event)"></filter-create>

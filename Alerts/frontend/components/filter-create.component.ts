@@ -13,6 +13,7 @@ export class FilterCreateComponent implements OnInit
 
     filterConfig: object;
     filterRules: Filter[] = [];
+    saving: boolean = false;
 
     ngOnInit() {
         this.filterConfig = filters;
@@ -22,6 +23,7 @@ export class FilterCreateComponent implements OnInit
     @Input() showDialog: boolean = false;
 
     @Output() dialogClosed = new EventEmitter<boolean>();
+    @Output() filterRulesChanged = new EventEmitter<Filter[]>();
 
 
     hideDialog() {
@@ -39,11 +41,19 @@ export class FilterCreateComponent implements OnInit
 
     setFilterRule(rule: Filter, idx: number) {
         this.filterRules[idx] = rule;
-        console.log(this.filterRules)
+        console.log(this.filterRules);
+
     }
 
     addInitializedRule(f: Filter) {
         this.filterRules.push(f);
     }
+
+    finishRuleEditing() {
+        this.filterRulesChanged.emit(this.filterRules);
+        this.hideDialog();
+    }
+
+
 
 }

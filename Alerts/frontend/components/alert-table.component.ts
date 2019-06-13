@@ -34,8 +34,9 @@ export class AlertTableComponent implements OnInit {
         this._alertTable = value;
     }
 
-    @Output() selectedItemsChanged = new EventEmitter<string[]>();
+    @Input() loading: boolean;
 
+    @Output() selectedItemsChanged = new EventEmitter<string[]>();
     @Output() removeAlertEvent = new EventEmitter<string>();
 
     createTargetString = AlertTableComponent.createTargetString;

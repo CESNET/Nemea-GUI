@@ -4,5 +4,5 @@ export class Filter {
     field: string;
     field2?: string;
     predicate: string;
-    value;
+    value: string | number | string[] | number[];
 }

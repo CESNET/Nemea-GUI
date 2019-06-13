@@ -12,7 +12,7 @@
                         <h4 class="card-title">Filter</h4>
                     </div>
                     <div class="card-content pb-0">
-                        <filter></filter>
+                        <filter (filterChanged)="setFilter($event)"></filter>
                     </div>
                 </div>
             </div>
@@ -55,6 +55,7 @@
                 <div class="table-responsive">
                     <alert-table
                             [alertTable]="alertTable"
+                            [loading]="loading"
                             (selectedItemsChanged)="updateSelectedAlertList($event)"
                             (removeAlertEvent)="deleteSingleAlert($event)"></alert-table>
                 </div>

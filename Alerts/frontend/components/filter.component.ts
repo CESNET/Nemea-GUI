@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
+import { Filter } from '../shared/filter';
 
 
 @Component({
@@ -13,12 +14,18 @@ export class FilterComponent {
 
     createFilterShown: boolean = false;
 
+    @Output() filterChanged = new EventEmitter<Filter[]>();
+
     showCreateFilterDialog() {
         this.createFilterShown = true;
     }
 
     hideCreateFilterDialog() {
         this.createFilterShown = false;
+    }
+
+    delegateFilterChange(filter: Filter[]) {
+        this.filterChanged.emit(filter);
     }
 
 }

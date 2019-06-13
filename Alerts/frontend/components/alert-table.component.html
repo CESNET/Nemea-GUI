@@ -13,6 +13,7 @@
     </tr>
     </thead>
     <tbody>
+    <h1 class="text-center" *ngIf="loading">Loading...</h1>
     <tr *ngFor="let alertItem of alertTable"
         [class.confirmed]="alertItem.Status == 1"
         [class.false-positive]="alertItem.Status == 2"
@@ -54,4 +55,5 @@
               (alertDetailClosed)="closeAlertDetail()"
               (setSelectedAlertType)="setSelectedAlertType($event)"
               (removeAlertEvent)="removeSingleAlert()"></alert-detail>
-<h1 class="text-center" *ngIf="(!alertTable || alertTable.length == 0)">No alerts found.</h1>
+<h1 class="text-center" *ngIf="(!alertTable || alertTable.length == 0) && !loading">No alerts found.</h1>
+
