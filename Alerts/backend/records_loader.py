@@ -68,7 +68,7 @@ def set_false_positive():
 
 def set_status(ids, status):
     try:
-        alerts_coll.update_many({'ID': {'$in': ids}}, {'$set': {'Status': status}})
+        alerts_coll.update_many({'ID': {'$in': ids}}, {'$set': {'Status': status, "New": False}})
         return json.dumps({"success": True, "errCode": 200})
     except Exception:
         return json.dumps({"success": False, "errCode": 500})
@@ -88,7 +88,7 @@ def delete_alerts():
 @auth.required()
 def get_detail_of_alert():
     record_id = request.args.get('id')
-    alerts_coll.update_one({'ID': record_id, "New": {"$exists": True}}, {"$set": {"New": False}})
+    alerts_coll.update_one({'ID': record_id}, {"$set": {"New": False}})
     record = alerts_coll.find_one({'ID': record_id}, {'_id': 0})
     return json.dumps(record)
 
