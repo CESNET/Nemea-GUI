@@ -30,7 +30,7 @@ def get_filtered_alerts():
     records = list(alerts_coll.aggregate([{'$match': query}, {'$project': project},
                                           {'$skip': first_item}, {'$limit': items}]))
 
-    numbers_of_records = len(records)
+    numbers_of_records = alerts_coll.find(query).count()
 
     for record in records:
         if record['Source'] is not None:

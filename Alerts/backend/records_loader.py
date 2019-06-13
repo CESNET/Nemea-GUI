@@ -23,21 +23,13 @@ def get_limited_number_of_records():
     items = int(request.args.get('items'))
     first_item = items * (page - 1)
 
-    if page < 1:
-        print("Warning: received page is less than 1.")
-        return
-
-    ids = [x["_id"] for x in list(alerts_coll.find({}, {"_id": 1}).skip(first_item).limit(items).sort("DetectTime", -1))]
-    alerts_coll.update_many({"_id": {"$in": ids}, "Status": 3}, {"$set": {"Status": 0}})
-    alerts_coll.update_many({"_id": {"$in": ids}, "Status": {"$exists": False}}, {"$set": {"Status": 3}})
-
     project = {'_id': 0, 'DetectTime': 1, 'Category': 1, 'FlowCount': 1, 'Status': 1, 'ID': 1,
                'Source': {'$setUnion': ['$Source.IP4', '$Source.IP6']},
                'Target': {'$setUnion': ['$Target.IP4', '$Target.IP6']}}
-    records = list(alerts_coll.aggregate([{'$project': project},
+    records = list(alerts_coll.aggregate([{'$project': project}, {'$sort': {'DetectTime': -1}},
                                           {'$skip': first_item}, {'$limit': items}]))
 
-    numbers_of_records = len(records)
+    numbers_of_records = alerts_coll.find().count()
 
     for record in records:
         if record['Source'] is not None:
