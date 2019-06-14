@@ -26,12 +26,12 @@ from .filters import *
 # delete_data_from_db()
 # save_filter('ff')
 # save_filter('ff2')
-# save_filter('ff3')
+# filters_coll.delete_many({})
+# save_filter()
 # load_filter()
 # get_filter_names()
 # for x in filters_coll.find():
 #     print(x)
-# filters_coll.delete_many({})
 
 # Get limited number of records for one page
 alerts_bp.add_url_rule('/alert-page', view_func=get_limited_number_of_records, methods=['GET'])
@@ -58,7 +58,7 @@ alerts_bp.add_url_rule('/alert-filtered', view_func=get_filtered_alerts, methods
 alerts_bp.add_url_rule('/save-filter', view_func=save_filter, methods=['POST'])
 
 # Load filter from database
-alerts_bp.add_url_rule('/load-filter', view_func=load_filter, methods=['GET'])
+alerts_bp.add_url_rule('/load-filter', view_func=load_filter, methods=['POST'])
 
 # Get all filter names from db, that they seem to user
 alerts_bp.add_url_rule('/filter-names', view_func=get_filter_names, methods=['GET'])
