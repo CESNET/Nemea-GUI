@@ -18,7 +18,7 @@ def save_filter():
     received_filter = data['filter']
 
     session = auth.lookup(request.headers.get('lgui-Authorization', None))
-    user = session['user']
+    user = str(session['user'])
 
     filter_doc = {"name": name, "user": user, "filter": received_filter}
 
@@ -32,19 +32,21 @@ def save_filter():
 
 @auth.required()
 def load_filter():
-    name = request.args.get('name')
+    data = request.json
+    name = data['name']
     session = auth.lookup(request.headers.get('lgui-Authorization', None))
-    user = session['user']
+    user = str(session['user'])
 
     record = filters_coll.find_one({'name': name, 'user': user}, {'_id': 0, 'user': 0})
-    print(record)
+    print('load', record)
+
     return json.dumps(record)
 
 
 @auth.required()
 def get_filter_names():
     session = auth.lookup(request.headers.get('lgui-Authorization', None))
-    user = session['user']
+    user = str(session['user'])
 
     records = list(filters_coll.aggregate([{'$group': {'_id': user, 'names': {'$push': '$name'}}},
                                            {'$project': {'_id': 0, 'names': 1}}]))
