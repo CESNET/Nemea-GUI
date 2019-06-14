@@ -16,17 +16,26 @@ alerts_coll = alerts_db.db[config['alerts']['collection']]
 
 
 @auth.required()
+def get_limited_number_of_records():
+    page = int(request.args.get('page'))
+    items = int(request.args.get('items'))
+    return get_alerts(page, items, {})
+
+
+@auth.required()
 def get_filtered_alerts():
     data = request.json
-    received_filter = data['filter']
     page = int(data['page'])
     items = int(data['items'])
+    received_filter = data['filter']
+    return get_alerts(page, items, parse_filter_to_query(received_filter))
+
+
+def get_alerts(page, items, query):
     first_item = items * (page - 1)
 
     alerts_coll.update_many({"New": {"$exists": False}}, {"$set": {"New": True}})
 
-    query = parse_filter_to_query(received_filter)
-    print(query)
     project = {'_id': 0, 'DetectTime': 1, 'Category': 1, 'FlowCount': 1, 'Status': 1, 'ID': 1, 'New': 1,
                'Source': {'$setUnion': ['$Source.IP4', '$Source.IP6']},
                'Target': {'$setUnion': ['$Target.IP4', '$Target.IP6']}}
