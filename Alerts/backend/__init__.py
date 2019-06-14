@@ -55,13 +55,13 @@ alerts_bp.add_url_rule('/set-status-comment/<record_id>', view_func=set_status_c
 alerts_bp.add_url_rule('/alert-filtered', view_func=get_filtered_alerts, methods=['POST'])
 
 # Save received filter to database
-alerts_bp.add_url_rule('/save_filter', view_func=save_filter, methods=['POST'])
+alerts_bp.add_url_rule('/save-filter', view_func=save_filter, methods=['POST'])
 
 # Load filter from database
-alerts_bp.add_url_rule('/load_filter', view_func=load_filter, methods=['GET'])
+alerts_bp.add_url_rule('/load-filter', view_func=load_filter, methods=['GET'])
 
 # Get all filter names from db, that they seem to user
-alerts_bp.add_url_rule('/filter_names', view_func=get_filter_names, methods=['GET'])
+alerts_bp.add_url_rule('/filter-names', view_func=get_filter_names, methods=['GET'])
 
 # import atexit
 # atexit.register(delete_data_from_db)
