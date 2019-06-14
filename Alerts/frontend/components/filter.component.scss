@@ -15,3 +15,9 @@
   height: 150px;
   font-family: 'Consolas', 'Courier', monospace;
 }
+
+.btn-disabled {
+  cursor: not-allowed;
+  color: $colorText;
+
+}

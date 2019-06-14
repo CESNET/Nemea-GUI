@@ -21,7 +21,7 @@ export class AlertsComponent implements OnInit {
     selectedAlerts: string[] = [];
     activeFilter: Filter[] = [];
     statusFilterIdx: number = -1;
-
+    statusSelectValue: string = "all";
     selectedAction: string;
 
     constructor(
@@ -62,18 +62,31 @@ export class AlertsComponent implements OnInit {
     }
 
     onStatusChanged(newValue: string) {
-        console.log(newValue);
         if(this.statusFilterIdx != -1) {
             this.activeFilter.splice(this.statusFilterIdx, 1);
             this.statusFilterIdx = -1;
         }
-        if(newValue !== 'all') {
-            if(newValue == "3") {
+        this.generateStatusFilter(newValue);
+        this.getAlerts();
+    }
+
+    generateStatusFilter(val: string) {
+        if(val && val !== 'all') {
+            if(val == "new") {
+                let f: Filter = {
+                    field: "New",
+                    field2: undefined,
+                    predicate: "$eq",
+                    value: true
+                };
+                this.activeFilter.push(f);
+            }
+            else if(val == "undecided") {
                 let f: Filter = {
                     field: "Status",
                     field2: undefined,
                     predicate: "$exists",
-                    value: false
+                    value: 0
                 };
                 this.activeFilter.push(f);
             }
@@ -82,15 +95,13 @@ export class AlertsComponent implements OnInit {
                     field: "Status",
                     field2: undefined,
                     predicate: "$eq",
-                    value: +newValue
+                    value: +val
                 };
                 this.activeFilter.push(f);
             }
 
-
             this.statusFilterIdx = this.activeFilter.length - 1;
         }
-        this.getAlerts();
     }
 
     applyMassOperation() {
@@ -140,8 +151,6 @@ export class AlertsComponent implements OnInit {
 
     getAlerts() {
         this.loading = true;
-        console.log("Active filter:");
-        console.log(this.activeFilter);
         if(this.activeFilter.length === 0) {
             this.alertsService.getAlertPage(this.page, this.pageSize)
                 .subscribe(alerts => this.setAlerts(alerts));
@@ -165,8 +174,15 @@ export class AlertsComponent implements OnInit {
     }
 
     setFilter(filter: Filter[]) {
-        this.activeFilter = filter;
+        console.log("Got a new filter, setting");
+        console.log(filter);
+        this.activeFilter = Object.assign([],filter);
+        console.log("Active filter before generating status");
+        console.log(this.activeFilter);
+        this.generateStatusFilter(this.statusSelectValue);
         this.getAlerts();
+        console.log("Getting alerts with filter");
+        console.log(this.activeFilter);
     }
 
 }

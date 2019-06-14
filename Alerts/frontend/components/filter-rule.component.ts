@@ -105,44 +105,8 @@ export class FilterRuleComponent implements OnInit
         this.removeRule.emit(this.ruleIndex);
     }
 
-    // TODO: in range
     predicateToName(predicate: string): string {
-        switch(predicate) {
-            /*case "$eq":
-                return "is equal to";
-            case "$ne":
-                return "is not equal to";
-            case "$lt":
-                return "is less than";
-            case "$lte":
-                return "is less or equal to";
-            case "$gt":
-                return "is greater than";
-            case "$gte":
-                return "is greater or equal to";*/
-            case "$eq":
-                return "=";
-            case "$ne":
-                return "!=";
-            case "$lt":
-                return "<";
-            case "$lte":
-                return "<=";
-            case "$gt":
-                return ">";
-            case "$gte":
-                return ">=";
-            case "$in":
-                return "is one of";
-            case "$nin":
-                return "is not one of";
-            case "$exists":
-                return "is set";
-            case "$nexists":
-                return "is not set";
-            default:
-                return predicate;
-        }
+        return Filter.translatePredicate(predicate);
     }
 
 

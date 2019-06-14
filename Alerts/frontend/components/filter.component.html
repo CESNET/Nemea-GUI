@@ -1,35 +1,37 @@
 <div class="row">
     <div class="col-sm-12 col-md-7">
-        <textarea class="filter-text-preview" (click)="showCreateFilterDialog()" disabled></textarea>
+        <textarea class="filter-text-preview" (click)="showCreateFilterDialog()" disabled>{{filterText}}</textarea>
     </div>
     <div class="col-sm-12 col-md-5">
         <label>
             Start at
-            <input type="datetime-local" [(ngModel)]="dateStartAt" (change)="changeStartAtDate(dateStartAt)">
+            <input type="datetime-local" [(ngModel)]="dateStartAt" (change)="ruleSetChanged()">
         </label><br>
         <label>
             End at
-            <input type="datetime-local">
+            <input type="datetime-local" [(ngModel)]="dateEndAt" (change)="ruleSetChanged()">
         </label>
     </div>
 </div>
 <div class="row">
     <div class="filter-toolbar">
         <div class="float-left">
-            <button class="btn btn-secondary mr-2" (click)="showCreateFilterDialog()">Create filter</button>
+            <button class="btn btn-secondary mr-2" (click)="showCreateFilterDialog()" *ngIf="!filterSet">Create filter</button>
+            <button class="btn btn-secondary mr-2" (click)="showCreateFilterDialog()" *ngIf="filterSet">Edit filter</button>
             <label for="filter-select">Load filter</label>
             <select id="filter-select">
                 <option disabled selected>No saved filters</option>
             </select>
         </div>
         <div class="float-right">
-            <button class="btn btn-primary">Apply filter</button>
+            <button class="btn btn-danger mr-3" *ngIf="filterActive" (click)="clearFilter()">Clear filter</button>
+            <button class="btn btn-primary" (click)="delegateFilterChange()" *ngIf="!filterActive">Apply filter</button>
+            <button class="btn btn-disabled" disabled *ngIf="filterActive">Applied</button>
         </div>
-
-
     </div>
 </div>
 
 <filter-create [showDialog]="createFilterShown"
+               [clearFilter]="clearFilterSubject.asObservable()"
                (dialogClosed)="hideCreateFilterDialog()"
-               (filterRulesChanged)="delegateFilterChange($event)"></filter-create>
+               (filterRulesChanged)="setFilter($event)"></filter-create>

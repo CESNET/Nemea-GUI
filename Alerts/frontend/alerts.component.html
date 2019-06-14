@@ -32,12 +32,12 @@
             </div>
             <div class="col-sm-12 col-md-3">
                 <label for="statusSelect">Status:</label>
-                <select (change)="onStatusChanged($event.target.value)" id="statusSelect">
+                <select [(ngModel)]="statusSelectValue" (change)="onStatusChanged($event.target.value)" id="statusSelect">
                     <option selected value="all">All</option>
-                    <option value="0">Undecided</option>
-                    <option value="1">Confirmed</option>
-                    <option value="2">False positive</option>
-                    <option value="3">New</option>
+                    <option value="undecided">Undecided</option>
+                    <option value="0">Confirmed</option>
+                    <option value="1">False positive</option>
+                    <option value="new">New</option>
                 </select>
             </div>
             <div class="col-sm-12 col-md-4">

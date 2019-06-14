@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter, HostListener, OnInit } from '@angular/core';
-import {filters} from '../filter-config';
+import { Component, Input, Output, EventEmitter, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { filters } from '../filter-config';
 import { Filter } from '../shared/filter';
+import { Observable} from 'rxjs';
 
 @Component({
     selector: 'filter-create',
@@ -14,13 +15,20 @@ export class FilterCreateComponent implements OnInit
     filterConfig: object;
     filterRules: Filter[] = [];
     saving: boolean = false;
+    private filterClearEventListener: any;
 
     ngOnInit() {
         this.filterConfig = filters;
         this.addRule();
+        this.filterClearEventListener = this.clearFilter.subscribe(() => this.clearRules());
+    }
+
+    ngOnDestroy() {
+        this.filterClearEventListener.unsubscribe();
     }
 
     @Input() showDialog: boolean = false;
+    @Input() clearFilter: Observable<void>;
 
     @Output() dialogClosed = new EventEmitter<boolean>();
     @Output() filterRulesChanged = new EventEmitter<Filter[]>();
@@ -41,7 +49,6 @@ export class FilterCreateComponent implements OnInit
 
     setFilterRule(rule: Filter, idx: number) {
         this.filterRules[idx] = rule;
-        console.log(this.filterRules);
 
     }
 
@@ -58,5 +65,8 @@ export class FilterCreateComponent implements OnInit
         this.filterRules.splice(idx, 1);
     }
 
-
+    clearRules() {
+        this.filterRules = [];
+        this.filterRulesChanged.emit(this.filterRules);
+    }
 }
