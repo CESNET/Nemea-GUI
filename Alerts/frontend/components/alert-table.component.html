@@ -50,4 +50,4 @@
               (setSelectedAlertType)="setSelectedAlertType($event)"
               (removeAlertEvent)="removeSingleAlert()"></alert-detail>
 <h1 class="text-center" *ngIf="(!alertTable || alertTable.length == 0) && !loading">No alerts found.</h1>
-<h1 class="text-center" *ngIf="(!alertTable || alertTable.length == 0) && loading">Loading...</h1>
+<h1 class="text-center" *ngIf="(!alertTable || alertTable.length == 0) && loading"><i class="fa fa-spinner fa-pulse fa-fw" *ngIf="loading" title="Loading..."></i></h1>

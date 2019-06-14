@@ -67,6 +67,7 @@ export class AlertsComponent implements OnInit {
             this.statusFilterIdx = -1;
         }
         this.generateStatusFilter(newValue);
+        this.goToPage(1);
         this.getAlerts();
     }
 
@@ -116,6 +117,7 @@ export class AlertsComponent implements OnInit {
                 this.setSelectedAlertType(AlertType.FalsePositive);
                 break;
         }
+
 
     }
 
@@ -174,15 +176,10 @@ export class AlertsComponent implements OnInit {
     }
 
     setFilter(filter: Filter[]) {
-        console.log("Got a new filter, setting");
-        console.log(filter);
         this.activeFilter = Object.assign([],filter);
-        console.log("Active filter before generating status");
-        console.log(this.activeFilter);
         this.generateStatusFilter(this.statusSelectValue);
+        this.goToPage(1);
         this.getAlerts();
-        console.log("Getting alerts with filter");
-        console.log(this.activeFilter);
     }
 
 }

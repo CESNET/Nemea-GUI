@@ -29,24 +29,25 @@ export class PaginationComponent {
     }
 
     setPage(n: number): void {
-        if(n > 0 && n <= this.totalPages()) {
-            this.goPage.emit(n);
+        if(!this.loading) {
+            if(n > 0 && n <= this.totalPages()) {
+                this.goPage.emit(n);
+            }
+            else {
+                this.page = 1;
+            }
         }
-        else {
-            this.page = 1;
-        }
-
     }
 
     nextPage(): void {
-        if(this.page < this.totalPages()) {
+        if(this.page < this.totalPages()  && !this.loading) {
             this.goNext.emit(true);
         }
 
     }
 
     prevPage(): void {
-        if(this.page > 1) {
+        if(this.page > 1  && !this.loading) {
             this.goPrev.emit(true);
         }
 

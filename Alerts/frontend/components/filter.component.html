@@ -19,8 +19,11 @@
             <button class="btn btn-secondary mr-2" (click)="showCreateFilterDialog()" *ngIf="!filterSet">Create filter</button>
             <button class="btn btn-secondary mr-2" (click)="showCreateFilterDialog()" *ngIf="filterSet">Edit filter</button>
             <label for="filter-select">Load filter</label>
-            <select id="filter-select">
-                <option disabled selected>No saved filters</option>
+            <select id="filter-select" (change)="loadFilter($event.target.value)">
+                <option selected disabled *ngIf="savedFiltersLoading">Loading your filters..</option>
+                <option disabled selected *ngIf="savedFilterNames == [] && !savedFiltersLoading">No saved filters</option>
+                <option disabled selected *ngIf="savedFilterNames != [] && !savedFiltersLoading">Select saved filter</option>
+                <option *ngFor="let f of savedFilterNames">{{f}}</option>
             </select>
         </div>
         <div class="float-right">

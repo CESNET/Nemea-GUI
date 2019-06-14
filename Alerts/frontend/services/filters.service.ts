@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Filter } from '../shared/filter';
 import { SavedFilter } from '../shared/saved-filter';
+import { HandleServiceError } from '../shared/handle-service-error';
 
 @Injectable({
     providedIn: 'root',
@@ -18,16 +19,21 @@ export class FiltersService {
 
 
     loadSavedFilterNames(): Observable<string[]> {
-        return this.http.get<string[]>('/alerts/');
+        return this.http.get<string[]>('/alerts/filter-names')
+            .pipe(
+                catchError(HandleServiceError.handleError('loadSavedFilterNames', []))
+            );
     }
 
     loadSavedFilter(filterName: string): Observable<SavedFilter> {
-        let params = new HttpParams()
-            .set('name', filterName);
-        return this.http.get<SavedFilter>('/alerts/');
+        return this.http.post<SavedFilter>('/alerts/load-filter', {'name': filterName});
+
     }
 
     saveFilter(filter: Filter[], name: string) {
-        return this.http.post<object>('/alerts/', {'name': name, 'data': filter});
+        return this.http.post<object>('/alerts/save-filter', {'name': name, 'filter': filter})
+            .pipe(
+                catchError(HandleServiceError.handleError('saveFilter', {}))
+            );
     }
 }

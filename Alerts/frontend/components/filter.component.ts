@@ -1,16 +1,18 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { Filter } from '../shared/filter';
 
 import { Subject } from 'rxjs';
+import { FiltersService } from '../services/filters.service';
+import { SavedFilter } from '../shared/saved-filter';
 
 @Component({
     selector: 'filter',
     templateUrl: './filter.component.html',
     styleUrls: ['./filter.component.scss']
 })
-export class FilterComponent {
+export class FilterComponent implements OnInit {
 
-    constructor()
+    constructor(private filterService: FiltersService)
     {}
 
     createFilterShown: boolean = false;
@@ -23,8 +25,31 @@ export class FilterComponent {
     filterActive: boolean = false;
     clearFilterSubject: Subject<void> = new Subject<void>();
 
+    savedFilterNames: string[] = [];
+    savedFiltersLoading: boolean = false;
+    loadedFilter: SavedFilter;
 
     @Output() filterChanged = new EventEmitter<Filter[]>();
+
+    ngOnInit() {
+        this.loadFilterNames();
+    }
+
+    loadFilterNames() {
+        this.savedFiltersLoading = true;
+        this.filterService.loadSavedFilterNames().subscribe(
+            names => {this.savedFilterNames = names[0]['names']; this.savedFiltersLoading = false; console.log(names)}
+        );
+    }
+
+    loadFilter(name: string) {
+        this.filterService.loadSavedFilter(name)
+            .subscribe(filter => {
+                this.loadedFilter = filter;
+                this.ruleSet = filter.data;
+                console.log(filter);
+            });
+    }
 
     showCreateFilterDialog() {
         this.createFilterShown = true;
@@ -96,6 +121,7 @@ export class FilterComponent {
         this.dateEndAt = undefined;
         this.dateFilter = [];
         this.ruleSet = [];
+        this.filterSet = false;
         this.clearFilterSubject.next();
         this.filterChanged.emit(this.ruleSet);
     }

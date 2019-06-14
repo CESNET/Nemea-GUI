@@ -18,13 +18,18 @@
 
             <div class="float-right">
                 <button class="btn btn-secondary" (click)="finishRuleEditing()">Use</button>
-                <button class="btn btn-secondary" *ngIf="newFilterName && newFilterName != ''" (click)="saving = !saving">
+                <button class="btn btn-secondary" *ngIf="newFilterName && newFilterName != '' && !error" (click)="saveFilter()">
                     <span *ngIf="saving">
                         <i class="fa fa-spinner fa-pulse fa-fw quick-action-btn" ></i> Saving...
                     </span>
-                    <span *ngIf="!saving">Save</span>
+                    <span *ngIf="!saving && !saved">Save</span>
+                    <span *ngIf="!saving && saved">Saved</span>
                 </button>
-                <button class="btn btn-primary" *ngIf="newFilterName && newFilterName != ''" >
+                <button *ngIf="newFilterName && newFilterName != '' && error" disabled class="btn btn-danger">
+                    Error
+                </button>
+
+                <button class="btn btn-primary" *ngIf="newFilterName && newFilterName != ''" (click)="saveFilter();finishRuleEditing()">
                     <span>Save and use</span>
                 </button>
             </div>

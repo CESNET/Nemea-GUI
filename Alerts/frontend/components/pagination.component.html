@@ -4,7 +4,7 @@
             <button class="page-btn no-mobile" (click)="setPage(1)"
                     [class.active]="page == 1"
                     [class.disabled]="loading">1</button>
-            <button class="page-btn" (click)="prevPage()" [class.disabled]="page == 1">&lt;</button>
+            <button class="page-btn" (click)="prevPage()" [class.disabled]="page == 1 || loading">&lt;</button>
 
             <button class="page-btn no-mobile"
                     *ngFor="let pageNum of getPages()"
@@ -13,7 +13,7 @@
                 {{pageNum}}
             </button>
 
-            <button class="page-btn" (click)="nextPage()" [class.disabled]="page == totalPages()">&gt;</button>
+            <button class="page-btn" (click)="nextPage()" [class.disabled]="page == totalPages() || loading">&gt;</button>
             <button class="page-btn no-mobile"
                     (click)="setPage(totalPages())"
                     [class.active]="page == totalPages()"
