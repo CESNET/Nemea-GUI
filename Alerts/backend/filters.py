@@ -11,22 +11,21 @@ filters_db = dbConnector('alerts')
 filters_coll = filters_db.db[config['alerts']['collection2']]
 
 
-@auth.required()
+# @auth.required()
 def save_filter():
     data = request.json
     name = data['name']
     received_filter = data['filter']
 
     session = auth.lookup(request.headers.get('lgui-Authorization', None))
-    user = str(session['user'])
+    user = session['user'].username
 
     filter_doc = {"name": name, "user": user, "filter": received_filter}
 
     try:
-        filters_coll.insert_one(filter_doc)
+        filters_coll.update_one({'name': name}, filter_doc, {'upsert': True})
         return json.dumps({"success": True, "errCode": 200})
     except Exception:
-        print("err")
         return json.dumps({"success": False, "errCode": 500})
 
 
@@ -35,7 +34,7 @@ def load_filter():
     data = request.json
     name = data['name']
     session = auth.lookup(request.headers.get('lgui-Authorization', None))
-    user = str(session['user'])
+    user = session['user'].username
 
     record = filters_coll.find_one({'name': name, 'user': user}, {'_id': 0, 'user': 0})
     print('load', record)
@@ -46,7 +45,7 @@ def load_filter():
 @auth.required()
 def get_filter_names():
     session = auth.lookup(request.headers.get('lgui-Authorization', None))
-    user = str(session['user'])
+    user = session['user'].username
 
     records = list(filters_coll.aggregate([{'$group': {'_id': user, 'names': {'$push': '$name'}}},
                                            {'$project': {'_id': 0, 'names': 1}}]))
