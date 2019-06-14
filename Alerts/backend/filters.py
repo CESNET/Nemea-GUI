@@ -6,68 +6,46 @@ from liberouterapi.dbConnector import dbConnector
 import json
 from flask import request
 
-# Connect and select alerts collection
-alerts_db = dbConnector('alerts')
-alerts_coll = alerts_db.db[config['alerts']['collection']]
-
-# Received filter format
-# [{'field': 'columnName', 'field2': 'submergedColumnName', 'predicate': '$...', 'value': ['...', ...]}, ...]
-# 'predicate': $eq, $ne, $lt, $lte, $gt, $gte, $in, $nin, $exists
+# Connect and select filters collection
+filters_db = dbConnector('alerts')
+filters_coll = filters_db.db[config['alerts']['collection2']]
 
 
 @auth.required()
-def get_limited_number_of_records():
-    page = int(request.args.get('page'))
-    items = int(request.args.get('items'))
-    return get_alerts(page, items, {})
-
-
-@auth.required()
-def get_filtered_alerts():
+def save_filter():
     data = request.json
-    page = int(data['page'])
-    items = int(data['items'])
+    name = data['name']
     received_filter = data['filter']
-    return get_alerts(page, items, parse_filter_to_query(received_filter))
+
+    session = auth.lookup(request.headers.get('lgui-Authorization', None))
+    user = session['user']
+
+    filter_doc = {"name": name, "user": user, "filter": received_filter}
+
+    try:
+        filters_coll.insert_one(filter_doc)
+        return json.dumps({"success": True, "errCode": 200})
+    except Exception:
+        print("err")
+        return json.dumps({"success": False, "errCode": 500})
 
 
-def get_alerts(page, items, query):
-    first_item = items * (page - 1)
+@auth.required()
+def load_filter():
+    name = request.args.get('name')
+    session = auth.lookup(request.headers.get('lgui-Authorization', None))
+    user = session['user']
 
-    alerts_coll.update_many({"New": {"$exists": False}}, {"$set": {"New": True}})
-
-    project = {'_id': 0, 'DetectTime': 1, 'Category': 1, 'FlowCount': 1, 'Status': 1, 'ID': 1, 'New': 1,
-               'Source': {'$setUnion': ['$Source.IP4', '$Source.IP6']},
-               'Target': {'$setUnion': ['$Target.IP4', '$Target.IP6']}}
-    records = list(alerts_coll.aggregate([{'$match': query}, {'$project': project}, {'$sort': {'DetectTime': -1}},
-                                          {'$skip': first_item}, {'$limit': items}]))
-
-    numbers_of_records = alerts_coll.find(query).count()
-
-    for record in records:
-        if record['Source'] is not None:
-            record['Source'] = sum(record['Source'], [])
-            record['Source'] = list(set(record['Source']))
-        else:
-            record['Source'] = []
-        if record['Target'] is not None:
-            record['Target'] = sum(record['Target'], [])
-            record['Target'] = list(set(record['Target']))
-        else:
-            record['Target'] = []
-
-    return json.dumps({"count": numbers_of_records, "data": records})
+    record = filters_coll.find_one({'name': name, 'user': user}, {'_id': 0, 'user': 0})
+    print(record)
+    return json.dumps(record)
 
 
-def parse_filter_to_query(received_filter):
-    query = {'$and': []}
-    for x in received_filter:
-        if x['predicate'] is '$exists':
-            x['value'] = bool(x['value'])
-        expression = {x['field']: {}}
-        if 'field2' in x:
-            expression[x['field']] = {'$elemMatch': {x['field2']: {x['predicate']: x['value']}}}
-        else:
-            expression[x['field']] = {x['predicate']: x['value']}
-        query['$and'].append(expression)
-    return query
+@auth.required()
+def get_filter_names():
+    session = auth.lookup(request.headers.get('lgui-Authorization', None))
+    user = session['user']
+
+    records = list(filters_coll.aggregate([{'$group': {'_id': user, 'names': {'$push': '$name'}}},
+                                           {'$project': {'_id': 0, 'names': 1}}]))
+    return json.dumps(records)
