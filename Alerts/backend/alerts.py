@@ -5,6 +5,7 @@ from liberouterapi.dbConnector import dbConnector
 # MongoDB data manipulation
 import json
 from flask import request
+import re
 
 # Connect and select alerts collection
 alerts_db = dbConnector('alerts')
@@ -116,6 +117,9 @@ def parse_filter_to_query(received_filter):
     for x in received_filter:
         if x['predicate'] is '$exists':
             x['value'] = bool(x['value'])
+        if x['predicate'] is 'wildcard':
+            x['predicate'] = '$regex'
+            x['value'] = parse_wildcard_to_regex(x['value'])
         expression = {x['field']: {}}
         if 'field2' in x:
             expression[x['field']] = {'$elemMatch': {x['field2']: {x['predicate']: x['value']}}}
@@ -123,3 +127,9 @@ def parse_filter_to_query(received_filter):
             expression[x['field']] = {x['predicate']: x['value']}
         query['$and'].append(expression)
     return query
+
+
+def parse_wildcard_to_regex(wild_card):
+    wild_card = re.sub(r'\.', '\.', wild_card)
+    wild_card = re.sub(r'\*', '(?:[0-9]{1,3})', wild_card)
+    return '^' + wild_card + '$'

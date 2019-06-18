@@ -32,6 +32,8 @@ from .filters import *
 # get_filter_names()
 # for x in filters_coll.find():
 #     print(x)
+# parse_ip_to_regex("1.127.*.*")
+
 
 # Get limited number of records for one page
 alerts_bp.add_url_rule('/alert-page', view_func=get_limited_number_of_records, methods=['GET'])

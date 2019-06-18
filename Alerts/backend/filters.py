@@ -11,7 +11,7 @@ filters_db = dbConnector('alerts')
 filters_coll = filters_db.db[config['alerts']['collection2']]
 
 
-# @auth.required()
+@auth.required()
 def save_filter():
     data = request.json
     name = data['name']
@@ -23,7 +23,7 @@ def save_filter():
     filter_doc = {"name": name, "user": user, "filter": received_filter}
 
     try:
-        filters_coll.update_one({'name': name}, filter_doc, {'upsert': True})
+        filters_coll.update_one({'name': name}, {'$set': filter_doc}, upsert=True)
         return json.dumps({"success": True, "errCode": 200})
     except Exception:
         return json.dumps({"success": False, "errCode": 500})
