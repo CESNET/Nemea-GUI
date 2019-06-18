@@ -24,10 +24,12 @@ export class FilterComponent implements OnInit {
     filterSet: boolean = false;
     filterActive: boolean = false;
     clearFilterSubject: Subject<void> = new Subject<void>();
+    selectedFilterValue;
 
     savedFilterNames: string[] = [];
     savedFiltersLoading: boolean = false;
     loadedFilter: SavedFilter;
+    initFilter: Subject<SavedFilter> = new Subject<SavedFilter>();
 
     @Output() filterChanged = new EventEmitter<Filter[]>();
 
@@ -38,16 +40,20 @@ export class FilterComponent implements OnInit {
     loadFilterNames() {
         this.savedFiltersLoading = true;
         this.filterService.loadSavedFilterNames().subscribe(
-            names => {this.savedFilterNames = names[0]['names']; this.savedFiltersLoading = false; console.log(names)}
-        );
+            names => {
+                if(names.length !== 0) {
+                    this.savedFilterNames = names[0]['names'];
+                }
+                this.savedFiltersLoading = false;
+            });
     }
 
     loadFilter(name: string) {
         this.filterService.loadSavedFilter(name)
             .subscribe(filter => {
                 this.loadedFilter = filter;
-                this.ruleSet = filter.data;
-                console.log(filter);
+                this.setFilter(filter.filter);
+                this.initFilter.next(filter);
             });
     }
 
@@ -61,9 +67,9 @@ export class FilterComponent implements OnInit {
 
     setFilter(filter: Filter[]) {
         this.filterSet = true;
-        this.ruleSetChanged();
         this.ruleSet = filter;
         this.filterText = "";
+        this.ruleSetChanged();
         let i = 0;
         for(let f of filter) {
             if(i != 0) {
@@ -114,6 +120,7 @@ export class FilterComponent implements OnInit {
 
     ruleSetChanged() {
         this.filterActive = false;
+        this.selectedFilterValue = null;
     }
 
     clearFilter() {
@@ -124,6 +131,13 @@ export class FilterComponent implements OnInit {
         this.filterSet = false;
         this.clearFilterSubject.next();
         this.filterChanged.emit(this.ruleSet);
+    }
+
+    addSavedFilter(name: string) {
+        if(this.savedFilterNames.indexOf(name) === -1) {
+            this.savedFilterNames.push(name);
+        }
+
     }
 
 }

@@ -30,10 +30,10 @@ export class FiltersService {
 
     }
 
-    saveFilter(filter: Filter[], name: string) {
+    saveFilter(filter: Filter[], name: string): any {
         return this.http.post<object>('/alerts/save-filter', {'name': name, 'filter': filter})
             .pipe(
-                catchError(HandleServiceError.handleError('saveFilter', {}))
+                catchError(HandleServiceError.handleError('saveFilter', {'success': false}))
             );
     }
 }

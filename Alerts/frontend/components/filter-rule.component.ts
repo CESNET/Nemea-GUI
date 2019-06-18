@@ -33,8 +33,6 @@ export class FilterRuleComponent implements OnInit
     }
 
     filterToSelectedItem(filter: Filter) {
-        console.log("Setting filter");
-        console.log(filter);
         if(filter.field2 !== undefined) {
             this.selectedFilter = this.filterConfig.find(x => (x['field'] == filter.field && x['field2'] == filter.field2));
         }

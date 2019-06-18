@@ -29,7 +29,7 @@
                     Error
                 </button>
 
-                <button class="btn btn-primary" *ngIf="newFilterName && newFilterName != ''" (click)="saveFilter();finishRuleEditing()">
+                <button class="btn btn-primary" *ngIf="newFilterName && newFilterName != '' && !error" (click)="saveAndUseFilter()">
                     <span>Save and use</span>
                 </button>
             </div>
