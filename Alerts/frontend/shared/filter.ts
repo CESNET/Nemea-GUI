@@ -31,6 +31,10 @@ export class Filter {
                 return "is set";
             case "$nexists":
                 return "is not set";
+            case "$wildcard":
+                return "IPv4 wildcard";
+            case "$regex":
+                return "regular expression";
             default:
                 return predicate;
         }

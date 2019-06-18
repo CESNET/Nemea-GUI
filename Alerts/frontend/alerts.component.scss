@@ -1,0 +1,20 @@
+@import "colors";
+
+.long-load-warning {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: $colorItemBackground;
+  color: $colorText;
+  text-align: center;
+  z-index: 9999;
+  .warning-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);
+  }
+}

@@ -17,6 +17,7 @@ export class FilterRuleComponent implements OnInit
     inputValue: string;
 
     selectedPredicateValue: string;
+    helpText: string;
 
 
     @Input() ruleIndex: number;
@@ -58,6 +59,7 @@ export class FilterRuleComponent implements OnInit
 
     changeSelectedPredicate(predicate: string) {
         this.selectedRule.predicate = predicate;
+        this.createHelpText(predicate);
         this.emitChanges();
     }
 
@@ -105,6 +107,24 @@ export class FilterRuleComponent implements OnInit
 
     predicateToName(predicate: string): string {
         return Filter.translatePredicate(predicate);
+    }
+
+    createHelpText(predicate: string) {
+        switch(predicate) {
+            case "$regex":
+                this.helpText = "Use regular expressions in python format.";
+                break;
+            case "$wildcard":
+                this.helpText = "Use format 127.0.*.* , replace any part of IP with star to ignore that part.";
+                break;
+            case "$in":
+            case "$nin":
+                this.helpText = "Enter list of possible values separated by a comma";
+                break;
+            default:
+                this.helpText = "";
+                break;
+        }
     }
 
 

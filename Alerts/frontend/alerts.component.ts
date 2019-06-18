@@ -23,6 +23,7 @@ export class AlertsComponent implements OnInit {
     statusFilterIdx: number = -1;
     statusSelectValue: string = "all";
     selectedAction: string;
+    totalItems: number = 0;
 
     constructor(
         private alertsService: AlertsService,
@@ -155,23 +156,26 @@ export class AlertsComponent implements OnInit {
         this.loading = true;
         if(this.activeFilter.length === 0) {
             this.alertsService.getAlertPage(this.page, this.pageSize)
-                .subscribe(alerts => this.setAlerts(alerts));
+                .subscribe(alerts => this.setAlerts(alerts, false));
         }
         else {
             this.alertsService.getAlertPageFiltered(this.page, this.pageSize, this.activeFilter)
-                .subscribe(alerts => this.setAlerts(alerts));
+                .subscribe(alerts => this.setAlerts(alerts, true));
         }
 
 
     }
 
-    setAlerts(alertSet: AlertSet) {
+    setAlerts(alertSet: AlertSet, filtered: boolean) {
         this.loading = false;
         this.itemCount = alertSet.count;
         this.alertTable = alertSet.data;
         if(this.itemCount !== 0 &&(Math.ceil(this.itemCount / this.pageSize) < this.page)) {
             this.page = Math.ceil(this.itemCount / this.pageSize) || 1;
             this.getAlerts();
+        }
+        if(!filtered) {
+            this.totalItems = alertSet.count;
         }
     }
 

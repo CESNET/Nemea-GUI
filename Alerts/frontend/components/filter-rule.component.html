@@ -1,3 +1,4 @@
+<span class="rule-help">{{helpText}}</span><br>
 <select [(ngModel)]="selectedFilter" (change)="changeActiveFilter()" class="filter-rule-input">
     <option *ngFor="let fc of filterConfig" [ngValue]="fc">{{fc.name}}</option>
 </select>

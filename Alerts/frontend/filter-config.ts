@@ -4,14 +4,14 @@ export let filters = [
         "field": "Target",
         "field2": "IP4",
         "type": "ip4",
-        "predicates": ["$eq", "$ne", "$in", "$nin", "$exists", "$nexists"]
+        "predicates": ["$eq", "$ne", "$in", "$nin", "$exists", "$nexists", "$wildcard", "$regex"]
     },
     {
         "name": "Source IPv4",
         "field": "Source",
         "field2": "IP4",
         "type": "ip4",
-        "predicates": ["$eq", "$ne", "$in", "$nin", "$exists", "$nexists"]
+        "predicates": ["$eq", "$ne", "$in", "$nin", "$exists", "$nexists", "$wildcard"]
     },
     {
         "name": "Flows",

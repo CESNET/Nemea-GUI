@@ -15,3 +15,10 @@
     color: transparentize($reject, .4);
   }
 }
+
+.rule-help {
+  font-family: 'Source Code Pro', 'Consolas', 'Courier', monospace;
+  color: transparentize($colorText,.2);
+  font-size: 0.8rem;
+
+}
