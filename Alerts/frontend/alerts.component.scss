@@ -6,7 +6,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: $colorItemBackground;
+  background: transparentize($colorItemBackground, 0.1);
   color: $colorText;
   text-align: center;
   z-index: 9999;

@@ -1,6 +1,6 @@
 <div class="long-load-warning" *ngIf="loading && totalItems >= 1000000">
     <div class="warning-content">
-        <h1>Searching in {{totalItems}} alerts</h1>
+        <h1>Searching in {{totalItems | number}} alerts</h1>
         <h2>Please be patient, this might take a while</h2>
         <h1><i class="fa fa-spinner fa-pulse fa-fw" title="Loading..."></i></h1>
     </div>

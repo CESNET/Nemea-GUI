@@ -31,6 +31,7 @@ export class FilterRuleComponent implements OnInit
         this.selectedRule = this.ruleFilter;
         this.filterToSelectedItem(this.ruleFilter);
         this.inputValue = this.ruleFilter.value.toString();
+        this.createHelpText(this.selectedPredicateValue);
     }
 
     filterToSelectedItem(filter: Filter) {
@@ -47,8 +48,6 @@ export class FilterRuleComponent implements OnInit
         else {
             this.selectedPredicateValue = filter.predicate;
         }
-
-
     }
 
     changeActiveFilter() {

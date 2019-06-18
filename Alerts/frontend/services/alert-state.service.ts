@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AlertType } from '../shared/alertType';
+import { AlertType } from '../shared/alert-type';
 import { HandleServiceError } from '../shared/handle-service-error';
 
 @Injectable({

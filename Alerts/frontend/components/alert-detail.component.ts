@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewEncapsulation } from '@angular/core'
-import { AlertType, AlertTypeToString } from '../shared/alertType';
+import { AlertType, AlertTypeToString } from '../shared/alert-type';
 import { AlertDetailService } from '../services/alert-detail.service';
 
 @Component({

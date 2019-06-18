@@ -1,4 +1,4 @@
-import { AlertType } from './alertType';
+import { AlertType } from './alert-type';
 
 export class AlertSimple {
     DetectTime?: string;

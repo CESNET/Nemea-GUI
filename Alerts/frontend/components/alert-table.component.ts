@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { AlertSimple } from '../shared/alert-simple';
-import { AlertType, AlertTypeToString } from '../shared/alertType';
+import { AlertType, AlertTypeToString } from '../shared/alert-type';
 import { AlertStateService } from '../services/alert-state.service';
 import { AlertDetailService } from '../services/alert-detail.service';
 
