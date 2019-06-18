@@ -1,6 +1,10 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { filters } from '../filter-config';
 import { Filter } from '../shared/filter';
+import { FilterConfigService } from '../services/filter-config.service';
+
+// import test from '../filters.json';
+
 
 @Component({
     selector: 'filter-rule',
@@ -9,7 +13,9 @@ import { Filter } from '../shared/filter';
 })
 export class FilterRuleComponent implements OnInit
 {
-    constructor() {}
+    constructor(
+        private filterConfigService: FilterConfigService
+    ) {}
 
     filterConfig: object[];
     selectedFilter: object;
@@ -27,7 +33,7 @@ export class FilterRuleComponent implements OnInit
     @Output() removeRule = new EventEmitter<number>();
 
     ngOnInit() {
-        this.filterConfig = filters;
+        this.filterConfigService.loadFilterConfig().subscribe(config => this.filterConfig = config);
         this.selectedRule = this.ruleFilter;
         this.filterToSelectedItem(this.ruleFilter);
         this.inputValue = this.ruleFilter.value.toString();
