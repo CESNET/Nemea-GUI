@@ -13,6 +13,8 @@ import sys
 alerts_db = dbConnector("alerts")
 alerts_coll = alerts_db.db[config['alerts']['collection']]
 
+categories = ["Attempt.Login", "Anomaly.Connection", "Recon.Scanning", "Availibility.DDoS", "Intrusion.Botnet"]
+
 alerts_data_list = [
     {"DetectTime":"2015-12-14T23:18:50Z","Category":["Attempt.Login"],"FlowCount":30,"Description":"Multiple unsuccessful login attempts on SSH","Format":"IDEA0","Source":[{"IP4":["1.2.3.6"],"Proto":["tcp","ssh"]}],"ID":"59c85a23-11b6-4faf-9eff-55bfb5f7fda5","Node":[{"Type":["Flow","Statistical"],"SW":["Nemea","brute_force_detector"],"Name":"cz.cesnet.nemea.brute_force_detector"}],"CreateTime":"2016-03-23T15:53:56Z"},
     {"DetectTime":"2015-12-14T23:18:50Z","Category":["Attempt.Login"],"Target":[{"Port":23,"Proto":["tcp","telnet"]}],"FlowCount":30,"Description":"Multiple unsuccessful login attempts on TELNET","Format":"IDEA0","Source":[{"IP4":["1.2.3.6"],"Proto":["tcp","telnet"]}],"ID":"5f1ef384-6256-4a64-ade7-f3278476b965","Node":[{"Type":["Flow","Statistical"],"SW":["Nemea","brute_force_detector"],"Name":"cz.cesnet.nemea.brute_force_detector"}],"CreateTime":"2016-03-23T15:53:56Z"},
