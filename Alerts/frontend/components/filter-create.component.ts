@@ -1,9 +1,9 @@
 import { Component, Input, Output, EventEmitter, HostListener, OnInit, OnDestroy } from '@angular/core';
-import { filters } from '../filter-config';
 import { Filter } from '../shared/filter';
 import { Observable } from 'rxjs';
 import { FiltersService } from '../services/filters.service';
 import { SavedFilter } from '../shared/saved-filter';
+import { FilterConfigService } from '../services/filter-config.service';
 
 @Component({
     selector: 'filter-create',
@@ -12,7 +12,8 @@ import { SavedFilter } from '../shared/saved-filter';
 })
 export class FilterCreateComponent implements OnInit, OnDestroy {
     constructor(
-        private filterService: FiltersService
+        private filterService: FiltersService,
+        private filterConfigService: FilterConfigService
     ) {
     }
 
@@ -25,9 +26,10 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
     error: boolean = false;
     saved: boolean;
 
-    //FIXME: load filter config from json
     ngOnInit() {
-        this.filterConfig = filters;
+        this.filterConfigService.loadFilterConfig().subscribe(
+            filters => this.filterConfig = filters
+        );
         this.addRule();
         this.filterClearEventListener = this.clearFilter.subscribe(() => this.clearRules());
         this.filterLoadEventListener = this.filterLoaded.subscribe(filters => {
