@@ -25,6 +25,7 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
     newFilterName: string;
     error: boolean = false;
     saved: boolean;
+    removedRules: Filter[] = [];
 
     ngOnInit() {
         this.filterConfigService.loadFilterConfig().subscribe(
@@ -78,11 +79,13 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
     }
 
     finishRuleEditing() {
+        this.removedRules = [];
         this.filterRulesChanged.emit(this.filterRules);
         this.hideDialog();
     }
 
     removeRule(idx: number) {
+        this.removedRules.push(this.filterRules[idx]);
         this.filterRules.splice(idx, 1);
         this.saved = false;
     }
@@ -93,7 +96,14 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
         this.filterRulesChanged.emit(this.filterRules);
     }
 
+    cancelChanges() {
+        this.filterRules = this.filterRules.concat(this.removedRules);
+        this.hideDialog();
+        this.removedRules = [];
+    }
+
     saveFilter() {
+        this.removedRules = [];
         this.saving = true;
         this.filterService.saveFilter(this.filterRules, this.newFilterName)
             .subscribe(result => {
@@ -114,6 +124,7 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
     }
 
     saveAndUseFilter() {
+        this.removedRules = [];
         this.saving = true;
         this.filterService.saveFilter(this.filterRules, this.newFilterName)
             .subscribe(result => {
