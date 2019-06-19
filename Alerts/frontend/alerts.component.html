@@ -30,7 +30,7 @@
         <div class="row mb-3">
             <div class="col-sm-12 col-md-3">
                 <label for="perPageSelect">Limit:</label>
-                <select (change)="onPerPageChanged($event.target.value)" id="perPageSelect">
+                <select (change)="onPerPageChanged($event.target.value)" id="perPageSelect" class="alerts-input">
                     <option value="1">1 per page</option>
                     <option selected value="10">10 per page</option>
                     <option value="20">20 per page</option>
@@ -40,7 +40,10 @@
             </div>
             <div class="col-sm-12 col-md-3">
                 <label for="statusSelect">Status:</label>
-                <select [(ngModel)]="statusSelectValue" (change)="onStatusChanged($event.target.value)" id="statusSelect">
+                <select [(ngModel)]="statusSelectValue"
+                        (change)="onStatusChanged($event.target.value)"
+                        id="statusSelect"
+                        class="alerts-input">
                     <option selected value="all">All</option>
                     <option value="undecided">Undecided</option>
                     <option value="0">Confirmed</option>
@@ -50,7 +53,7 @@
             </div>
             <div class="col-sm-12 col-md-4">
                 <label for="actionSelect">On selected perform:</label>
-                <select [(ngModel)]="selectedAction" id="actionSelect">
+                <select [(ngModel)]="selectedAction" id="actionSelect" class="alerts-input">
                     <option selected value="confirm">Set as confirmed</option>
                     <option value="false-positive">Set as false positive</option>
                     <option value="delete">Delete</option>

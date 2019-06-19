@@ -25,6 +25,7 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
     error: boolean = false;
     saved: boolean;
 
+    //FIXME: load filter config from json
     ngOnInit() {
         this.filterConfig = filters;
         this.addRule();

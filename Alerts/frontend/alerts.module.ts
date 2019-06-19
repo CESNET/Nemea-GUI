@@ -17,6 +17,7 @@ import { FilterComponent } from './components/filter.component';
 import { FilterCreateComponent } from './components/filter-create.component';
 import { FilterRuleComponent } from './components/filter-rule.component';
 
+//import data from './filters.json'
 
 const routes: Routes = [{
     path: 'alerts',

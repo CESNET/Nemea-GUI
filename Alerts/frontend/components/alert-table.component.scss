@@ -1,14 +1,17 @@
 @import "../colors";
 @import "../alerts-colors";
 
+
 .confirmed {
   background: $confirmed-bg;
+  color: $decided-text-color;
   &:hover {
     background: darken($confirmed-bg, 10%);
   }
 }
 .false-positive {
   background: $false-positive-bg;
+  color: $decided-text-color;
   &:hover {
     background: darken($false-positive-bg, 10%);
   }

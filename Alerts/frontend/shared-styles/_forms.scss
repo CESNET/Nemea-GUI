@@ -1,0 +1,14 @@
+@import "../colors";
+
+.alerts-input {
+  background: darken($colorItemBackground, 10%);
+  border: 2px solid lighten($colorItemBackground, 10%);
+  border-radius: 5px;
+  padding: 5px;
+  color: $colorText;
+  transition: all 250ms ease-in-out;
+  &:focus, &:active {
+    outline: none;
+    border: 2px solid $colorHighlight;
+  }
+}

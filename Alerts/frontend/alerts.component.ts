@@ -162,8 +162,6 @@ export class AlertsComponent implements OnInit {
             this.alertsService.getAlertPageFiltered(this.page, this.pageSize, this.activeFilter)
                 .subscribe(alerts => this.setAlerts(alerts, true));
         }
-
-
     }
 
     setAlerts(alertSet: AlertSet, filtered: boolean) {

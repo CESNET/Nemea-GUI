@@ -5,11 +5,11 @@
     <div class="col-sm-12 col-md-5">
         <label>
             Start at
-            <input type="datetime-local" [(ngModel)]="dateStartAt" (change)="ruleSetChanged()">
+            <input type="datetime-local" [(ngModel)]="dateStartAt" (change)="ruleSetChanged()" class="alerts-input">
         </label><br>
         <label>
             End at
-            <input type="datetime-local" [(ngModel)]="dateEndAt" (change)="ruleSetChanged()">
+            <input type="datetime-local" [(ngModel)]="dateEndAt" (change)="ruleSetChanged()" class="alerts-input">
         </label>
     </div>
 </div>
@@ -21,7 +21,7 @@
             <button class="btn btn-secondary mr-2" (click)="showCreateFilterDialog()" *ngIf="filterSet">Edit filter
             </button>
             <label for="filter-select">Load filter</label>
-            <select id="filter-select" [(ngModel)]="selectedFilterValue" (change)="loadFilter($event.target.value)">
+            <select id="filter-select" [(ngModel)]="selectedFilterValue" (change)="loadFilter($event.target.value)" class="alerts-input">
                 <option selected disabled *ngIf="savedFiltersLoading">Loading your filters..</option>
                 <option disabled selected *ngIf="savedFilterNames == [] && !savedFiltersLoading">No saved filters
                 </option>

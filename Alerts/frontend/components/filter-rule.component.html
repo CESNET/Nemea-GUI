@@ -1,16 +1,20 @@
 <span class="rule-help">{{helpText}}</span><br>
-<select [(ngModel)]="selectedFilter" (change)="changeActiveFilter()" class="filter-rule-input">
+<select [(ngModel)]="selectedFilter" (change)="changeActiveFilter()" class="filter-rule-input alerts-input">
     <option *ngFor="let fc of filterConfig" [ngValue]="fc">{{fc.name}}</option>
 </select>
 
-<select *ngIf="selectedFilter" class="filter-rule-input" (change)="changeSelectedPredicate($event.target.value)"
+<select *ngIf="selectedFilter" class="filter-rule-input alerts-input"
+        (change)="changeSelectedPredicate($event.target.value)"
         [(ngModel)]="selectedPredicateValue">
     <option selected disabled>Operation</option>
     <option *ngFor="let predicate of selectedFilter.predicates" [value]="predicate">{{predicateToName(predicate)}}
     </option>
 </select>
 
-<input type="text" class="filter-rule-input" [(ngModel)]="inputValue" (change)="changeValue()" placeholder="value"
-        *ngIf="selectedPredicateValue != '$nexists' && selectedPredicateValue != '$exists'">
+<input type="text" class="filter-rule-input alerts-input" [(ngModel)]="inputValue"
+       (change)="changeValue()"
+       placeholder="value"
+       *ngIf="selectedPredicateValue != '$nexists' && selectedPredicateValue != '$exists'"
+>
 <i class="fa fa-times remove-filter-rule" aria-hidden="true" (click)="removeSelf()"></i>
 <br>
