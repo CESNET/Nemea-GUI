@@ -33,6 +33,7 @@ from .filters import *
 # for x in filters_coll.find():
 #     print(x)
 # parse_ip_to_regex("1.127.*.*")
+# fill_db_with_n(1000000)
 
 
 # Get limited number of records for one page
