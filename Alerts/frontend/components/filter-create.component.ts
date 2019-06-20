@@ -25,8 +25,8 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
     newFilterName: string;
     error: boolean = false;
     saved: boolean;
-    removedRules: Filter[] = [];
     initRules: Filter[] = [];
+    initName: string;
 
     ngOnInit() {
         this.filterConfigService.loadFilterConfig().subscribe(
@@ -37,9 +37,9 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
         this.filterLoadEventListener = this.filterLoaded.subscribe(filters => {
             this.filterRules = filters.filter;
             this.newFilterName = filters.name;
-            this.initRules = this.filterRules;
-            console.log("Got init rules");
-            console.log(this.initRules);
+            this.initRules = [];
+            this.initRules = this.initRules.concat(this.filterRules);
+            this.initName = filters.name;
         });
         this.error = false;
         this.saved = false;
@@ -84,35 +84,34 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
     }
 
     finishRuleEditing() {
-        //this.removedRules = [];
+        this.clearEmptyRules();
+        this.initRules = this.filterRules;
         this.filterRulesChanged.emit(this.filterRules);
         this.hideDialog();
     }
 
     removeRule(idx: number) {
-        //this.removedRules.push(this.filterRules[idx]);
         this.filterRules.splice(idx, 1);
         this.saved = false;
     }
 
     clearRules() {
         this.filterRules = [];
+        this.initRules = [];
         this.newFilterName = "";
         this.filterRulesChanged.emit(this.filterRules);
     }
 
     cancelChanges() {
-        console.log("Cancelling changes");
         this.filterRules = [];
         this.filterRules = this.filterRules.concat(this.initRules);
-        console.log(this.initRules);
+        this.newFilterName = this.initName;
         this.hideDialog();
-        //this.removedRules = [];
     }
 
     saveFilter() {
-        //this.removedRules = [];
         this.saving = true;
+        this.clearEmptyRules();
         this.filterService.saveFilter(this.filterRules, this.newFilterName)
             .subscribe(result => {
                     this.saving = false;
@@ -133,8 +132,8 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
     }
 
     saveAndUseFilter() {
-        //this.removedRules = [];
         this.saving = true;
+        this.clearEmptyRules();
         this.filterService.saveFilter(this.filterRules, this.newFilterName)
             .subscribe(result => {
                     this.saving = false;
@@ -152,5 +151,13 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
                 },
                 () => {
                     this.saving = false;});
+    }
+
+    private clearEmptyRules() {
+
+        this.filterRules = this.filterRules.filter(function( f ) {
+            return f.field !== '' && f.predicate !== '' && f.value !== '';
+        });
+        
     }
 }
