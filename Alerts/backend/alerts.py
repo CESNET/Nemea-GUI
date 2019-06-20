@@ -2,7 +2,7 @@
 from liberouterapi import db, auth, config
 from liberouterapi.dbConnector import dbConnector
 
-# MongoDB data manipulation
+# Data manipulation
 import json
 from flask import request
 import re
@@ -85,6 +85,9 @@ def get_filtered_alerts():
 
 
 def get_alerts(page, items, query):
+    if page < 1:
+        return json.dumps({"success": False, "errCode": 500})
+
     first_item = items * (page - 1)
 
     alerts_coll.update_many({"New": {"$exists": False}}, {"$set": {"New": True}})
@@ -95,7 +98,7 @@ def get_alerts(page, items, query):
     records = list(alerts_coll.aggregate([{'$match': query}, {'$project': project}, {'$sort': {'DetectTime': -1}},
                                           {'$skip': first_item}, {'$limit': items}], allowDiskUse=True))
 
-    numbers_of_records = alerts_coll.find(query).count()
+    number_of_records = alerts_coll.find(query).count()
 
     for record in records:
         if record['Source'] is not None:
@@ -109,15 +112,15 @@ def get_alerts(page, items, query):
         else:
             record['Target'] = []
 
-    return json.dumps({"count": numbers_of_records, "data": records})
+    return json.dumps({"count": number_of_records, "data": records})
 
 
 def parse_filter_to_query(received_filter):
     query = {'$and': []}
     for x in received_filter:
-        if x['predicate'] is '$exists':
+        if x['predicate'] == '$exists':
             x['value'] = bool(x['value'])
-        if x['predicate'] is 'wildcard':
+        if x['predicate'] == '$wildcard':
             x['predicate'] = '$regex'
             x['value'] = parse_wildcard_to_regex(x['value'])
         expression = {x['field']: {}}
