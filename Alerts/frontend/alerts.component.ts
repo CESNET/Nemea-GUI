@@ -159,6 +159,7 @@ export class AlertsComponent implements OnInit {
                     return obj.ID !== alert;
                 });
             }
+            this.cache.deleteAlertsFromCache(this.selectedAlerts);
             this.alertStateService.deleteAlerts(this.selectedAlerts).subscribe(() => this.getAlerts());
         }
     }

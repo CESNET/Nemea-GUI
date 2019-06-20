@@ -161,4 +161,13 @@ export class AlertCache {
         return result;
     }
 
+    deleteAlertsFromCache(alertIds: string[]) {
+        for(let alert of alertIds) {
+            this.cache = this.cache.filter(function( obj ) {
+                return obj.ID !== alert;
+            });
+        }
+
+    }
+
 }
