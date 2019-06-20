@@ -27,7 +27,7 @@ export class AlertsService {
     }
 
 
-    getAlertPageFiltered(page: number, itemsPerPage: number, filter: Filter[]) {
+    getAlertPageFiltered(page: number, itemsPerPage: number, filter: Filter[]): Observable<AlertSet> {
         return this.http.post<AlertSet>('alerts/alert-filtered', {'page': page, 'items': itemsPerPage, 'filter': filter})
             .pipe (
                 catchError(HandleServiceError.handleError('getAlertPageFiltered', {'count': 0, 'data': []}))

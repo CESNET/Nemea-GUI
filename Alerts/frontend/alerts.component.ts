@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { AlertSimple } from './shared/alert-simple';
 import { AlertType } from './shared/alert-type';
 import { AlertsService } from './services/alerts.service';
 import { AlertStateService } from './services/alert-state.service';
 import { Filter } from './shared/filter';
 import { AlertSet } from './shared/alert-set';
+import { AlertCache } from './shared/alert-cache';
 
 @Component({
     selector: 'alerts',
@@ -24,15 +25,34 @@ export class AlertsComponent implements OnInit {
     statusSelectValue: string = "all";
     selectedAction: string;
     totalItems: number = 0;
+    private cache: AlertCache = new AlertCache(this.alertsService);
 
     constructor(
         private alertsService: AlertsService,
-        private alertStateService: AlertStateService
+        private alertStateService: AlertStateService,
+
     )
     {}
 
     ngOnInit() {
-      this.getAlerts();
+
+      this.loading = true;
+      this.cache.initCache(this.pageSize);
+      this.cache.currentAlertSet$.subscribe((alerts) =>
+        this.setAlerts(alerts, this.activeFilter.length === 0));
+
+    }
+
+
+    @HostListener('window:beforeunload', ['$event'])
+    unloadNotification($event: any) {
+        if (this.cache.loading) {
+            $event.returnValue = true;
+        }
+    }
+
+    public isLoading() {
+        return this.loading || this.cache.loading;
     }
 
     goToPage(n: number): void {
@@ -69,7 +89,7 @@ export class AlertsComponent implements OnInit {
         }
         this.generateStatusFilter(newValue);
         this.goToPage(1);
-        this.getAlerts();
+        this.cache.forceReloadCache(this.page, this.pageSize, this.activeFilter);
     }
 
     generateStatusFilter(val: string) {
@@ -153,15 +173,7 @@ export class AlertsComponent implements OnInit {
     }
 
     getAlerts() {
-        this.loading = true;
-        if(this.activeFilter.length === 0) {
-            this.alertsService.getAlertPage(this.page, this.pageSize)
-                .subscribe(alerts => this.setAlerts(alerts, false));
-        }
-        else {
-            this.alertsService.getAlertPageFiltered(this.page, this.pageSize, this.activeFilter)
-                .subscribe(alerts => this.setAlerts(alerts, true));
-        }
+        this.cache.getPageFromCache(this.page, this.pageSize, this.activeFilter);
     }
 
     setAlerts(alertSet: AlertSet, filtered: boolean) {
@@ -181,7 +193,7 @@ export class AlertsComponent implements OnInit {
         this.activeFilter = Object.assign([],filter);
         this.generateStatusFilter(this.statusSelectValue);
         this.goToPage(1);
-        this.getAlerts();
+        this.cache.forceReloadCache(this.page, this.pageSize, this.activeFilter);
     }
 
 }

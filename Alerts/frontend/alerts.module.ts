@@ -16,6 +16,7 @@ import { AlertDetailComponent } from './components/alert-detail.component';
 import { FilterComponent } from './components/filter.component';
 import { FilterCreateComponent } from './components/filter-create.component';
 import { FilterRuleComponent } from './components/filter-rule.component';
+import { CanDeactivateGuard } from './shared/can-deactivate.guard';
 
 //import data from './filters.json'
 
@@ -23,6 +24,7 @@ const routes: Routes = [{
     path: 'alerts',
     component: AlertsComponent,
     canActivate: [AuthGuard],
+    canDeactivate: [CanDeactivateGuard],
     data: {
         role: 10,
         name: 'Alerts',
@@ -48,10 +50,11 @@ const routes: Routes = [{
         AlertDetailComponent,
         FilterComponent,
         FilterCreateComponent,
-        FilterRuleComponent
+        FilterRuleComponent,
     ],
     providers: [
-        SafePipe
+        SafePipe,
+        CanDeactivateGuard
     ]
 })
 export class AlertsModule {}

@@ -26,6 +26,7 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
     error: boolean = false;
     saved: boolean;
     removedRules: Filter[] = [];
+    initRules: Filter[] = [];
 
     ngOnInit() {
         this.filterConfigService.loadFilterConfig().subscribe(
@@ -36,9 +37,13 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
         this.filterLoadEventListener = this.filterLoaded.subscribe(filters => {
             this.filterRules = filters.filter;
             this.newFilterName = filters.name;
+            this.initRules = this.filterRules;
+            console.log("Got init rules");
+            console.log(this.initRules);
         });
         this.error = false;
         this.saved = false;
+
     }
 
 
@@ -79,13 +84,13 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
     }
 
     finishRuleEditing() {
-        this.removedRules = [];
+        //this.removedRules = [];
         this.filterRulesChanged.emit(this.filterRules);
         this.hideDialog();
     }
 
     removeRule(idx: number) {
-        this.removedRules.push(this.filterRules[idx]);
+        //this.removedRules.push(this.filterRules[idx]);
         this.filterRules.splice(idx, 1);
         this.saved = false;
     }
@@ -97,13 +102,16 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
     }
 
     cancelChanges() {
-        this.filterRules = this.filterRules.concat(this.removedRules);
+        console.log("Cancelling changes");
+        this.filterRules = [];
+        this.filterRules = this.filterRules.concat(this.initRules);
+        console.log(this.initRules);
         this.hideDialog();
-        this.removedRules = [];
+        //this.removedRules = [];
     }
 
     saveFilter() {
-        this.removedRules = [];
+        //this.removedRules = [];
         this.saving = true;
         this.filterService.saveFilter(this.filterRules, this.newFilterName)
             .subscribe(result => {
@@ -120,11 +128,12 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
                     this.error = true
                 },
                 () => {
-                    this.saving = false;});
+                    this.saving = false;
+            });
     }
 
     saveAndUseFilter() {
-        this.removedRules = [];
+        //this.removedRules = [];
         this.saving = true;
         this.filterService.saveFilter(this.filterRules, this.newFilterName)
             .subscribe(result => {
