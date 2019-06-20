@@ -55,6 +55,7 @@ export class AlertCache {
         if (this.areDataInCache(pageNumber, pageSize)) {
             if(this.cache.length >= AlertCache.ITEMS_TO_LOAD &&
                 !this.loading &&
+                this.activeAlertSet.count >= this.cachePage * AlertCache.ITEMS_TO_LOAD &&
                 this.prevPage < pageNumber &&
                 ((pageNumber * pageSize) >= this.cacheStartsAt + this.cache.length - AlertCache.LOAD_MORE_AT_REMAINING)) {
                 this.loadNextCachePage(filter);
