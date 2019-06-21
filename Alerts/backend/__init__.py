@@ -19,22 +19,9 @@ from .fill_db import *
 from .alerts import *
 from .filters import *
 
-# pomocne funkce pro docasne testovani
-# fill_db_with_data()
-# get_limited_number_of_records(2, 3)
-# get_filtered_alerts(1, 20)
-# delete_data_from_db()
-# save_filter('ff')
-# save_filter('ff2')
-# filters_coll.delete_many({})
-# save_filter()
-# load_filter()
-# get_filter_names()
-# for x in filters_coll.find():
-#     print(x)
-# parse_ip_to_regex("1.127.*.*")
+# Some testing functions to fill database with random alerts and delete all records in database
 # fill_db_with_n(1000000)
-
+# delete_data_from_db()
 
 # Get limited number of records for one page
 alerts_bp.add_url_rule('/alert-page', view_func=get_limited_number_of_records, methods=['GET'])
@@ -65,6 +52,3 @@ alerts_bp.add_url_rule('/load-filter', view_func=load_filter, methods=['POST'])
 
 # Get all filter names from db, that they seem to user
 alerts_bp.add_url_rule('/filter-names', view_func=get_filter_names, methods=['GET'])
-
-# import atexit
-# atexit.register(delete_data_from_db)
