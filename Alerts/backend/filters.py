@@ -22,10 +22,11 @@ def save_filter():
 
     filter_doc = {"name": name, "user": user, "filter": received_filter}
 
-    if not received_filter:
-        return json.dumps({"success": True, "errCode": 200})
-
     try:
+        if not received_filter:
+            filters_coll.delete_one({'name': name, 'user': user})
+            return json.dumps({"success": True, "errCode": 200})
+
         filters_coll.update_one({'name': name}, {'$set': filter_doc}, upsert=True)
         return json.dumps({"success": True, "errCode": 200})
     except Exception:
