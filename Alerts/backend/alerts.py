@@ -6,6 +6,7 @@ from liberouterapi.dbConnector import dbConnector
 import json
 from flask import request
 import re
+import dateutil.parser
 
 # Connect and select alerts collection
 alerts_db = dbConnector('alerts')
@@ -101,6 +102,8 @@ def get_alerts(page, items, query):
     number_of_records = alerts_coll.find(query).count()
 
     for record in records:
+        if record['DetectTime'] is not None:
+            record['DetectTime'] = format_datetime(record['DetectTime'])
         if record['Source'] is not None:
             record['Source'] = sum(record['Source'], [])
             record['Source'] = list(set(record['Source']))
@@ -136,3 +139,10 @@ def parse_wildcard_to_regex(wild_card):
     wild_card = re.sub(r'\.', '\.', wild_card)
     wild_card = re.sub(r'\*', '(?:[0-9]{1,3})', wild_card)
     return '^' + wild_card + '$'
+
+
+def format_datetime(datetime_string):
+    datetime = dateutil.parser.parse(datetime_string)
+    datetime.strftime("%Y-%m-%d %H:%M:%S")
+    datetime = datetime.replace(tzinfo=None)
+    return str(datetime)
