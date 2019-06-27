@@ -40,6 +40,7 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
             this.initRules = [];
             this.initRules = this.initRules.concat(this.filterRules);
             this.initName = filters.name;
+            this.saved = true;
         });
         this.error = false;
         this.saved = false;
@@ -58,6 +59,7 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
     @Output() dialogClosed = new EventEmitter<boolean>();
     @Output() filterRulesChanged = new EventEmitter<Filter[]>();
     @Output() filterSaved = new EventEmitter<string>();
+    @Output() filterRemoved = new EventEmitter<string>();
 
 
     hideDialog() {
@@ -98,6 +100,7 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
     clearRules() {
         this.filterRules = [];
         this.initRules = [];
+        this.saved = false;
         this.newFilterName = "";
         this.filterRulesChanged.emit(this.filterRules);
     }
@@ -158,6 +161,17 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
         this.filterRules = this.filterRules.filter(function( f ) {
             return f.field !== '' && f.predicate !== '' && f.value !== '';
         });
+
+    }
+
+    removeFilter() {
+        if(confirm("Do you really want to remove filter '" + this.newFilterName + "'? This can not be undone!")) {
+            this.filterService.removeSavedFilter(this.newFilterName).subscribe(() => {
+                this.filterRemoved.emit(this.newFilterName);
+                this.clearRules();
+                this.finishRuleEditing();
+            });
+        }
 
     }
 }

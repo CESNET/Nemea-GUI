@@ -139,6 +139,12 @@ export class FilterComponent implements OnInit {
         }
     }
 
+    removeSavedFilter(name: string) {
+        if(this.savedFilterNames.indexOf(name) !== -1) {
+            this.savedFilterNames.splice(this.savedFilterNames.indexOf(name), 1);
+        }
+    }
+
     clearDates() {
         this.dateStartAt = undefined;
         this.dateEndAt = undefined;

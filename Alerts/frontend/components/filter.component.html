@@ -6,7 +6,8 @@
                        [filterLoaded]="initFilter.asObservable()"
                        (dialogClosed)="hideCreateFilterDialog()"
                        (filterRulesChanged)="setFilter($event)"
-                       (filterSaved)="addSavedFilter($event)"></filter-create>
+                       (filterSaved)="addSavedFilter($event)"
+                        (filterRemoved)="removeSavedFilter($event)"></filter-create>
     </div>
     <div class="col-sm-12 col-md-5">
         <div class="row align-right">
@@ -30,7 +31,7 @@
                 <button class="btn btn-danger ml-1" (click)="clearDates()">Clear dates</button>
                 <button class="btn btn-primary ml-1" (click)="setLastHour()">Last hour</button>
                 <button class="btn btn-primary ml-1" (click)="setToday()">Last 24 hours</button>
-                <button class="btn btn-primary ml-1" (click)="setLastWeek()">Last week</button>
+                <button class="btn btn-primary ml-1" (click)="setLastWeek()">Last 7 days</button>
             </div>
         </div>
 

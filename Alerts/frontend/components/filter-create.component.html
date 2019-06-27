@@ -18,6 +18,7 @@
         </div>
         <div class="filter-popup-toolbox">
             <button class="btn btn-danger" (click)="cancelChanges()">Cancel</button>
+            <button *ngIf="saved" class="btn btn-danger" (click)="removeFilter()">Delete</button>
 
             <div class="float-right">
                 <button class="btn btn-secondary" (click)="finishRuleEditing()">Use</button>
@@ -31,6 +32,7 @@
                 <button *ngIf="newFilterName && newFilterName != '' && error" disabled class="btn btn-danger">
                     Error
                 </button>
+
 
                 <button class="btn btn-primary" *ngIf="newFilterName && newFilterName != '' && !error" (click)="saveAndUseFilter()">
                     <span>Save and use</span>
