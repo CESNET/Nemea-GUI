@@ -21,7 +21,7 @@ from .filters import *
 
 # Some testing functions to fill database with random alerts and delete all records in database
 # fill_db_with_n(1000000)
-# print(format_datetime())
+# print(format_datetime("2019-11-28 14:34:33.373067"))
 # delete_data_from_db()
 
 # Get limited number of records for one page
