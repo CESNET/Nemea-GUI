@@ -144,5 +144,5 @@ def parse_wildcard_to_regex(wild_card):
 def format_datetime(datetime_string):
     datetime = dateutil.parser.parse(datetime_string)
     datetime.strftime("%Y-%m-%d %H:%M:%S")
-    datetime = datetime.replace(tzinfo=None)
+    datetime = datetime.replace(tzinfo=None).replace(microsecond=0)
     return str(datetime)
