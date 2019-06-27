@@ -120,7 +120,14 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
                     this.saving = false;
                     if (result && result['success'] == true) {
                         this.saved = true;
-                        this.filterSaved.emit(this.newFilterName);
+                        if(this.filterRules.length !== 0) {
+                            // We need to send filters because if filter of the same name exists
+                            // and is replaced with empty, it will be removed
+                            this.filterSaved.emit(this.newFilterName);
+                        }
+                        else {
+                            this.filterRemoved.emit(this.newFilterName);
+                        }
                     } else {
                         this.error = true;
                     }
