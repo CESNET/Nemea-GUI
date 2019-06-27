@@ -16,8 +16,8 @@ export class FilterComponent implements OnInit {
     {}
 
     createFilterShown: boolean = false;
-    dateStartAt: string;
-    dateEndAt: string;
+    dateStartAt: any;
+    dateEndAt: any;
     dateFilter: Filter[] = [];
     ruleSet: Filter[] = [];
     filterText: string = "";
@@ -73,7 +73,7 @@ export class FilterComponent implements OnInit {
         let i = 0;
         for(let f of filter) {
             if(i != 0) {
-                this.filterText += " AND ";
+                this.filterText += " AND \n";
             }
             this.filterText += f.field + " ";
             if(f.field2) {
@@ -137,7 +137,46 @@ export class FilterComponent implements OnInit {
         if(this.savedFilterNames.indexOf(name) === -1) {
             this.savedFilterNames.push(name);
         }
+    }
 
+    clearDates() {
+        this.dateStartAt = undefined;
+        this.dateEndAt = undefined;
+    }
+
+    setLastHour() {
+        let d = new Date();
+        this.dateEndAt = FilterComponent.toDateString(d);
+        this.dateStartAt = FilterComponent.toDateString(
+            new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours() - 1, d.getMinutes())
+        );
+    }
+
+    setToday() {
+        let d = new Date();
+        this.dateEndAt = FilterComponent.toDateString(d);
+        this.dateStartAt = FilterComponent.toDateString(
+            new Date(d.getFullYear(), d.getMonth(), d.getDate() - 1, d.getHours(), d.getMinutes())
+        );
+    }
+
+    setLastWeek() {
+        let d = new Date();
+        this.dateEndAt = FilterComponent.toDateString(d);
+        this.dateStartAt = FilterComponent.toDateString(
+            new Date(d.getFullYear(), d.getMonth(), d.getDate() - 7,0, 0)
+        );
+    }
+
+    private static toDateString(date: Date): string {
+        return (date.getFullYear().toString() + '-'
+            + ("0" + (date.getMonth() + 1)).slice(-2) + '-'
+            + ("0" + (date.getDate())).slice(-2))
+            + 'T' + date.toTimeString().slice(0,5);
+    }
+
+    private static todayToMidnight(date: Date): Date {
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0)
     }
 
 }

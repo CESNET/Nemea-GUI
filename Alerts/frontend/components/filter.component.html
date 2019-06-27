@@ -1,16 +1,39 @@
 <div class="row">
     <div class="col-sm-12 col-md-7">
         <textarea class="filter-text-preview" (click)="showCreateFilterDialog()" disabled>{{filterText}}</textarea>
+        <filter-create [showDialog]="createFilterShown"
+                       [clearFilter]="clearFilterSubject.asObservable()"
+                       [filterLoaded]="initFilter.asObservable()"
+                       (dialogClosed)="hideCreateFilterDialog()"
+                       (filterRulesChanged)="setFilter($event)"
+                       (filterSaved)="addSavedFilter($event)"></filter-create>
     </div>
     <div class="col-sm-12 col-md-5">
-        <label>
-            Start at
-            <input type="datetime-local" [(ngModel)]="dateStartAt" (change)="ruleSetChanged()" class="alerts-input">
-        </label><br>
-        <label>
-            End at
-            <input type="datetime-local" [(ngModel)]="dateEndAt" (change)="ruleSetChanged()" class="alerts-input">
-        </label>
+        <div class="row align-right">
+            <div class="col-sm-12">
+                <label>
+                    Start at
+                    <input type="datetime-local" [(ngModel)]="dateStartAt" (change)="ruleSetChanged()" class="alerts-input">
+                </label>
+            </div>
+        </div>
+        <div class="row align-right">
+            <div class="col-sm-12">
+                <label>
+                    End at
+                    <input type="datetime-local" [(ngModel)]="dateEndAt" (change)="ruleSetChanged()" class="alerts-input">
+                </label>
+            </div>
+        </div>
+        <div class="row align-right">
+            <div class="col">
+                <button class="btn btn-danger ml-1" (click)="clearDates()">Clear dates</button>
+                <button class="btn btn-primary ml-1" (click)="setLastHour()">Last hour</button>
+                <button class="btn btn-primary ml-1" (click)="setToday()">Last 24 hours</button>
+                <button class="btn btn-primary ml-1" (click)="setLastWeek()">Last week</button>
+            </div>
+        </div>
+
     </div>
 </div>
 <div class="row">
@@ -38,9 +61,4 @@
     </div>
 </div>
 
-<filter-create [showDialog]="createFilterShown"
-               [clearFilter]="clearFilterSubject.asObservable()"
-               [filterLoaded]="initFilter.asObservable()"
-               (dialogClosed)="hideCreateFilterDialog()"
-               (filterRulesChanged)="setFilter($event)"
-               (filterSaved)="addSavedFilter($event)"></filter-create>
+

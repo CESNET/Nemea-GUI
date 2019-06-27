@@ -158,6 +158,6 @@ export class FilterCreateComponent implements OnInit, OnDestroy {
         this.filterRules = this.filterRules.filter(function( f ) {
             return f.field !== '' && f.predicate !== '' && f.value !== '';
         });
-        
+
     }
 }
