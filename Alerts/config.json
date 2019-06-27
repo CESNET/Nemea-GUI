@@ -1,4 +1,7 @@
  {
+     "dependencies": {
+         "pip": "backend/requirements.txt"
+     },
     "module": {
         "class": "AlertsModule",
         "file": "alerts.module.ts",
