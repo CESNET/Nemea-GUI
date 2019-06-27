@@ -53,3 +53,6 @@ alerts_bp.add_url_rule('/load-filter', view_func=load_filter, methods=['POST'])
 
 # Get all filter names from db, that they seem to user
 alerts_bp.add_url_rule('/filter-names', view_func=get_filter_names, methods=['GET'])
+
+# Delete selected filter from database
+alerts_bp.add_url_rule('/delete-filter', view_func=delete_filter, methods=['POST'])
