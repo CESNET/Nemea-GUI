@@ -142,9 +142,11 @@ export class FilterComponent implements OnInit {
     clearDates() {
         this.dateStartAt = undefined;
         this.dateEndAt = undefined;
+        this.filterActive = false;
     }
 
     setLastHour() {
+        this.filterActive = false;
         let d = new Date();
         this.dateEndAt = FilterComponent.toDateString(d);
         this.dateStartAt = FilterComponent.toDateString(
@@ -153,6 +155,7 @@ export class FilterComponent implements OnInit {
     }
 
     setToday() {
+        this.filterActive = false;
         let d = new Date();
         this.dateEndAt = FilterComponent.toDateString(d);
         this.dateStartAt = FilterComponent.toDateString(
@@ -161,6 +164,7 @@ export class FilterComponent implements OnInit {
     }
 
     setLastWeek() {
+        this.filterActive = false;
         let d = new Date();
         this.dateEndAt = FilterComponent.toDateString(d);
         this.dateStartAt = FilterComponent.toDateString(
