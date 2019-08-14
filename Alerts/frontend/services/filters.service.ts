@@ -36,4 +36,11 @@ export class FiltersService {
                 catchError(HandleServiceError.handleError('saveFilter', {'success': false}))
             );
     }
+
+    removeSavedFilter(name: string): Observable<object> {
+        return this.http.post<object>('/alerts/delete-filter', {'name': name})
+            .pipe(
+                catchError(HandleServiceError.handleError('removeSavedFilter', {'success': false}))
+            );
+    }
 }
