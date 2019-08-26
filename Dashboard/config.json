@@ -1,0 +1,14 @@
+{
+    "dependencies": {
+        "npm": "frontend/package.json",
+        "pip": "backend/requirements.txt",
+        "ngc": "frontend/angular.json"
+    },
+    "module": {
+        "class": "DashboardModule",
+        "file": "dashboard.module.ts",
+        "frontend": "frontend/",
+        "backend": "backend/",
+        "name" : "dashboard"
+    }
+}

@@ -1,0 +1,56 @@
+@import "../colors";
+
+$menuPadding: 15px;
+
+.dashboard-menu {
+  margin: -.5em -1em 0;
+  background: $colorMain;
+  width: calc(100% + 2em);
+  height: auto;
+  a {
+
+    display: inline-block;
+    color: $colorTextInverse;
+    background: $colorHighlight;
+    padding: $menuPadding;
+    transition: all ease-in-out 250ms;
+    border-bottom: 2px solid $colorBackground;
+    &:hover {
+      background: $colorSelected2;
+      border-bottom: 2px solid $colorMain;
+    }
+    &.active {
+      background: $colorSelected;
+      border-bottom: 2px solid $colorSelected;
+      font-weight: bold;
+    }
+  }
+  p {
+    display: inline-block;
+    margin-bottom: 0;
+    padding: $menuPadding;
+    color: transparentize($colorTextInverse, 0.15);
+
+  }
+}
+
+.no-mobile, .mobile-only {
+  display: inline;
+}
+
+.no-mobile {
+  @media screen and (max-width: 600px) {
+    display: none;
+  }
+}
+
+.mobile-only {
+  @media screen and (min-width: 600px) {
+    display: none;
+  }
+}
+
+.dashboard-select {
+  background: $colorMain $black;
+  color: $colorTextInverse;
+}

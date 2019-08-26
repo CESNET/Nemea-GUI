@@ -1,0 +1,8 @@
+<dashboard-menu [dashboardList]="dashboardList" (displayNewDashboardDialog)="showNewDashboardDialog()"></dashboard-menu>
+<div class="container-fluid">
+    <dashboard-grid [activeDashboardName]="activeDash$"></dashboard-grid>
+</div>
+
+<dashboard-new-popup (dataSet)="dashboardAdded($event)" [show]="addNewDashboardDialogShown" (canceled)="hideNewDashboardDialog()">
+
+</dashboard-new-popup>

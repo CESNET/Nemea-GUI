@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "angular-gridster2": "~6.0.10",
+    "angular2-uuid": "^1.1.1",
+    "ng-chartist": "^4.1.0",
+    "chartist": "^0.11.3"
+  },
+  "devDependencies": {
+    "@types/chartist": "^0.9.46"
+  }
+}

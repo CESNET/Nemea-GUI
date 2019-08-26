@@ -1,0 +1,20 @@
+<div>
+    <h3 *ngIf="!(data || numdata)">No data</h3>
+    <div *ngIf="data || numdata">
+        <h3 *ngIf="content.type == 3">
+            {{numdata}}
+        </h3>
+        <div *ngIf="content.type == 0 || content.type == 1" [style.height.px]="content.gridPosition.rows * 200 - 100"
+             [style.width.px]="content.gridPosition.cols * 200 - 100">
+            <chartist-graph [data]="data" [type]="typeToChartType(+content.type)"
+            ></chartist-graph>
+        </div>
+        <div *ngIf="content.type == 2">
+            <p>Type 2</p>
+        </div>
+    </div>
+
+    <p>{{content.config?.description}}</p>
+    <button (click)="editBoxData()" class="btn btn-primary btn-edit" title="Edit box"><i class="fa fa-pencil"></i>
+    </button>
+</div>

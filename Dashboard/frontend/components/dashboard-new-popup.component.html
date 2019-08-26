@@ -1,0 +1,19 @@
+<div class="popup-wrapper" *ngIf="show">
+    <div class="popup-content-wrapper">
+        <div class="popup-header">
+            <h1>Add new dashboard</h1>
+        </div>
+        <div class="popup-content">
+            <label class="lrg-form-label" for="name">Dashboard name:</label><br>
+            <input class="lrg-form-input" type="text" [(ngModel)]="model.name" placeholder="Dashboard name" id="name"><br>
+            <label class="lrg-form-label" for="refreshInterval">Refresh interval:</label><br>
+            <input class="lrg-form-input" type="number" [(ngModel)]="model.refreshInterval" placeholder="Refresh interval" id="refreshInterval"><br>
+            <label class="lrg-form-label" for="timeShift">Time shift:</label><br>
+            <input class="lrg-form-input" type="number" [(ngModel)]="model.timeShift" placeholder="Time shift" id="timeShift">
+        </div>
+        <div class="popup-toolbox">
+            <button class="btn btn-danger mr-5" (click)="cancel()">Cancel</button>
+            <button class="btn btn-secondary" (click)="saveData()">Save</button>
+        </div>
+    </div>
+</div>

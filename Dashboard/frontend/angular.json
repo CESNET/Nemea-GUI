@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "liberouter-gui": {
+      "architect": {
+        "build": {
+          "options": {
+            "styles": [
+              "../modules/Dashboard/frontend/chartist.scss"
+            ],
+            "scripts": [
+            ]
+          }
+        }
+      }
+    }
+  }
+}

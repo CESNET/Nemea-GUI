@@ -1,0 +1,15 @@
+<nav class="dashboard-menu">
+    <p>Dashboards</p>
+    <div class="no-mobile">
+        <a *ngFor="let dashboardItem of dashboardList"
+           [routerLink]="'/dashboard/' + dashboardItem"
+           [class.active]="dashboardItem == activeDashName">{{dashboardItem}}</a>
+    </div>
+    <div class="mobile-only">
+        <select class="dashboard-select" (change)="navigateToDashboard($event.target.value)" [value]="activeDashName">
+            <option *ngFor="let dashboardItem of dashboardList" >{{dashboardItem}}</option>
+        </select>
+
+    </div>
+    <a (click)="addDashboard()" [routerLink]="">+ Add new dashboard</a>
+</nav>

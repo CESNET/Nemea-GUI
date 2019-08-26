@@ -1,0 +1,37 @@
+<div class="popup-wrapper" *ngIf="show">
+    <div class="popup-content-wrapper">
+        <div class="popup-header">
+            <h1>Edit box "{{newBoxForm.get('title').value}}"</h1>
+        </div>
+        <form [formGroup]="newBoxForm" (ngSubmit)="saveChanges(newBoxForm.value)">
+            <div class="popup-content">
+
+                <label for="boxName" class="lrg-form-label" #name>Box name</label><br>
+                <input class="lrg-form-input" type="text" placeholder="box name"
+                       id="boxName" autofocus formControlName="title"><br>
+                <label for="boxType" class="lrg-form-label">Type of view</label><br>
+                <select class="lrg-form-input" id="boxType" formControlName="viewType">
+                    <option selected disabled value="-1">Type of view</option>
+                    <option value="0">Barchart</option>
+                    <option value="1">Piechart</option>
+                    <option value="2">Top</option>
+                    <option value="3">Sum</option>
+                </select><br>
+
+                <select class="lrg-form-input">
+                    <option *ngFor="let category of categories">{{category}}</option>
+                </select><br>
+                <select *ngIf="newBoxForm.get('viewType') == 0 || newBoxForm.get('viewType') == 1"></select>
+                <label for="boxTimeWindow" class="lrg-form-label" >Time window [hours]</label><br>
+                <input type="number" id="boxTimeWindow" placeholder="Time window" class="lrg-form-input" formControlName="timeWindow"><br>
+                <label for="boxDescription" class="lrg-form-label">Box description</label><br>
+                <input type="text" id="boxDescription" placeholder="Box description" formControlName="description" class="lrg-form-input"><br>
+
+            </div>
+            <div class="popup-toolbox">
+                <button (click)="cancelEdit()" class="btn btn-danger mr-5">Cancel</button>
+                <button type="submit" class="btn-secondary btn">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
