@@ -3,6 +3,7 @@ import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { DashboardGridService } from '../services/dashboard-grid.service';
 import { DashboardItemData } from '../shared/DashboardItemData';
 import { DashboardItemContentComponent } from './dashboard-item-content.component';
+import { DashboardItemConfig } from '../shared/DashboardItemConfig';
 
 @Component({
     selector: 'dashboard-grid',
@@ -66,10 +67,10 @@ export class DashboardGridComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.gridLoading = true;
         this.gridService.loadDashboard(this.activeDashboardName);
-        //FIXME: Not required, can pull layout directly from gridService OR save layout here only, not in service
         this.gridService.layoutChangedEvent.subscribe(() => {
             this.layout = this.gridService.layout;
             this.gridLoading = false;
+
         });
     }
 
@@ -104,10 +105,10 @@ export class DashboardGridComponent implements OnInit, OnDestroy {
         this.boxEditShown = false;
     }
 
-    addBox(data: object) {
+    addBox(data: DashboardItemConfig) {
         if(this.editing) {
-            this.editData.title = data['title'];
-            this.editData.type = data['viewType'];
+            this.editData.title = data.title;
+            this.editData.type = data.viewType;
             this.editData.config = data;
             this.gridService.editItem(this.editData);
 

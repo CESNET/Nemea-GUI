@@ -1,16 +1,52 @@
 <div>
-    <h3 *ngIf="!(data || numdata)">No data</h3>
-    <div *ngIf="data || numdata">
+    <h3 *ngIf="!(data || dataSets) && loaded">No data</h3>
+    <div *ngIf="!loaded">
+        <h1>Loading...</h1>
+    </div>
+    <div *ngIf="data || numdata || dataSets">
         <h3 *ngIf="content.type == 3">
             {{numdata}}
         </h3>
-        <div *ngIf="content.type == 0 || content.type == 1" [style.height.px]="content.gridPosition.rows * 200 - 100"
-             [style.width.px]="content.gridPosition.cols * 200 - 100">
-            <chartist-graph [data]="data" [type]="typeToChartType(+content.type)"
-            ></chartist-graph>
+        <div *ngIf="content.type == 0">
+            <canvas
+                    baseChart
+                    [datasets]="dataSets"
+                    [labels]="labels"
+                    [chartType]="barChartType"
+                    [legend]="legend"
+                    [options]="barChartOptions">
+            </canvas>
+
         </div>
+        <div *ngIf="content.type == 1">
+            <canvas *ngIf="data.length > 0"
+                    baseChart
+                    [data]="data"
+                    [labels]="labels"
+                    [chartType]="'pie'"
+                    [legend]="legend">
+            </canvas>
+            <h3 *ngIf="data?.length == 0 && loaded">No data</h3>
+        </div>
+
+
         <div *ngIf="content.type == 2">
-            <p>Type 2</p>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Detect time</th>
+                        <th>Category</th>
+                        <th>Flow count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let alert of topAlerts">
+                        <td>{{alert['DetectTime']}}</td>
+                        <td>{{alert['Category']}}</td>
+                        <td>{{alert['FlowCount']}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 

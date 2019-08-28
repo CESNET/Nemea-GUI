@@ -5,6 +5,7 @@ import { UUID } from 'angular2-uuid';
 import { catchError } from 'rxjs/operators';
 import { DashboardItemData } from '../shared/DashboardItemData';
 import { HandleServiceError } from '../shared/handle-service-error';
+import { DashboardItemConfig } from '../shared/DashboardItemConfig';
 
 @Injectable({
     providedIn: 'root'
@@ -15,7 +16,7 @@ export class DashboardGridService {
 
     constructor(private http: HttpClient) { }
 
-    addItem(options: object): void {
+    addItem(options: DashboardItemConfig): void {
         let tmp: GridsterItem = {
             cols: 2,
             id: UUID.UUID(),
@@ -25,9 +26,9 @@ export class DashboardGridService {
         };
         let data: DashboardItemData = {
             config: options,
-            title: options['title'],
+            title: options.title,
             gridPosition: tmp,
-            type: +options['viewType']
+            type: +options.viewType
         };
         this.layout.push(data);
         this.layoutChangedEvent.emit(true);

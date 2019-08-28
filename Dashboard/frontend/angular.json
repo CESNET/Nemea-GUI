@@ -5,9 +5,9 @@
         "build": {
           "options": {
             "styles": [
-              "../modules/Dashboard/frontend/chartist.scss"
             ],
             "scripts": [
+              "node_modules/chart.js/dist/Chart.bundle.min.js"
             ]
           }
         }

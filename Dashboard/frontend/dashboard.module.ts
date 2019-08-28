@@ -7,7 +7,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { GridsterModule } from 'angular-gridster2';
-import { ChartistModule } from 'ng-chartist';
 
 import { AuthGuard } from 'app/utils/auth.guard';
 import { SafePipe, SafePipeModule } from 'app/utils/safe.pipe';
@@ -17,7 +16,7 @@ import { DashboardGridComponent } from './components/dashboard-grid.component';
 import { DashboardNewPopupComponent } from './components/dashboard-new-popup.component';
 import { DashboardItemContentComponent } from './components/dashboard-item-content.component';
 import { DashboardItemEditComponent } from './components/dashboard-item-edit.component';
-import { ChartistGraphComponent } from './components/chartist/chartist-graph.component';
+import { ChartsModule } from 'ng2-charts';
 
 const routes: Routes = [
     {
@@ -52,7 +51,7 @@ const routes: Routes = [
         NgbModule,
         GridsterModule,
         HttpClientModule,
-        ChartistModule
+        ChartsModule
     ],
     declarations: [
 	    DashboardComponent,
@@ -60,8 +59,7 @@ const routes: Routes = [
         DashboardGridComponent,
         DashboardNewPopupComponent,
         DashboardItemContentComponent,
-        DashboardItemEditComponent,
-        ChartistGraphComponent
+        DashboardItemEditComponent
     ],
     providers: [
         SafePipe
