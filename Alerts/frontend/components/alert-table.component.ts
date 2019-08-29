@@ -71,7 +71,6 @@ export class AlertTableComponent implements OnInit {
     }
 
     toggleCheckedId(clickEvent: any) {
-        console.log(clickEvent.currentTarget.value);
         const index = this.selectedItems.indexOf(clickEvent.currentTarget.value, 0);
         if(clickEvent.currentTarget.checked) {
             // Add to array
