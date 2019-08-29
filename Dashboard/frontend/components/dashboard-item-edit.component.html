@@ -25,18 +25,32 @@
                        [(ngModel)]="config.aggregation">
             </div>
             <br>
-            <div *ngIf="config.viewType != 2 && config.viewType != 1">
+            <div *ngIf="config.viewType == 3">
                 <label for="category" class="lrg-form-label">Category</label><br>
                 <select class="lrg-form-input" [(ngModel)]="config.category" id="category">
                     <option *ngFor="let category of categories">{{category}}</option>
                 </select><br>
             </div>
             <div *ngIf="config.viewType == 0">
-                <label for="countSelect">Y axis value</label><br>
+                <label for="countSelect" class="lrg-form-label">Y axis value</label><br>
                 <select class="lrg-form-input" id="countSelect" [(ngModel)]="config.flowCount">
                     <option value="false">Alert count</option>
                     <option value="true">Flow count</option>
                 </select><br>
+            </div>
+            <div *ngIf="config.viewType == 0 || config.viewType == 1">
+                <label for="metricSelect" class="lrg-form-label">Metric</label><br>
+                <select class="lrg-form-input" id="metricSelect" [(ngModel)]="selectedMetric">
+                    <option selected>Category</option>
+                    <option>Node.SW</option>
+                    <option>Custom</option>
+                </select><br>
+                <div *ngIf="selectedMetric == 'Custom'">
+                    <label for="metricInput" class="lrg-form-label">Custom metric</label><br>
+                    <input type="text" class="lrg-form-input" id="metricInput" [(ngModel)]="customMetric"
+                           placeholder="Custom metric"><br>
+                </div>
+
             </div>
 
             <label for="boxDescription" class="lrg-form-label">Box description</label><br>

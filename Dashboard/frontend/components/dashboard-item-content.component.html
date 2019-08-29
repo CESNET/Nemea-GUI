@@ -1,7 +1,9 @@
 <div>
     <h3 *ngIf="loaded && checkNoData()">No data</h3>
     <div *ngIf="!loaded">
+
         <h1>Loading...</h1>
+        <i class="fa fa-spinner fa-pulse fa-3x fa-fw mt-1"></i>
     </div>
     <div *ngIf="loaded">
         <h3 *ngIf="config.viewType == 3">

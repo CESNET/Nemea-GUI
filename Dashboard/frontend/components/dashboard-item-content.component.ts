@@ -41,6 +41,7 @@ export class DashboardItemContentComponent implements OnInit {
     private _config: DashboardItemConfig;
     private _inited: boolean = false;
 
+
     @Input() content: DashboardItemData;
 
     @Output() editBox: EventEmitter<DashboardItemData> = new EventEmitter<DashboardItemData>();

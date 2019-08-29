@@ -103,7 +103,10 @@ def get_bar_chart_data(category, time_window, aggregation_period, db_coll, flow_
 
 
 def time_window_to_datetime(time_window):
-    return datetime.datetime.now() - datetime.timedelta(hours=time_window)
+    try:
+        return datetime.datetime.now() - datetime.timedelta(hours=time_window)
+    except OverflowError:
+        return datetime.datetime(1990, 1, 1, 0, 0)
 
 
 def format_datetime(datetime_string):

@@ -88,18 +88,15 @@ class TestAlertOperations(unittest.TestCase):
         data = json.loads(get_bar_chart_data('Category', 52595, 600000, alertTestCol))
         self.assertEqual(len(data['labels']), len(data['series']))
         total = 0
-        series_len = 0
-        labels_len = 0
         for x in data['series']:
             total += sum(x['data'])
-            series_len += len(x)
-        for x in data['labels']:
-            labels_len += len(x)
         self.assertEqual(total, GENERATED_ALERT_COUNT)
-        self.assertEqual(labels_len, series_len)
 
-    def test_bar_chart_edge_case(self):
-        self.assertEqual(get_bar_chart_data('Category', 0, 1, alertTestCol), json.dumps({'labels': [], 'series': []}))
+    def test_datetime_overflow(self):
+        self.assertEqual(len(json.loads(get_pie_chart_data('Category', 99999999, alertTestCol))), GENERATED_ALERT_COUNT)
+
+    # def test_bar_chart_edge_case(self):
+    #    self.assertEqual(json.loads(get_bar_chart_data('Category', 0, 1, alertTestCol))['data'], [])
 
 
 if __name__ == "__main__":

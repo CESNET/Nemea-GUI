@@ -25,6 +25,8 @@ export class DashboardItemEditComponent implements OnInit {
     }
 
     config: DashboardItemConfig = new DashboardItemConfig();
+    private selectedMetric: string;
+    private customMetric: string;
 
 
     @Input() set initData(data: DashboardItemData) {
@@ -59,7 +61,8 @@ export class DashboardItemEditComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.alertDataService.getAlertCategories().subscribe(categories => this.categories = categories)
+        this.alertDataService.getAlertCategories()
+            .subscribe(categories => this.categories = categories)
     }
 
     saveChanges(): void {
@@ -73,6 +76,9 @@ export class DashboardItemEditComponent implements OnInit {
             viewType: this.config.viewType
 
         };
+        if(this.config.viewType == 0 || this.config.viewType == 1) {
+            tmp.category = this.selectedMetric == 'Custom' ? this.customMetric : this.selectedMetric;
+        }
         this.settings.emit(tmp);
     }
 
