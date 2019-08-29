@@ -38,6 +38,16 @@ export class DashboardItemEditComponent implements OnInit {
                 this.config.aggregation = data.config['aggregation'];
                 this.config.description = data.config['description'];
                 this.config.flowCount = data.config['flowCount'];
+                this.config.category = data.config.category;
+                if(this.config.viewType == 0 || this.config.viewType == 1) {
+                    if(this.config.category == 'Category' || this.config.category == 'Node.SW') {
+                        this.selectedMetric = this.config.category;
+                    }
+                    else {
+                        this.selectedMetric = 'Custom';
+                        this.customMetric = this.config.category;
+                    }
+                }
             }
         }
 
@@ -64,6 +74,8 @@ export class DashboardItemEditComponent implements OnInit {
         this.alertDataService.getAlertCategories()
             .subscribe(categories => this.categories = categories)
     }
+
+
 
     saveChanges(): void {
         let tmp: DashboardItemConfig = {
