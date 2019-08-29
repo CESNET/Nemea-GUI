@@ -58,7 +58,7 @@ def get_pie_graph():
 @auth.required()
 def get_bar_graph():
     return get_bar_chart_data(request.args.get('category'), int(request.args.get('time_window')),
-                              int(request.args.get('aggregation')), data_coll, True)
+                              int(request.args.get('aggregation')), data_coll, request.args.get('flowCount') == 'true')
 
 
 @auth.required()

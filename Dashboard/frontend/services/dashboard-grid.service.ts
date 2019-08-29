@@ -12,7 +12,7 @@ import { DashboardItemConfig } from '../shared/DashboardItemConfig';
 })
 export class DashboardGridService {
     public layout: DashboardItemData[] = [];
-    public layoutChangedEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
+    public layoutChangedEvent: EventEmitter<string> = new EventEmitter<string>();
 
     constructor(private http: HttpClient) { }
 
@@ -28,29 +28,28 @@ export class DashboardGridService {
             config: options,
             title: options.title,
             gridPosition: tmp,
-            type: +options.viewType
         };
         this.layout.push(data);
-        this.layoutChangedEvent.emit(true);
+        this.layoutChangedEvent.emit(tmp.id);
     }
 
     editItem(data: DashboardItemData) {
         const item = this.layout.find(d => d.gridPosition.id === data.gridPosition.id);
         this.layout.splice(this.layout.indexOf(item), 1);
         this.layout.push(data);
-        this.layoutChangedEvent.emit(true);
+        this.layoutChangedEvent.emit(data.gridPosition.id);
     }
 
     deleteItem(id: string): void {
         const item = this.layout.find(d => d.gridPosition.id === id);
         this.layout.splice(this.layout.indexOf(item), 1);
-        this.layoutChangedEvent.emit(true);
+        this.layoutChangedEvent.emit(id);
     }
 
     loadDashboard(dashName: string) {
         this.load(dashName).subscribe(data => {
             this.layout = data;
-            this.layoutChangedEvent.emit(true);
+            this.layoutChangedEvent.emit("");
         });
 
     }
@@ -63,9 +62,7 @@ export class DashboardGridService {
     }
 
     save(gridName: string) {
-        return this.http.post<object>('/dashboard/grid/' + gridName, {'data': this.layout})
-            .pipe(
-                catchError(HandleServiceError.handleError('save', {"success": false}))
-            );
+        // No catchError pipe, errors handled in dashboard grid component
+        return this.http.post<object>('/dashboard/grid/' + gridName, {'data': this.layout});
     }
 }

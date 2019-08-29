@@ -1,8 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DashboardItemData } from '../shared/DashboardItemData';
 import { AlertDataService } from '../services/alert-data.service';
-import { ChartType, ChartOptions, ChartDataSets } from 'chart.js';
-import { SingleDataSet, Label } from 'ng2-charts';
+import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
+import { Label } from 'ng2-charts';
+import { DashboardItemConfig } from '../shared/DashboardItemConfig';
+import { DashboardItemContentType } from '../shared/DashboardItemContentType';
+import { DashboardGridService } from '../services/dashboard-grid.service';
 
 @Component({
     selector: 'dashboard-item-content',
@@ -10,94 +13,98 @@ import { SingleDataSet, Label } from 'ng2-charts';
     styleUrls: ['./dashboard-item-content.component.scss']
 })
 export class DashboardItemContentComponent implements OnInit {
+    get rows(): number {
+        return this._rows;
+    }
 
+    @Input() set rows(value: number) {
+        this._rows = value;
+        if (this._inited) {
+            this.loaded = false;
+            this.getData();
+        }
+    }
+
+    get config(): DashboardItemConfig {
+        return this._config;
+    }
+
+    @Input() set config(value: DashboardItemConfig) {
+        this._config = value;
+        if (this._inited) {
+            this.loaded = false;
+            this.getData();
+        }
+    }
+
+    private _rows: number;
+    private _config: DashboardItemConfig;
     private _inited: boolean = false;
-    private _content: DashboardItemData;
-    get content(): DashboardItemData {
-        return this._content
-    };
 
-    @Input() set content(data: DashboardItemData) {
-        this._content = data;
-        this._content.type = +data.config['viewType'];
-    };
-
-    @Input() loading: boolean;
+    @Input() content: DashboardItemData;
 
     @Output() editBox: EventEmitter<DashboardItemData> = new EventEmitter<DashboardItemData>();
 
 
-    loaded: boolean = false;
-    public labels: Label[] = [];
-    public data: SingleDataSet = [];
-    public legend = true;
-
-    public dataSets: ChartDataSets[] = [{data: []}];
-    edit: boolean = false;
-    type: ChartType;
-    numdata: number = 0;
-    prevType: number;
-    topAlerts: object;
-    dataGot: boolean = false;
-    public barChartType: ChartType = 'bar';
-    public barChartOptions: ChartOptions = {
+    chartData: ChartDataSets[] | object | number = [{data: []}];
+    labels: Label[] = [];
+    public chartOptions: ChartOptions = {
         responsive: true,
     };
+    loaded: boolean = false;
 
-    chartData: SingleDataSet | ChartDataSets[] | object | number;
-
-    constructor(private alertDataService: AlertDataService) {
+    constructor(private alertDataService: AlertDataService, private gridService: DashboardGridService) {
     }
 
     ngOnInit() {
         this._inited = true;
         this.getData();
-        this.prevType = this.content.type;
+        /*this.gridService.layoutChangedEvent.subscribe(id => {
+            if(this.content.gridPosition.id == id) {
+                this.getData();
+            }
+        });*/
     }
 
     getData() {
-        if (!this.dataGot) {
-            this.dataGot = true;
-            if (this.content.type == 0) {
-                this.alertDataService.getBarChart('Category', this.content.config.timeWindow,
-                    this.content.config.aggregation, this.content.config.flowCount === undefined ?
-                        false: this.content.config.flowCount)
-                    .subscribe(data => {
-                        this.dataSets = data['series'];
-                        this.labels = data['labels'];
-                        this.loaded = true;
-                    });
-            } else if (this.content.type == 1) {
-                this.alertDataService.getPieChart('Category', this.content.config.timeWindow)
-                    .subscribe(data => {
-                        this.data = data['series'];
-                        this.labels = data['labels'];
-                        this.loaded = true;
-                    });
-            } else if (this.content.type == 2) {
-                this.alertDataService.getTopAlerts(this.content.gridPosition.rows * 2, this.content.config.timeWindow)
-                    .subscribe( data => {
-                        this.topAlerts = data;
-                        this.loaded = true;
-                    });
-            } else if (this.content.type == 3) {
-                this.alertDataService.getAlertCountByCategory('any', this.content.config.timeWindow)
-                    .subscribe(count => {
-                        this.numdata = count;
-                        this.loaded = true;
-                    });
-            }
+        this.loaded = false;
+        if (this.config.viewType == DashboardItemContentType.Barchart) {
+            this.alertDataService.getBarChart(this.config.category, this.config.timeWindow,
+                this.config.aggregation, this.config.flowCount === undefined ?
+                    false : this.config.flowCount)
+                .subscribe(data => {
+                    this.chartData = data['series'];
+                    this.labels = data['labels'];
+                    this.loaded = true;
+                });
+        } else if (this.config.viewType == DashboardItemContentType.Piechart) {
+            this.alertDataService.getPieChart(this.config.category, this.config.timeWindow)
+                .subscribe(data => {
+                    this.chartData = [{data: data['series']}];
+                    this.labels = data['labels'];
+                    this.loaded = true;
+                });
+        } else if (this.config.viewType == DashboardItemContentType.Top) {
+            // 200px = row size,
+            // (50 px = box header, 50px = table header, 40px = box padding) == 140px
+            // 50 px = table row height
+            this.alertDataService.getTopAlerts(Math.max(Math.round(((this.rows * 200) - 140) / 50), 2), this.config.timeWindow)
+                .subscribe(data => {
+                    this.chartData = data;
+                    this.loaded = true;
+                });
+        } else if (this.config.viewType == DashboardItemContentType.Sum) {
+            this.alertDataService.getAlertCountByCategory(this.config.category, this.config.timeWindow)
+                .subscribe(count => {
+                    this.chartData = count;
+                    this.loaded = true;
+                });
         }
-
     }
 
 
     typeToChartType(chartType: number): ChartType {
-        if (this.prevType != chartType) {
-            this.getData();
-        }
-        this.prevType = chartType;
-        switch (chartType) {
+        switch (+chartType) {
             case 0:
                 return 'bar';
             case 1:
@@ -111,14 +118,18 @@ export class DashboardItemContentComponent implements OnInit {
 
     editBoxData() {
         this.editBox.emit(this.content);
-
-    }
-
-    debug() {
-        console.log(this.content);
     }
 
 
+    checkNoData(): boolean {
+        if(this.config.viewType == 0 || this.config.viewType == 1) {
+            return this.chartData[0]['data'].length == 0;
+        }
+        else {
+            return false;
+        }
+
+    }
 }
 
 

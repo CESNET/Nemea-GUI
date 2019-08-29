@@ -6,6 +6,5 @@
     "ng2-charts": "2.2.3"
   },
   "devDependencies": {
-    "@types/chartist": "^0.9.46"
   }
 }

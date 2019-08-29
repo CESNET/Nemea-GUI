@@ -1,38 +1,26 @@
 <div>
-    <h3 *ngIf="!(data || dataSets) && loaded">No data</h3>
+    <h3 *ngIf="loaded && checkNoData()">No data</h3>
     <div *ngIf="!loaded">
         <h1>Loading...</h1>
     </div>
-    <div *ngIf="data || numdata || dataSets">
-        <h3 *ngIf="content.type == 3">
-            {{numdata}}
+    <div *ngIf="loaded">
+        <h3 *ngIf="config.viewType == 3">
+            {{chartData}}
         </h3>
-        <div *ngIf="content.type == 0">
+        <div *ngIf="loaded && (config.viewType == 0 || config.viewType == 1)">
             <canvas
                     baseChart
-                    [datasets]="dataSets"
+                    [datasets]="chartData"
                     [labels]="labels"
-                    [chartType]="barChartType"
-                    [legend]="legend"
-                    [options]="barChartOptions">
+                    [chartType]="typeToChartType(config.viewType)"
+                    [legend]="true"
+                    [options]="chartOptions">
             </canvas>
-
-        </div>
-        <div *ngIf="content.type == 1">
-            <canvas *ngIf="data.length > 0"
-                    baseChart
-                    [data]="data"
-                    [labels]="labels"
-                    [chartType]="'pie'"
-                    [legend]="legend">
-            </canvas>
-            <h3 *ngIf="data?.length == 0 && loaded">No data</h3>
         </div>
 
-
-        <div *ngIf="content.type == 2">
+        <div *ngIf="config.viewType == 2">
             <table class="table table-hover">
-                <thead>
+                <thead *ngIf="rows > 1">
                     <tr>
                         <th>Detect time</th>
                         <th>Category</th>
@@ -40,7 +28,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let alert of topAlerts">
+                    <tr *ngFor="let alert of chartData">
                         <td>{{alert['DetectTime']}}</td>
                         <td>{{alert['Category']}}</td>
                         <td>{{alert['FlowCount']}}</td>
@@ -50,7 +38,7 @@
         </div>
     </div>
 
-    <p>{{content.config?.description}}</p>
+    <p>{{config?.description}}</p>
     <button (click)="editBoxData()" class="btn btn-primary btn-edit" title="Edit box"><i class="fa fa-pencil"></i>
     </button>
 </div>

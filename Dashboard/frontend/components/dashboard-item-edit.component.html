@@ -25,7 +25,7 @@
                        [(ngModel)]="config.aggregation">
             </div>
             <br>
-            <div *ngIf="config.viewType != 2">
+            <div *ngIf="config.viewType != 2 && config.viewType != 1">
                 <label for="category" class="lrg-form-label">Category</label><br>
                 <select class="lrg-form-input" [(ngModel)]="config.category" id="category">
                     <option *ngFor="let category of categories">{{category}}</option>

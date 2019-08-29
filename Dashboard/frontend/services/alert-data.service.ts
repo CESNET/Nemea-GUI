@@ -55,7 +55,7 @@ export class AlertDataService {
             .set('flowCount', flowCount);
         return this.http.get<object>('dashboard/bar-chart', {'params': params})
             .pipe(
-                catchError(HandleServiceError.handleError('getBarChart', {'labels': [], 'series': []}))
+                catchError(HandleServiceError.handleError('getBarChart', {'labels': [], 'series': [{data: []}]}))
             );
     }
 }

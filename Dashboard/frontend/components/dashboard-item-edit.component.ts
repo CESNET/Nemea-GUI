@@ -7,7 +7,6 @@ import {
     HostListener
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms'
-import { DashboardItemContentType } from '../shared/DashboardItemContentType';
 import { DashboardItemData } from '../shared/DashboardItemData';
 import { AlertDataService } from '../services/alert-data.service';
 import { DashboardItemConfig } from '../shared/DashboardItemConfig';
@@ -29,7 +28,7 @@ export class DashboardItemEditComponent implements OnInit {
 
 
     @Input() set initData(data: DashboardItemData) {
-        if(data) {
+        if (data) {
             this.config.title = data.title;
             if (data.config !== undefined) {
                 this.config.viewType = data.config['viewType'];
@@ -45,8 +44,6 @@ export class DashboardItemEditComponent implements OnInit {
     @Input() show: boolean;
     @Output() settings: EventEmitter<object> = new EventEmitter<object>();
     @Output() editCancelled: EventEmitter<boolean> = new EventEmitter<boolean>();
-
-    newBoxForm;
     categories: string[];
 
     @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
@@ -66,8 +63,17 @@ export class DashboardItemEditComponent implements OnInit {
     }
 
     saveChanges(): void {
-        this.settings.emit(this.config);
-        this.resetConfig();
+        let tmp: DashboardItemConfig = {
+            aggregation: this.config.aggregation,
+            category: this.config.category,
+            description: this.config.description,
+            flowCount: this.config.flowCount,
+            timeWindow: this.config.timeWindow,
+            title: this.config.title,
+            viewType: this.config.viewType
+
+        };
+        this.settings.emit(tmp);
     }
 
     cancelEdit(): void {
@@ -76,23 +82,24 @@ export class DashboardItemEditComponent implements OnInit {
     }
 
     resetConfig(): void {
-        if(this.initData && this.initData.config) {
+        if (this.initData && this.initData.config) {
             this.config = {
+                category: this.initData.config.category ? this.initData.config.category : 'Category',
                 aggregation: this.initData.config.aggregation ? this.initData.config.aggregation : 30,
-                description: this.initData.config.description ? this.initData.config.description : "",
+                description: this.initData.config.description ? this.initData.config.description : '',
                 timeWindow: this.initData.config.timeWindow ? this.initData.config.timeWindow : 24,
-                title: this.initData.config.title ? this.initData.config.title : "New box",
+                title: this.initData.config.title ? this.initData.config.title : 'New box',
                 viewType: this.initData.config.viewType ? this.initData.config.viewType : -1,
                 flowCount: this.initData.config.flowCount ? this.initData.config.flowCount : 'false'
             }
-        }
-        else {
+        } else {
             this.config = {
+                category: 'Category',
                 aggregation: 30,
-                description: "",
-                flowCount: "false",
+                description: '',
+                flowCount: 'false',
                 timeWindow: 30,
-                title: "New box",
+                title: 'New box',
                 viewType: -1
 
             }

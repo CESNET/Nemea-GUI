@@ -91,12 +91,15 @@ class TestAlertOperations(unittest.TestCase):
         series_len = 0
         labels_len = 0
         for x in data['series']:
-            total += sum(x)
+            total += sum(x['data'])
             series_len += len(x)
         for x in data['labels']:
             labels_len += len(x)
         self.assertEqual(total, GENERATED_ALERT_COUNT)
         self.assertEqual(labels_len, series_len)
+
+    def test_bar_chart_edge_case(self):
+        self.assertEqual(get_bar_chart_data('Category', 0, 1, alertTestCol), json.dumps({'labels': [], 'series': []}))
 
 
 if __name__ == "__main__":
